@@ -79,10 +79,7 @@
                     <td>
                       {{ item.date.toDate().toLocaleTimeString() }}
                     </td>
-                    <DeleteItemFromTab
-                      :item="item"
-                      v-if="canDelete(item.date)"
-                    />
+                    <DeleteItemFromTab :item="item" v-if="canDelete(item.date)" />
                   </tr>
                 </template>
               </tbody>
@@ -103,7 +100,9 @@
   </VContainer>
   <VContainer v-else fluid align="center">
     <VRow>
-      <VCol> <h1>Fetching your profile...</h1></VCol>
+      <VCol>
+        <h1>Fetching your profile...</h1>
+      </VCol>
     </VRow>
     <VRow>
       <VCol cols="12">

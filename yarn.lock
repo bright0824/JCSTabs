@@ -2807,6 +2807,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/webfontloader@npm:^1.6.35":
+  version: 1.6.35
+  resolution: "@types/webfontloader@npm:1.6.35"
+  checksum: 8a809e1f8041fc9f7ec1df82d6e841bfc51732a3aa0b56a4e3d2abab86a8abce1b0db90dc9d2c594fd0d77034e2670cae3cfb714a902a0112985fa04fd4a61c8
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/eslint-plugin@npm:^5.0.0, @typescript-eslint/eslint-plugin@npm:^5.48.0":
   version: 5.48.1
   resolution: "@typescript-eslint/eslint-plugin@npm:5.48.1"
@@ -5817,6 +5824,7 @@ __metadata:
   dependencies:
     "@rushstack/eslint-patch": ^1.2.0
     "@types/node": ^18.11.18
+    "@types/webfontloader": ^1.6.35
     "@vitejs/plugin-vue": ^4.0.0
     "@vue/eslint-config-prettier": ^7.0.0
     "@vue/eslint-config-typescript": ^11.0.2
