@@ -15,7 +15,7 @@
     "roboto-fontface": "^0.10.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
-    "vuetify": "^3.1.0"
+    "vuetify": "^3.1.1"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
