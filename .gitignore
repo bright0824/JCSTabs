@@ -35,3 +35,8 @@ coverage
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+# Firebase
+firestore.rules
+firestore.indexes.json
+.firebase/*
