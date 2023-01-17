@@ -1,13 +1,13 @@
 <template>
-  <VContainer v-if="items.length">
+  <VContainer v-if="items?.food">
     <VRow class="text-center">
       <VCol>
         <AddItem />
       </VCol>
     </VRow>
     <VRow class="text-center">
-      <VCol v-for="(item, index) in items" :key="index" align="center">
-        <ItemCard :items="items" :input="item" />
+      <VCol v-for="(item, index) in items.food" :key="index" align="center">
+        <ItemCard :items="items.food" :input="item" />
       </VCol>
     </VRow>
   </VContainer>
@@ -37,18 +37,14 @@
 </route>
 
 <script setup lang="ts">
-import type { Item } from "@/types";
+import { doc } from "firebase/firestore";
+import { useFirestore, useDocument } from "vuefire";
 
-// data
-const items = ref([] as Item[]);
+// components
+import AddItem from "@/components/admin/Item/AddItem.vue";
+import ItemCard from "@/components/admin/Item/ItemCard.vue";
 
-const itemSnap = onSnapshot(doc(db, "admin/items"), (doc) => {
-  if (doc.exists()) {
-    items.value = doc.data().food as Item[];
-  }
-});
-
-if (!auth.currentUser) {
-  itemSnap();
-}
+// firebase
+const db = useFirestore();
+const items = useDocument(doc(db, "admin", "items"));
 </script>

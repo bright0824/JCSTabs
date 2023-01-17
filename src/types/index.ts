@@ -1,8 +1,12 @@
-import type { Timestamp } from "@firebase/firestore";
+import type { Timestamp } from "firebase/firestore";
 
 export type Item = {
   name: string;
   price: number;
+};
+
+export type Items = {
+  food: Item[];
 };
 
 export type TabItem = {

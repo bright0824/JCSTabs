@@ -52,6 +52,12 @@
 
 <script setup lang="ts">
 import type { User } from "@/types";
+import { defineProps, ref } from "vue";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "@/util/firebase";
+import { useFirebaseAuth } from "vuefire";
+
+const auth = useFirebaseAuth();
 
 const props = defineProps<{
   user: User | null;
@@ -90,7 +96,7 @@ const toggleRole = async () => {
 };
 
 const checkPerms = () => {
-  if (props.user?.info.email == auth.currentUser?.email) {
+  if (props.user?.info.email == auth?.currentUser?.email) {
     return {
       disabled: true,
       message: "You cannot change your own permissions",

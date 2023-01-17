@@ -1,8 +1,8 @@
 <template>
-  <VContainer align="center" v-if="user && items">
+  <VContainer align="center" v-if="userDoc && items">
     <VRow>
       <VCol>
-        <AddItemToTab :items="items" />
+        <AddItemToTab :items="items.food" />
       </VCol>
     </VRow>
     <VRow>
@@ -19,7 +19,7 @@
                 </tr>
               </thead>
               <tbody>
-                <template v-for="(item, index) in items" :key="index">
+                <template v-for="(item, index) in items.food" :key="index">
                   <tr v-if="count()[item.name] > 0">
                     <td>{{ item.name }}</td>
                     <td>{{ count()[item.name] }}</td>
@@ -79,7 +79,10 @@
                     <td>
                       {{ item.date.toDate().toLocaleTimeString() }}
                     </td>
-                    <DeleteItemFromTab :item="item" v-if="canDelete(item.date)" />
+                    <DeleteItemFromTab
+                      :item="item"
+                      v-if="canDelete(item.date)"
+                    />
                   </tr>
                 </template>
               </tbody>
@@ -123,46 +126,37 @@
 </route>
 
 <script setup lang="ts">
+import { ref, computed } from "vue";
 import type { Timestamp } from "firebase/firestore";
-import type { User, Item } from "@/types";
+import type { Item } from "@/types";
+import { useRouter } from "vue-router";
+import { useDocument, useFirestore, useFirebaseAuth } from "vuefire";
+import { doc } from "firebase/firestore";
 
+// components
+import FeedBack from "@/components/Feedback.vue";
 const router = useRouter();
 
 // data
 const page = ref(1);
 const perPage = 5;
-const user = ref<User | null>(null);
-const items = ref<Item[]>([]);
 
 // firebase
-const itemSub = onSnapshot(doc(db, "admin/items"), (doc) => {
-  items.value = doc.data()?.food as Item[];
-});
+const db = useFirestore();
+const auth = useFirebaseAuth();
 
-const userSub = onSnapshot(
-  // @ts-expect-error
-  doc(db, "users", auth.currentUser.uid),
-  (doc) => {
-    if (doc.exists()) {
-      user.value = doc.data() as User;
-      user.value.tab.reverse();
-    } else {
-      console.log("No such document!");
-    }
-  }
-);
+console.log(auth?.currentUser?.uid);
 
-onBeforeUnmount(() => {
-  itemSub();
-  userSub();
-});
+const items = useDocument(doc(db, "admin", "items"));
+const userDoc = useDocument(doc(db, `users/${auth?.currentUser?.uid}`));
+
 // computed properties
 const count = () => {
   const total = {} as { [key: string]: number };
-  items.value?.forEach((item) => {
+  items.data.value?.food.forEach((item: Item) => {
     total[item.name] = 0;
   });
-  user.value?.tab?.forEach((item) => {
+  userDoc.data.value?.tab?.forEach((item: Item) => {
     total[item.name]++;
   });
   return total;
@@ -170,7 +164,7 @@ const count = () => {
 
 const total = () => {
   let total = 0;
-  user.value?.tab?.forEach((item) => {
+  userDoc.data.value?.tab?.forEach((item: Item) => {
     total += item.price;
   });
   return new Intl.NumberFormat("en-CA", {
@@ -180,7 +174,7 @@ const total = () => {
 };
 
 const visibleItems = computed(() => {
-  return user.value?.tab.slice(
+  return userDoc.data.value?.tab.slice(
     (page.value - 1) * perPage,
     page.value * perPage
   );
@@ -194,13 +188,13 @@ const canDelete = (date: Timestamp) => {
 
 // methods
 const MathTime = () => {
-  if (user.value?.tab.length) {
-    return Math.ceil(user.value.tab.length / perPage);
+  if (userDoc.data.value?.tab.length) {
+    return Math.ceil(userDoc.data.value.tab.length / perPage);
   }
 };
 
 setTimeout(() => {
-  if (!user.value) {
+  if (!auth?.currentUser) {
     router.push({
       name: "error",
     });

@@ -2,11 +2,9 @@ import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+
 import vuetify from "vite-plugin-vuetify";
 import VueRouter from "unplugin-vue-router/vite";
-import AutoImport from "unplugin-auto-import/vite";
-import Components from "unplugin-vue-components/vite";
-import { VueRouterAutoImports } from "unplugin-vue-router";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
@@ -18,43 +16,10 @@ export default defineConfig({
       routeBlockLang: "json5",
       importMode: "async",
     }),
-    vue({
-      reactivityTransform: true,
+    vue(),
+    vuetify({
+      autoImport: true,
     }),
-    vuetify(),
-    AutoImport({
-      include: [
-        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-        /\.vue\??/, // .vue
-        /\.mdx?$/, // .md, .mdx
-      ],
-
-      imports: [
-        "vue",
-        VueRouterAutoImports,
-        {
-          vuetify: ["useTheme", "useDisplay"],
-          "firebase/auth": ["GoogleAuthProvider", "signInWithPopup"],
-          "firebase/firestore": [
-            "doc",
-            "collection",
-            "onSnapshot",
-            "arrayRemove",
-            "addDoc",
-            "updateDoc",
-            "Timestamp",
-            "arrayUnion",
-          ],
-          "firebase/functions": ["httpsCallable"],
-          "@/firebase": ["auth", "db", "functions"],
-        },
-      ],
-
-      eslintrc: {
-        enabled: true,
-      },
-    }),
-    Components(),
     VitePWA({
       injectRegister: "inline",
       registerType: "autoUpdate",
@@ -177,10 +142,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      utils: fileURLToPath(new URL("./src/utils", import.meta.url)),
-      types: fileURLToPath(new URL("./src/types", import.meta.url)),
     },
-    extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },
   server: {
     headers: {

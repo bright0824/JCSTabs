@@ -20,7 +20,7 @@
             rounded
             variant="text"
             color="auto"
-            @click="router.push('/admin/staff')"
+            @click="router.push('/admin')"
             prepend-icon="admin_panel_settings"
           >
             admin menu
@@ -42,27 +42,29 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from "firebase/auth";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useCurrentUser, useFirebaseAuth } from "vuefire";
 
 // data
-const user = ref<User | null>(null);
+const user = useCurrentUser();
 const admin = ref(false);
 const router = useRouter();
-// eslint-disable-next-line no-undef
+
+// firebase
+const auth = useFirebaseAuth()!;
 
 auth.onAuthStateChanged((currentUser) => {
   if (currentUser) {
     currentUser?.getIdTokenResult().then((idTokenResult) => {
       admin.value = idTokenResult.claims.admin;
     });
-    user.value = currentUser;
-  } else {
-    user.value = null;
   }
 });
 
 // methods
 const logout = () => {
   auth.signOut();
+  router.push("/login");
 };
 </script>

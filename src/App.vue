@@ -9,7 +9,7 @@
           <VIcon icon="dark_mode" v-else />
         </Transition>
       </VBtn>
-      <UserProfile v-if="loggedIn" />
+      <UserProfile />
     </VAppBar>
     <VMain>
       <VContainer fluid>
@@ -24,23 +24,23 @@
 </template>
 
 <script setup lang="ts">
-import { auth } from "@/firebase";
+import { ref } from "vue";
+import { useFirebaseAuth } from "vuefire";
+import { useRouter } from "vue-router";
+import { useTheme } from "vuetify";
+
+import UserProfile from "@/components/UserProfile.vue";
+//components
+// const UserProfile = () => import("@/components/UserProfile.vue");
 
 // data
 const loggedIn = ref(false);
 const theme = useTheme();
-
+const auth = useFirebaseAuth()!;
 const router = useRouter();
 
-// computed
 auth.onAuthStateChanged((user) => {
-  if (user) {
-    router.push("/user");
-    loggedIn.value = true;
-  } else {
-    router.push("/login");
-    loggedIn.value = false;
-  }
+  loggedIn.value = !!user;
 });
 
 // methods

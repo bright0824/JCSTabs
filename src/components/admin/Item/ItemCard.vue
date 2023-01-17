@@ -35,6 +35,11 @@
 
 <script setup lang="ts">
 import type { Item } from "@/types";
+import { ref } from "vue";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "@/util/firebase";
+
+import DeleteItem from "./DeleteItem.vue";
 
 // props
 const props = defineProps<{

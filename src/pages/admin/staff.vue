@@ -1,63 +1,9 @@
-<template>
-  <VContainer fluid v-if="users !== null && items !== null">
-    <VRow>
-      <VExpansionPanels>
-        <template v-for="letter in letters" :key="letter">
-          <VExpansionPanel
-            :id="letter"
-            :value="letter"
-            class="ma-2"
-            v-if="filterUsers(letter).length > 0"
-          >
-            <VExpansionPanelTitle>
-              <VRow>
-                <VCol cols="12">
-                  <b class="text-h5">{{ letter.toUpperCase() }}</b>
-                </VCol>
-              </VRow>
-            </VExpansionPanelTitle>
-            <VExpansionPanelText>
-              <template v-for="user in filterUsers(letter)" :key="user">
-                <UserCard :user="user" :items="items" :ref="user.info.uid" />
-              </template>
-            </VExpansionPanelText>
-          </VExpansionPanel>
-        </template>
-      </VExpansionPanels>
-    </VRow>
-  </VContainer>
-  <VContainer fluid v-else>
-    <VRow>
-      <VCol align="center">
-        <h1>Fetching users...</h1>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol cols="12">
-        <VProgressLinear indeterminate />
-      </VCol>
-    </VRow>
-  </VContainer>
-</template>
-
-<route lang="json">
-{
-  "path": "/admin/staff",
-  "name": "admin-staff",
-  "meta": {
-    "requiresAuth": true,
-    "requiresAdmin": true
-  }
-}
-</route>
-
 <script setup lang="ts">
 import type { User, Item } from "@/types";
-import { onBeforeRouteLeave } from "vue-router/auto";
+import { useDocument, useCollection, useFirestore } from "vuefire";
+import { collection, doc } from "firebase/firestore";
 
-// data
-const users = ref<User[]>([]);
-const items = ref<Item[]>([]);
+import UserCard from "@/components/admin/User/UserCard.vue";
 
 const letters = [
   "a",
@@ -89,27 +35,13 @@ const letters = [
 ] as string[];
 
 // firestore snapshots
-const usersSnap = onSnapshot(collection(db, "users"), (snap) => {
-  users.value = [];
-  snap?.forEach((doc) => {
-    users.value.push(doc.data() as User);
-  });
-});
-
-const itemSnap = onSnapshot(doc(db, "admin/items"), (doc) => {
-  if (doc.exists()) {
-    items.value = doc.data().food as Item[];
-  }
-});
-
-onBeforeRouteLeave(() => {
-  usersSnap();
-  itemSnap();
-});
+const db = useFirestore();
+const users = useCollection(collection(db, "users"));
+const items = useDocument(doc(db, "admin", "items"));
 
 // methods
 const filterUsers = (letter: string) => {
-  return users?.value.filter((user: User) => {
+  return users?.value.filter((user) => {
     return user.info.displayName
       .split(" ")[1]
       ?.toLowerCase()
@@ -117,3 +49,60 @@ const filterUsers = (letter: string) => {
   });
 };
 </script>
+
+<template>
+  <VContainer fluid v-if="users && items">
+    <VRow>
+      <VExpansionPanels>
+        <template v-for="letter in letters" :key="letter">
+          <VExpansionPanel
+            :id="letter"
+            :value="letter"
+            class="ma-2"
+            v-if="filterUsers(letter).length > 0"
+          >
+            <VExpansionPanelTitle>
+              <VRow>
+                <VCol cols="12">
+                  <b class="text-h5">{{ letter.toUpperCase() }}</b>
+                </VCol>
+              </VRow>
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <template v-for="user in filterUsers(letter)" :key="user">
+                <UserCard
+                  :user="(user as User)"
+                  :items="(items.food as Item[])"
+                  :ref="user.info.uid"
+                />
+              </template>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+        </template>
+      </VExpansionPanels>
+    </VRow>
+  </VContainer>
+  <VContainer fluid v-else>
+    <VRow>
+      <VCol align="center">
+        <h1>Fetching users...</h1>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol cols="12">
+        <VProgressLinear indeterminate />
+      </VCol>
+    </VRow>
+  </VContainer>
+</template>
+
+<route lang="json">
+{
+  "path": "/admin/staff",
+  "name": "admin-staff",
+  "meta": {
+    "requiresAuth": true,
+    "requiresAdmin": true
+  }
+}
+</route>

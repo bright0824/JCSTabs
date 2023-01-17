@@ -63,6 +63,13 @@
 
 <script setup lang="ts">
 import type { Item } from "@/types";
+import { defineProps, ref } from "vue";
+import { useDisplay } from "vuetify";
+import { useFirebaseAuth, useFirestore } from "vuefire";
+import { doc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
+
+const db = useFirestore();
+const auth = useFirebaseAuth();
 
 const dialog = ref(false);
 const loading = ref({} as Record<string, boolean>);
@@ -82,7 +89,7 @@ props.items?.forEach((item) => {
 
 const addItem = async (item: Item) => {
   loading.value[item.name] = true;
-  if (!auth.currentUser) return;
+  if (!auth?.currentUser) return;
   try {
     await updateDoc(doc(db, "users", auth.currentUser?.uid), {
       tab: arrayUnion({

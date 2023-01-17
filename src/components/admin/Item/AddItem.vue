@@ -39,6 +39,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "@/util/firebase";
+
 // data
 const dialog = ref(false);
 const loading = ref(false);

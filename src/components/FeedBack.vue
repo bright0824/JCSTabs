@@ -41,6 +41,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
+
 const dialog = ref(false);
 const input = ref("");
 const inputForm = ref(null);
@@ -62,7 +64,13 @@ const submit = async () => {
 
   loading.value = true;
 
+  const { useFirebaseAuth, useFirestore } = await import("vuefire");
+  const { addDoc, collection, Timestamp } = await import("firebase/firestore");
+
   try {
+    const auth = useFirebaseAuth()!;
+    const db = useFirestore()!;
+
     await addDoc(collection(db, "feedback"), {
       name: auth.currentUser?.displayName,
       email: auth.currentUser?.email,

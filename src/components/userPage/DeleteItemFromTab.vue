@@ -46,6 +46,12 @@
 
 <script setup lang="ts">
 import type { TabItem } from "@/types";
+import { defineProps, ref } from "vue";
+import { arrayRemove, doc, updateDoc } from "firebase/firestore";
+import { useFirebaseAuth, useFirestore } from "vuefire";
+
+const auth = useFirebaseAuth();
+const db = useFirestore();
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -61,7 +67,7 @@ const props = defineProps<{
 const deleteItem = async () => {
   loading.value = true;
   try {
-    const user = auth.currentUser;
+    const user = auth?.currentUser;
     if (!user) {
       throw new Error("User not logged in");
     }

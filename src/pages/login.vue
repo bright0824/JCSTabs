@@ -1,3 +1,61 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useFirebaseAuth } from "vuefire";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useRouter } from "vue-router";
+
+// data
+const loggedIn = ref(false);
+const alert = ref(false);
+const error = ref({
+  message: "",
+  status: "",
+});
+
+const ignoreErrorCode = [
+  "auth/account-exists-with-different-credential",
+  "auth/credential-already-in-use",
+  "auth/cancelled-popup-request",
+  "auth/popup-closed-by-user",
+];
+
+const router = useRouter();
+const auth = useFirebaseAuth()!;
+const provider = new GoogleAuthProvider();
+
+// computed
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    router.push({ name: "user" });
+    loggedIn.value = true;
+  }
+});
+
+// methods
+const signIn = () => {
+  signInWithPopup(auth, provider)
+    .then((credentials) => {
+      console.log("Signed in");
+
+      console.log(credentials.user?.uid);
+    })
+
+    .catch((err) => {
+      if (!ignoreErrorCode.includes(err.code)) {
+        try {
+          const { error } = JSON.parse(err.message.match(/{.*}/g));
+          error.value = error;
+        } catch {
+          error.value = {
+            message: err.message,
+            status: err.code,
+          };
+        }
+      }
+    });
+};
+</script>
+
 <template>
   <VRow justify="center">
     <VCard color="secondary" width="300" class="text-center mt-45">
@@ -41,49 +99,3 @@
   }
 }
 </route>
-
-<script setup lang="ts">
-const router = useRouter();
-const loggedIn = ref(false);
-
-// data
-const alert = ref(false);
-const error = ref({
-  message: "",
-  status: "",
-});
-
-const ignoreErrorCode = [
-  "auth/account-exists-with-different-credential",
-  "auth/credential-already-in-use",
-  "auth/cancelled-popup-request",
-  "auth/popup-closed-by-user",
-];
-
-const provider = new GoogleAuthProvider();
-
-// computed
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    router.push({ name: "user" });
-    loggedIn.value = true;
-  }
-});
-
-// methods
-const signIn = () => {
-  signInWithPopup(auth, provider).catch((err) => {
-    if (!ignoreErrorCode.includes(err.code)) {
-      try {
-        const { error } = JSON.parse(err.message.match(/{.*}/g));
-        error.value = error;
-      } catch {
-        error.value = {
-          message: err.message,
-          status: err.code,
-        };
-      }
-    }
-  });
-};
-</script>

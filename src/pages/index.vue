@@ -17,3 +17,17 @@
   }
 }
 </route>
+
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import { useFirebaseAuth } from "vuefire";
+
+const auth = useFirebaseAuth();
+const router = useRouter();
+
+if (auth?.currentUser) {
+  router.push("/user");
+} else {
+  router.push("/login");
+}
+</script>
