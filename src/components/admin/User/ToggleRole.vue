@@ -36,13 +36,8 @@
         </VList>
       </VCardText>
       <VCardActions>
-        <VBtn
-          color="primary"
-          text
-          @click="toggleRole()"
-          :loading="loading.dialog"
-        >
-          OK
+        <VBtn color="auto" text @click="toggleRole()" :loading="loading.dialog">
+          Confirm
         </VBtn>
         <VBtn color="red" text @click="close()"> Cancel </VBtn>
       </VCardActions>
