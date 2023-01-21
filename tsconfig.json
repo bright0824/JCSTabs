@@ -27,7 +27,8 @@
     "types": [
       "vuetify",
       "vite-plugin-pwa/client",
-      "firebase/firestore"
+      "firebase/firestore",
+      "@types/webfontloader"
     ],
     "paths": {
       "@/*": [

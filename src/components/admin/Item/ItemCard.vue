@@ -37,7 +37,7 @@
 import type { Item } from "@/types";
 import { ref } from "vue";
 import { httpsCallable } from "firebase/functions";
-import { functions } from "@/util/firebase";
+import { functions } from "@/firebase";
 
 import DeleteItem from "./DeleteItem.vue";
 

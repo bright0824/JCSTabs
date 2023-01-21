@@ -3,7 +3,7 @@ import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
 import { registerSW } from "virtual:pwa-register";
 import { VueFire, VueFireAuth, VueFireAppCheck } from "vuefire";
-import { firebaseApp } from "./util/firebase";
+import { firebaseApp } from "./firebase";
 import { ReCaptchaV3Provider } from "firebase/app-check";
 
 import App from "./App.vue";

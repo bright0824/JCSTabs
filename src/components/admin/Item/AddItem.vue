@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { httpsCallable } from "firebase/functions";
-import { functions } from "@/util/firebase";
+import { functions } from "@/firebase";
 
 // data
 const dialog = ref(false);

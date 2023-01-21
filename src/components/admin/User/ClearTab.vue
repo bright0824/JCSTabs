@@ -36,7 +36,7 @@
 import type { User } from "@/types";
 import { defineProps, ref } from "vue";
 import { httpsCallable } from "firebase/functions";
-import { functions } from "@/util/firebase";
+import { functions } from "@/firebase";
 
 // inject the user
 const props = defineProps<{ user: User | null }>();

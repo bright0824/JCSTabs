@@ -134,7 +134,14 @@ import { useDocument, useFirestore, useFirebaseAuth } from "vuefire";
 import { doc } from "firebase/firestore";
 
 // components
-import FeedBack from "@/components/Feedback.vue";
+import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
+import DeleteItemFromTab from "@/components/userPage/DeleteItemFromTab.vue";
+import FeedBack from "@/components/FeedBack.vue";
+// const AddItemToTab = () => import("@/components/userPage/AddItemToTab.vue");
+// const DeleteItemFromTab = () =>
+//   import("@/components/userPage/DeleteItemFromTab.vue");
+
+// const FeedBack = () => import("@/components/FeedBack.vue");
 const router = useRouter();
 
 // data
@@ -144,8 +151,6 @@ const perPage = 5;
 // firebase
 const db = useFirestore();
 const auth = useFirebaseAuth();
-
-console.log(auth?.currentUser?.uid);
 
 const items = useDocument(doc(db, "admin", "items"));
 const userDoc = useDocument(doc(db, `users/${auth?.currentUser?.uid}`));
@@ -174,10 +179,9 @@ const total = () => {
 };
 
 const visibleItems = computed(() => {
-  return userDoc.data.value?.tab.slice(
-    (page.value - 1) * perPage,
-    page.value * perPage
-  );
+  return userDoc.data.value?.tab
+    .reverse()
+    .slice((page.value - 1) * perPage, page.value * perPage);
 });
 
 const canDelete = (date: Timestamp) => {
