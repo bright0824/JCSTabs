@@ -44,7 +44,7 @@
                     <VListItemTitle>
                       {{ item.name }}: {{ count[item.name] }} *
                       {{
-                        new Intl.NumberFormat("enCA", {
+                        new Intl.NumberFormat("en", {
                           style: "currency",
                           currency: "CAD",
                         }).format(item.price)
