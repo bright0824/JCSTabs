@@ -77,10 +77,12 @@ const perms = {
 // methods
 const toggleRole = async () => {
   loading.value.switch = true;
+  loading.value.dialog = true;
   try {
     const toggleRole = httpsCallable(functions, "toggleRole");
     await toggleRole({ email: props.user?.info.email, role: props.role });
     loading.value.switch = false;
+    dialog.value = false;
   } catch (err) {
     console.log(err);
     const { code, message } = err as { code: string; message: string };
