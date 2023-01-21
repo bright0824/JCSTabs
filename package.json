@@ -38,5 +38,8 @@
     "vite-plugin-vuetify": "^1.0.1",
     "vue-tsc": "^1.0.24"
   },
+  "workspaces": [
+    "functions"
+  ],
   "packageManager": "yarn@3.3.1"
 }
