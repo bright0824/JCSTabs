@@ -1,11 +1,5 @@
 <template>
-  <RouterView v-slot="{ Component }">
-    <Transition name="slide-x-transition" mode="out-in" appear>
-      <KeepAlive :include="['Staff', 'Items']">
-        <component :is="Component" />
-      </KeepAlive>
-    </Transition>
-  </RouterView>
+  <RouterView />
   <VBottomNavigation>
     <VTabs>
       <VTab value="staff" to="/admin/staff">

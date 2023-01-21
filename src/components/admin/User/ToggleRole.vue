@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import type { User } from "@/types";
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "@/firebase";
 import { useFirebaseAuth } from "vuefire";

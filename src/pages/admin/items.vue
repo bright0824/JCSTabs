@@ -1,13 +1,13 @@
 <template>
-  <VContainer v-if="items?.food">
+  <VContainer v-if="items!.food">
     <VRow class="text-center">
       <VCol>
         <AddItem />
       </VCol>
     </VRow>
     <VRow class="text-center">
-      <VCol v-for="(item, index) in items.food" :key="index" align="center">
-        <ItemCard :items="items.food" :input="item" />
+      <VCol v-for="(item, index) in items?.food" :key="index" align="center">
+        <ItemCard :items="items?.food" :input="item" />
       </VCol>
     </VRow>
   </VContainer>

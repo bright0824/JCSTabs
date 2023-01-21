@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import type { TabItem } from "@/types";
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { useFirebaseAuth, useFirestore } from "vuefire";
 

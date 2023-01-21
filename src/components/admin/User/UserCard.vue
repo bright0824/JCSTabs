@@ -72,7 +72,7 @@
 
 <script setup lang="ts">
 import type { User, Item } from "@/types";
-import { defineProps, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import ClearTab from "@/components/admin/User/ClearTab.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
 

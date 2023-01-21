@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import type { Item } from "@/types";
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 import { useDisplay } from "vuetify";
 import { useFirebaseAuth, useFirestore } from "vuefire";
 import { doc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";

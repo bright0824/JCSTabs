@@ -137,11 +137,7 @@ import { doc } from "firebase/firestore";
 import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
 import DeleteItemFromTab from "@/components/userPage/DeleteItemFromTab.vue";
 import FeedBack from "@/components/FeedBack.vue";
-// const AddItemToTab = () => import("@/components/userPage/AddItemToTab.vue");
-// const DeleteItemFromTab = () =>
-//   import("@/components/userPage/DeleteItemFromTab.vue");
 
-// const FeedBack = () => import("@/components/FeedBack.vue");
 const router = useRouter();
 
 // data
@@ -201,7 +197,21 @@ setTimeout(() => {
   if (!auth?.currentUser) {
     router.push({
       name: "error",
+      query: {
+        err: "503",
+      },
     });
   }
 }, 5000);
+
+setTimeout(() => {
+  if (!userDoc.value) {
+    router.push({
+      name: "error",
+      params: {
+        err: "408",
+      },
+    });
+  }
+}, 20000);
 </script>
