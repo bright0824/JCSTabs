@@ -33,26 +33,19 @@ auth.onAuthStateChanged((user) => {
 
 // methods
 const signIn = () => {
-  signInWithPopup(auth, provider)
-    .then((credentials) => {
-      console.log("Signed in");
-
-      console.log(credentials.user?.uid);
-    })
-
-    .catch((err) => {
-      if (!ignoreErrorCode.includes(err.code)) {
-        try {
-          const { error } = JSON.parse(err.message.match(/{.*}/g));
-          error.value = error;
-        } catch {
-          error.value = {
-            message: err.message,
-            status: err.code,
-          };
-        }
+  signInWithPopup(auth, provider).catch((err) => {
+    if (!ignoreErrorCode.includes(err.code)) {
+      try {
+        const { error } = JSON.parse(err.message.match(/{.*}/g));
+        error.value = error;
+      } catch {
+        error.value = {
+          message: err.message,
+          status: err.code,
+        };
       }
-    });
+    }
+  });
 };
 </script>
 
