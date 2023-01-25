@@ -2,12 +2,12 @@
   <VTooltip :text="user?.info.displayName">
     <template #activator="{ props }">
       <VBtn
-        :ref="user?.info.uid"
         icon
         v-bind="props"
         @click="dialog = true"
         :loading="dialog"
         color="secondary"
+        class="ml-1"
       >
         <VAvatar>
           <VImg :src="user?.info.photoURL" :alt="user?.info.displayName" />
