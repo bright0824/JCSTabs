@@ -73,7 +73,6 @@ const filterUsers = (letter: string) => {
                 <UserCard
                   :user="(user as User)"
                   :items="(items.food as Item[])"
-                  :ref="user.info.uid"
                 />
               </template>
             </VExpansionPanelText>
