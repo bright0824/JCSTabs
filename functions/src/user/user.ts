@@ -4,6 +4,8 @@ import {
   type FunctionsErrorCode,
 } from "firebase-functions/v1/https";
 
+import { firestore, auth } from "firebase-admin";
+
 export const clearTab = onCall(async (data, context) => {
   if (context.app == undefined) {
     throw new HttpsError("permission-denied", "Unknown origin");
@@ -16,7 +18,6 @@ export const clearTab = onCall(async (data, context) => {
   }
 
   try {
-    const { firestore, auth } = await import("firebase-admin");
     const user = await auth().getUserByEmail(data.email);
     return firestore().doc(`users/${user.uid}`).update({
       tab: [],
@@ -34,25 +35,31 @@ export const toggleRole = onCall(async (data, context) => {
   if (context.app == undefined) {
     throw new HttpsError("failed-precondition", "Unknown origin");
   }
-  if (!context.auth?.token.admin) {
-    throw new HttpsError("permission-denied", "You must be an admin");
-  }
-
-  const { auth, firestore } = await import("firebase-admin");
-
   const { email, role } = data;
-  const user = await auth().getUserByEmail(email);
 
-  return async () => {
-    await auth().setCustomUserClaims(user.uid, {
+  const user = await auth().getUserByEmail(email);
+  await auth()
+    .setCustomUserClaims(user.uid, {
       [role]: !user.customClaims?.[role],
+    })
+    .catch((error) => {
+      throw new HttpsError("unknown", error.message);
     });
-    await firestore()
-      .doc(`users/${user.uid}`)
-      .update({
+
+  await firestore()
+    .doc(`users/${user.uid}`)
+    .set(
+      {
         roles: {
           [role]: !user.customClaims?.[role],
         },
-      });
-  };
+      },
+      { merge: true }
+    )
+    .then(() => {
+      return { message: `Success! ${email} is now ${role}` };
+    })
+    .catch((error) => {
+      throw new HttpsError("unknown", error.message);
+    });
 });
