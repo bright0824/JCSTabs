@@ -6,6 +6,8 @@ import {
 
 import { firestore, auth } from "firebase-admin";
 
+import { Timestamp } from "firebase-admin/firestore";
+
 export const clearTab = onCall(async (data, context) => {
   if (context.app == undefined) {
     throw new HttpsError("permission-denied", "Unknown origin");
@@ -17,10 +19,41 @@ export const clearTab = onCall(async (data, context) => {
     );
   }
 
+  type TabItem = {
+    name: string;
+    price: number;
+    date: Timestamp;
+    paid: boolean;
+  };
+
   try {
     const user = await auth().getUserByEmail(data.email);
-    return firestore().doc(`users/${user.uid}`).update({
-      tab: [],
+    const userRef = firestore().collection("users").doc(user.uid);
+
+    return await firestore().runTransaction(async (t) => {
+      const doc = await t.get(userRef);
+      const tab = doc.data()?.tab;
+
+      const newTab = tab.forEach((element: TabItem) => {
+        element.paid == true;
+      });
+
+      const total = () => {
+        let total = 0;
+        newTab.forEach((item: TabItem) => {
+          total += item.price;
+        });
+        return total;
+      };
+
+      newTab.push({
+        name: "Tab Cleared",
+        price: total(),
+        date: Timestamp.now(),
+        paid: true,
+      });
+
+      await t.update(userRef, newTab);
     });
   } catch (error) {
     const { code, message } = error as {

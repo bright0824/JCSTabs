@@ -13,6 +13,7 @@ export type TabItem = {
   name: string;
   price: number;
   date: Timestamp;
+  payed: boolean;
 };
 
 export type User = {

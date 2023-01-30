@@ -95,6 +95,7 @@ const addItem = async (item: Item) => {
       tab: arrayUnion({
         ...item,
         date: Timestamp.now(),
+        paid: false,
       }),
     });
     close();
