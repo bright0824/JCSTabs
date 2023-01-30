@@ -88,7 +88,8 @@ const signIn = () => {
   "path": "/login",
   "name": "login",
   "meta": {
-    "requiresAuth": false
+    "requiresAuth": false,
+    "transition": "fade-transition"
   }
 }
 </route>

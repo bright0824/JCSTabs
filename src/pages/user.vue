@@ -120,7 +120,8 @@
   "path": "/user",
   "name": "user",
   "meta": {
-    "requiresAuth": true
+    "requiresAuth": true,
+    "transition": "fade-transition"
   }
 }
 </route>

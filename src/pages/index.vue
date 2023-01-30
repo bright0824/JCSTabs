@@ -13,7 +13,8 @@
   "path": "/",
   "name": "home",
   "meta": {
-    "requiresAuth": false
+    "requiresAuth": false,
+    "transition": "fade-transition"
   }
 }
 </route>

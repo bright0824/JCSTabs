@@ -13,9 +13,15 @@
     </VAppBar>
     <VMain>
       <VContainer fluid>
-        <RouterView v-slot="{ Component }">
-          <Transition name="fade-transition" appear>
-            <component :is="Component" />
+        <RouterView v-slot="{ Component, route }">
+          <Transition
+            :name="route.meta?.transition || 'fade-transition'"
+            appear
+            mode="out-in"
+          >
+            <div :key="route.path">
+              <component :is="Component" />
+            </div>
           </Transition>
         </RouterView>
       </VContainer>

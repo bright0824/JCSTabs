@@ -1,5 +1,11 @@
 <template>
-  <RouterView />
+  <RouterView v-slot="{ Component, route }">
+    <Transition name="slide-x-transition" appear mode="out-in">
+      <div :key="route.path">
+        <component :is="Component" />
+      </div>
+    </Transition>
+  </RouterView>
   <VBottomNavigation>
     <VTabs>
       <VTab value="staff" to="/admin/staff">
@@ -20,18 +26,25 @@
   "name": "AdminPage",
   "component": "AdminPage",
   "meta": {
-    "requiresAuth": true
+    "requiresAuth": true,
+    "transition": "fade-transition"
   },
   "children": [
     {
       "path": "staff",
       "name": "Staff",
-      "component": "StaffPage"
+      "component": "StaffPage",
+      "meta": {
+        "transition": "slide-x-transition"
+      }
     },
     {
       "path": "items",
       "name": "Items",
-      "component": "ItemsPage"
+      "component": "ItemsPage",
+      "meta": {
+        "transition": "slide-x-transition"
+      }
     }
   ]
 }

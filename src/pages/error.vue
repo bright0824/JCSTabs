@@ -33,7 +33,8 @@ const resolveCode = () => {
   "path": "/error",
   "name": "error",
   "meta": {
-    "requiresAuth": false
+    "requiresAuth": false,
+    "transition": "fade-transition"
   }
 }
 </route>
