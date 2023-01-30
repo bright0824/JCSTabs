@@ -6,18 +6,20 @@
       </div>
     </Transition>
   </RouterView>
-  <VBottomNavigation>
-    <VTabs>
-      <VTab value="staff" to="/admin/staff">
-        <VIcon icon="manage_accounts" />
-        Staff
-      </VTab>
-      <VTab value="items" to="/admin/items">
-        <VIcon icon="inventory_2" />
-        Items
-      </VTab>
-    </VTabs>
-  </VBottomNavigation>
+  <KeepAlive>
+    <VBottomNavigation>
+      <VTabs>
+        <VTab value="staff" to="/admin/staff">
+          <VIcon icon="manage_accounts" />
+          Staff
+        </VTab>
+        <VTab value="items" to="/admin/items">
+          <VIcon icon="inventory_2" />
+          Items
+        </VTab>
+      </VTabs>
+    </VBottomNavigation>
+  </KeepAlive>
 </template>
 
 <route lang="json">

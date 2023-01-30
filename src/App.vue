@@ -15,13 +15,11 @@
       <VContainer fluid>
         <RouterView v-slot="{ Component, route }">
           <Transition
-            :name="route.meta?.transition || 'fade-transition'"
+            :name="route.meta?.transition as string || 'fade-transition'"
             appear
             mode="out-in"
           >
-            <div :key="route.path">
-              <component :is="Component" />
-            </div>
+            <component :is="Component" />
           </Transition>
         </RouterView>
       </VContainer>
