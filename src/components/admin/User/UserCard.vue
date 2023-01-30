@@ -38,21 +38,31 @@
               Total: ${{ total }}
             </VExpansionPanelTitle>
             <VExpansionPanelText>
-              <VList>
-                <template v-for="(item, index) in items" :key="index">
-                  <VListItem v-if="count[item.name] > 0">
-                    <VListItemTitle>
-                      {{ item.name }}: {{ count[item.name] }} *
-                      {{
-                        new Intl.NumberFormat("en", {
-                          style: "currency",
-                          currency: "CAD",
-                        }).format(item.price)
-                      }}
-                    </VListItemTitle>
-                  </VListItem>
-                </template>
-              </VList>
+              <VTable>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-for="(item, index) in user?.tab" :key="index">
+                    <tr>
+                      <td>{{ item.name }}</td>
+                      <td>
+                        {{
+                          new Intl.NumberFormat("en", {
+                            style: "currency",
+                            currency: "CAD",
+                          }).format(item.price)
+                        }}
+                      </td>
+                      <td>1</td>
+                    </tr>
+                  </template>
+                </tbody>
+              </VTable>
             </VExpansionPanelText>
           </VExpansionPanel>
         </VExpansionPanels>
