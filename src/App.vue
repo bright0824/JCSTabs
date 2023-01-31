@@ -1,7 +1,7 @@
 <template>
   <VApp>
     <VAppBar color="primary" app>
-      <VAppBarNavIcon color="auto" icon="home" @click="router.push('/user')" />
+      <VAppBarNavIcon color="auto" icon="home" @click="router.push('/')" />
       <VAppBarTitle> JCS Tabs </VAppBarTitle>
       <VBtn icon @click="toggleTheme" color="auto">
         <Transition name="fade-transition" mode="out-in">
