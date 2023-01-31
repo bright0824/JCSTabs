@@ -7,10 +7,10 @@
     </VRow>
     <VRow>
       <VCol>
-        <VCard max-width="800px">
+        <VCard>
           <VCardTitle> Current Tab </VCardTitle>
           <VCardText>
-            <VTable density="compact">
+            <VTable>
               <thead>
                 <tr>
                   <th>Item</th>
@@ -51,47 +51,89 @@
     </VRow>
     <VRow>
       <VCol>
-        <VCard max-width="800px">
-          <VCardTitle> Current Tab </VCardTitle>
-          <VCardText>
-            <VPagination v-model="page" :length="MathTime()" />
-            <VTable>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Price</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-for="(item, index) in visibleItems" :key="index">
-                  <tr v-if="count()[item.name] > 0">
-                    <td>{{ item.name }}</td>
-                    <td>
-                      {{
-                        new Intl.NumberFormat("en-CA", {
-                          style: "currency",
-                          currency: "CAD",
-                        }).format(item.price)
-                      }}
-                    </td>
-                    <td>
-                      {{ item.date.toDate().toLocaleDateString() }}
-                    </td>
-                    <td>
-                      {{ item.date.toDate().toLocaleTimeString() }}
-                    </td>
-                    <DeleteItemFromTab
-                      :item="item"
-                      v-if="canDelete(item.date)"
-                    />
+        <VExpansionPanels>
+          <VExpansionPanel>
+            <VExpansionPanelTitle>
+              <h3>Recent Transactions</h3>
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <VTable>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Time</th>
                   </tr>
-                </template>
-              </tbody>
-            </VTable>
-          </VCardText>
-        </VCard>
+                </thead>
+                <tbody>
+                  <template v-for="(item, index) in userDoc.tab" :key="index">
+                    <tr v-if="count()[item.name] > 0">
+                      <td>{{ item.name }}</td>
+                      <td>
+                        {{
+                          new Intl.NumberFormat("en-CA", {
+                            style: "currency",
+                            currency: "CAD",
+                          }).format(item.price)
+                        }}
+                      </td>
+                      <td>
+                        {{ item.date.toDate().toLocaleDateString() }}
+                      </td>
+                      <td>
+                        {{ item.date.toDate().toLocaleTimeString() }}
+                      </td>
+                      <DeleteItemFromTab
+                        :item="item"
+                        v-if="canDelete(item.date, item.paid)"
+                      />
+                    </tr>
+                  </template>
+                </tbody>
+              </VTable>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+          <VExpansionPanel>
+            <VExpansionPanelTitle>
+              <h3>History</h3>
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <VPagination v-model="page" :length="MathTime()" />
+              <VTable>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-for="(item, index) in visibleItems" :key="index">
+                    <tr>
+                      <td>{{ item.name }}</td>
+                      <td>
+                        {{
+                          new Intl.NumberFormat("en-CA", {
+                            style: "currency",
+                            currency: "CAD",
+                          }).format(item.price)
+                        }}
+                      </td>
+                      <td>
+                        {{ item.date.toDate().toLocaleDateString() }}
+                      </td>
+                      <td>
+                        {{ item.date.toDate().toLocaleTimeString() }}
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </VTable>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+        </VExpansionPanels>
       </VCol>
     </VRow>
     <VRow>
@@ -130,7 +172,7 @@
 </route>
 
 <script setup lang="ts">
-import type { Item } from "@/types";
+import type { Item, TabItem } from "@/types";
 import type { Timestamp } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import { computed, ref } from "vue";
@@ -162,9 +204,11 @@ const count = () => {
   items.data.value?.food.forEach((item: Item) => {
     total[item.name] = 0;
   });
-  userDoc.data.value?.tab?.forEach((item: Item) => {
-    total[item.name]++;
-  });
+  userDoc.data.value?.tab
+    ?.filter((item: TabItem) => !item.paid)
+    .forEach((item: Item) => {
+      total[item.name]++;
+    });
   return total;
 };
 
@@ -180,15 +224,16 @@ const total = () => {
 };
 
 const visibleItems = computed(() => {
+  console.log(userDoc.data.value?.tab);
   return userDoc.data.value?.tab
-    .reverse()
+    .sort((a: TabItem, b: TabItem) => b.date.toMillis() - a.date.toMillis())
     .slice((page.value - 1) * perPage, page.value * perPage);
 });
 
-const canDelete = (date: Timestamp) => {
+const canDelete = (date: Timestamp, item: TabItem) => {
   const now = new Date();
   const diff = now.getTime() - date.toDate().getTime();
-  return diff < 300000;
+  return diff < 300000 && !item.paid;
 };
 
 // methods
