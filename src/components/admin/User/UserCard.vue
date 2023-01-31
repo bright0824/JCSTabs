@@ -47,7 +47,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="(item, index) in user?.tab.filter((item) => !item.paid)" :key="index">
+                  <template
+                    v-for="(item, index) in user?.tab.filter(
+                      (item) => !item.paid
+                    )"
+                    :key="index"
+                  >
                     <tr>
                       <td>{{ item.name }}</td>
                       <td>
@@ -58,7 +63,7 @@
                           }).format(item.price)
                         }}
                       </td>
-                      <td>{{count[item.name]}}</td>
+                      <td>{{ count[item.name] }}</td>
                     </tr>
                   </template>
                 </tbody>
@@ -66,10 +71,13 @@
             </VExpansionPanelText>
           </VExpansionPanel>
           <VExpansionPanel>
-            <VExpansionPanelTitle>
-              History
-            </VExpansionPanelTitle>
+            <VExpansionPanelTitle> History </VExpansionPanelTitle>
             <VExpansionPanelText>
+              <VPagination
+                v-model="page"
+                :length="MathTime()"
+                :totalVisible="MathTime()"
+              />
               <VTable>
                 <thead>
                   <tr>
@@ -81,7 +89,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="(item, index) in reverseTab" :key="index">
+                  <template v-for="item in visibleItems" :key="item">
                     <tr>
                       <td>{{ item.name }}</td>
                       <td>{{ item.paid ? "Yes" : "No" }}</td>
@@ -132,19 +140,33 @@ const props = defineProps<{
 
 // data
 const dialog = ref(false);
+const page = ref(1);
+const perPage = 3;
 
 // computed
 const total = computed(() => {
   let total = 0;
-  props.user?.tab?.filter((item) => !item.paid).forEach((item) => {
-    total += item.price;
-  });
+  props.user?.tab
+    ?.filter((item) => !item.paid)
+    .forEach((item) => {
+      total += item.price;
+    });
   return total;
 });
 
-const reverseTab = computed(() => {
-  return props.user?.tab.reverse();
+const visibleItems = computed(() => {
+  const start = (page.value - 1) * perPage;
+  const end = start + perPage;
+  // @ts-expect-error
+  props.user?.tab?.sort((a, b) => b.date.toDate() - a.date.toDate());
+  return props.user?.tab?.slice(start, end);
 });
+
+const MathTime = () => {
+  if (props.user?.tab.length) {
+    return Math.ceil(props.user?.tab.length / perPage);
+  }
+};
 
 const count = computed(() => {
   const count = {} as Record<string, number>;
