@@ -38,6 +38,9 @@
           </VCardText>
           <VCardText>
             <VRow>
+              <VCol align="left">
+                <ClearTab />
+              </VCol>
               <VCol align="right">
                 <h3 class="mr-2">Total: {{ total() }}</h3>
               </VCol>
@@ -49,7 +52,7 @@
     <VRow>
       <VCol>
         <VCard max-width="800px">
-          <VCardTitle> Recent Transactions </VCardTitle>
+          <VCardTitle> Current Tab </VCardTitle>
           <VCardText>
             <VPagination v-model="page" :length="MathTime()" />
             <VTable>
@@ -129,7 +132,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import type { Timestamp } from "firebase/firestore";
-import type { Item } from "@/types";
+import type { Item, User } from "@/types";
 import { useRouter } from "vue-router";
 import { useDocument, useFirestore, useFirebaseAuth } from "vuefire";
 import { doc } from "firebase/firestore";
@@ -138,6 +141,7 @@ import { doc } from "firebase/firestore";
 import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
 import DeleteItemFromTab from "@/components/userPage/DeleteItemFromTab.vue";
 import FeedBack from "@/components/FeedBack.vue";
+import ClearTab from "@/components/userPage/ClearTab.vue";
 
 const router = useRouter();
 
