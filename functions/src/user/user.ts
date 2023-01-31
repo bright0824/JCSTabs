@@ -12,7 +12,10 @@ export const clearTab = onCall(async (data, context) => {
   if (context.app == undefined) {
     throw new HttpsError("permission-denied", "Unknown origin");
   }
-  if (!context?.auth?.token.admin) {
+  if (
+    !context?.auth?.token.admin &&
+    context?.auth?.token.email !== data.email
+  ) {
     throw new HttpsError(
       "permission-denied",
       "You must be an admin to clear the tab"
@@ -24,6 +27,7 @@ export const clearTab = onCall(async (data, context) => {
     price: number;
     date: Timestamp;
     paid: boolean;
+    clearedBy?: string;
   };
 
   try {
@@ -31,29 +35,67 @@ export const clearTab = onCall(async (data, context) => {
     const userRef = firestore().collection("users").doc(user.uid);
 
     return await firestore().runTransaction(async (t) => {
+      // Get the user's tab
       const doc = await t.get(userRef);
       const tab = doc.data()?.tab;
 
-      const newTab = tab.forEach((element: TabItem) => {
-        element.paid == true;
+      const currentTab: TabItem[] = tab || [];
+
+      currentTab.forEach((item) => {
+        item.paid = true;
       });
 
       const total = () => {
         let total = 0;
-        newTab.forEach((item: TabItem) => {
+        currentTab.forEach((item) => {
           total += item.price;
         });
         return total;
       };
 
-      newTab.push({
-        name: "Tab Cleared",
+      const processedTab = [...currentTab];
+
+      processedTab.push({
+        name: "Tab cleared by " + user.displayName,
         price: total(),
         date: Timestamp.now(),
+        clearedBy: user.displayName,
         paid: true,
       });
 
-      await t.update(userRef, newTab);
+      console.log(processedTab);
+
+      await t.update(userRef, {
+        tab: processedTab,
+      });
+
+      return true;
+    });
+  } catch (error) {
+    console.log(error);
+    const { code, message } = error as {
+      code: FunctionsErrorCode;
+      message: string;
+    };
+    throw new HttpsError(code, message);
+  }
+});
+
+export const clearHistory = onCall(async (data, context) => {
+  if (context.app == undefined) {
+    throw new HttpsError("permission-denied", "Unknown origin");
+  }
+  if (!context?.auth?.token.admin) {
+    throw new HttpsError(
+      "permission-denied",
+      "You must be an admin to clear the history"
+    );
+  }
+
+  try {
+    const user = await auth().getUserByEmail(data.email);
+    return firestore().doc(`users/${user.uid}`).update({
+      tab: [],
     });
   } catch (error) {
     const { code, message } = error as {
