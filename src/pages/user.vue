@@ -130,18 +130,18 @@
 </route>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import type { Item } from "@/types";
 import type { Timestamp } from "firebase/firestore";
-import type { Item, User } from "@/types";
-import { useRouter } from "vue-router";
-import { useDocument, useFirestore, useFirebaseAuth } from "vuefire";
 import { doc } from "firebase/firestore";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";
 
 // components
-import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
-import DeleteItemFromTab from "@/components/userPage/DeleteItemFromTab.vue";
 import FeedBack from "@/components/FeedBack.vue";
+import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
 import ClearTab from "@/components/userPage/ClearTab.vue";
+import DeleteItemFromTab from "@/components/userPage/DeleteItemFromTab.vue";
 
 const router = useRouter();
 

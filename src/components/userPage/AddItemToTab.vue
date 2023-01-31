@@ -63,10 +63,10 @@
 
 <script setup lang="ts">
 import type { Item } from "@/types";
+import { arrayUnion, doc, Timestamp, updateDoc } from "firebase/firestore";
 import { ref } from "vue";
-import { useDisplay } from "vuetify";
 import { useFirebaseAuth, useFirestore } from "vuefire";
-import { doc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
+import { useDisplay } from "vuetify";
 
 const db = useFirestore();
 const auth = useFirebaseAuth();

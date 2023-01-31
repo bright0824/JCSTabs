@@ -46,10 +46,10 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from "@/types";
-import { ref } from "vue";
-import { httpsCallable } from "firebase/functions";
 import { functions } from "@/firebase";
+import type { User } from "@/types";
+import { httpsCallable } from "firebase/functions";
+import { ref } from "vue";
 import { useFirebaseAuth } from "vuefire";
 
 const auth = useFirebaseAuth();

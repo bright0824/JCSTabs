@@ -126,10 +126,12 @@
 </template>
 
 <script setup lang="ts">
-import type { User, Item } from "@/types";
-import { ref, computed } from "vue";
-import ClearTab from "@/components/admin/User/ClearTab.vue";
+import type { Item, User } from "@/types";
+import { computed, ref } from "vue";
+
+// components
 import ClearHistory from "@/components/admin/User/ClearHistory.vue";
+import ClearTab from "@/components/admin/User/ClearTab.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
 
 // props

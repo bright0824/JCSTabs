@@ -34,11 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Item } from "@/types";
-import { ref } from "vue";
-import { httpsCallable } from "firebase/functions";
 import { functions } from "@/firebase";
+import type { Item } from "@/types";
+import { httpsCallable } from "firebase/functions";
+import { ref } from "vue";
 
+// components
 import DeleteItem from "./DeleteItem.vue";
 
 // props

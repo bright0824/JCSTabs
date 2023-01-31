@@ -39,9 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { httpsCallable } from "firebase/functions";
 import { functions } from "@/firebase";
+import { httpsCallable } from "firebase/functions";
+import { ref } from "vue";
 
 // data
 const dialog = ref(false);

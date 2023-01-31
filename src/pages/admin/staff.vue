@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { User, Item } from "@/types";
-import { useDocument, useCollection, useFirestore } from "vuefire";
+import type { Item, User } from "@/types";
 import { collection, doc } from "firebase/firestore";
+import { useCollection, useDocument, useFirestore } from "vuefire";
 
 import UserCard from "@/components/admin/User/UserCard.vue";
 

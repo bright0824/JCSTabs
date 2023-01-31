@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { doc } from "firebase/firestore";
-import { useFirestore, useDocument } from "vuefire";
+import { useDocument, useFirestore } from "vuefire";
 
 // components
 import AddItem from "@/components/admin/Item/AddItem.vue";

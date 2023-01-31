@@ -29,10 +29,10 @@
 </template>
 
 <script setup lang="ts">
+import { functions } from "@/firebase";
+import { httpsCallable } from "firebase/functions";
 import { ref } from "vue";
 import { useFirebaseAuth } from "vuefire";
-import { httpsCallable } from "firebase/functions";
-import { functions } from "@/firebase";
 
 const auth = useFirebaseAuth();
 

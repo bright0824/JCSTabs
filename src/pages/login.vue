@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ref } from "vue";
-import { useFirebaseAuth } from "vuefire";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from "vue-router";
+import { useFirebaseAuth } from "vuefire";
 
 // data
 const loggedIn = ref(false);

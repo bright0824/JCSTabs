@@ -1,7 +1,9 @@
 <template>
   <VDialog v-model="dialog" max-width="500px" @click:outside="closeDialog()">
     <template #activator="{ props }">
-      <VBtn v-bind="props" color="error" :loading="dialog"> Clear History </VBtn>
+      <VBtn v-bind="props" color="error" :loading="dialog">
+        Clear History
+      </VBtn>
     </template>
     <VCard :disabled="loading" :loading="loading">
       <VAlert type="error" v-if="error.code != null">
@@ -33,10 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from "@/types";
-import { ref } from "vue";
-import { httpsCallable } from "firebase/functions";
 import { functions } from "@/firebase";
+import type { User } from "@/types";
+import { httpsCallable } from "firebase/functions";
+import { ref } from "vue";
 
 // inject the user
 const props = defineProps<{ user: User | null }>();

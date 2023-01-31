@@ -46,8 +46,8 @@
 
 <script setup lang="ts">
 import type { TabItem } from "@/types";
-import { ref } from "vue";
 import { arrayRemove, doc, updateDoc } from "firebase/firestore";
+import { ref } from "vue";
 import { useFirebaseAuth, useFirestore } from "vuefire";
 
 const auth = useFirebaseAuth();
