@@ -41,14 +41,16 @@ export const clearTab = onCall(async (data, context) => {
 
       const currentTab: TabItem[] = tab || [];
 
-      currentTab.forEach((item) => {
-        item.paid = true;
-      });
+      currentTab
+        .filter((item: TabItem) => !item.paid)
+        .forEach((item) => {
+          item.paid = true;
+        });
 
       const total = () => {
         let total = 0;
         currentTab.forEach((item) => {
-          total += item.price;
+          total -= item.price;
         });
         return total;
       };
@@ -63,13 +65,9 @@ export const clearTab = onCall(async (data, context) => {
         paid: true,
       });
 
-      console.log(processedTab);
-
-      await t.update(userRef, {
+      return await t.update(userRef, {
         tab: processedTab,
       });
-
-      return true;
     });
   } catch (error) {
     console.log(error);
