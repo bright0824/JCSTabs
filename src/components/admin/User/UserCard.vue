@@ -15,7 +15,7 @@
       </VBtn>
     </template>
   </VTooltip>
-  <VDialog v-model="dialog" maxWidth="400px">
+  <VDialog v-model="dialog" maxWidth="80%" maxheight="80%">
     <VCard>
       <VCardTitle>
         <VRow>
@@ -47,7 +47,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="(item, index) in user?.tab" :key="index">
+                  <template v-for="(item, index) in user?.tab.filter((item) => !item.paid)" :key="index">
                     <tr>
                       <td>{{ item.name }}</td>
                       <td>
@@ -58,7 +58,43 @@
                           }).format(item.price)
                         }}
                       </td>
-                      <td>1</td>
+                      <td>{{count[item.name]}}</td>
+                    </tr>
+                  </template>
+                </tbody>
+              </VTable>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+          <VExpansionPanel>
+            <VExpansionPanelTitle>
+              History
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <VTable>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Paid</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-for="(item, index) in reverseTab" :key="index">
+                    <tr>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.paid ? "Yes" : "No" }}</td>
+                      <td>
+                        {{
+                          new Intl.NumberFormat("en", {
+                            style: "currency",
+                            currency: "CAD",
+                          }).format(item.price)
+                        }}
+                      </td>
+                      <td>{{ item.date.toDate().toLocaleDateString() }}</td>
+                      <td>{{ item.date.toDate().toLocaleTimeString() }}</td>
                     </tr>
                   </template>
                 </tbody>
@@ -75,6 +111,7 @@
       <VCardActions>
         <VBtn color="auto" @click="dialog = false">Close</VBtn>
         <ClearTab :user="user" v-if="checkTabLength()" />
+        <ClearHistory :user="user" />
       </VCardActions>
     </VCard>
   </VDialog>
@@ -84,6 +121,7 @@
 import type { User, Item } from "@/types";
 import { ref, computed } from "vue";
 import ClearTab from "@/components/admin/User/ClearTab.vue";
+import ClearHistory from "@/components/admin/User/ClearHistory.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
 
 // props
@@ -98,10 +136,14 @@ const dialog = ref(false);
 // computed
 const total = computed(() => {
   let total = 0;
-  props.user?.tab?.forEach((item) => {
+  props.user?.tab?.filter((item) => !item.paid).forEach((item) => {
     total += item.price;
   });
   return total;
+});
+
+const reverseTab = computed(() => {
+  return props.user?.tab.reverse();
 });
 
 const count = computed(() => {

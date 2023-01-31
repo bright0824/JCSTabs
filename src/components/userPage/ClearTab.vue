@@ -12,11 +12,7 @@
       </VAlert>
       <VCardTitle>Are you sure?</VCardTitle>
       <VCardSubtitle>this action cannot be undone.</VCardSubtitle>
-      <VCardText>
-        Are you sure you want to clear the tab for
-        <strong>{{ user?.info?.displayName }}</strong
-        >?
-      </VCardText>
+      <VCardText> Are you sure you want to clear your tab? </VCardText>
       <VCardActions>
         <VBtn
           color="green"
@@ -33,13 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from "@/types";
 import { ref } from "vue";
+import { useFirebaseAuth } from "vuefire";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "@/firebase";
 
-// inject the user
-const props = defineProps<{ user: User | null }>();
+const auth = useFirebaseAuth();
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -52,7 +47,7 @@ const clearTab = async () => {
   loading.value = true;
   try {
     const clearTab = httpsCallable(functions, "clearTab");
-    await clearTab({ email: props.user?.info.email });
+    await clearTab({ email: auth?.currentUser?.email });
     dialog.value = false;
 
     error.value = { code: null, message: null };
