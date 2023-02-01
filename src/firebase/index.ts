@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFunctions } from "firebase/functions";
+import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
 import { getAnalytics } from "firebase/analytics";
 import { getPerformance } from "firebase/performance";
 
@@ -18,5 +18,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const functions = getFunctions(firebaseApp);
 getAnalytics(firebaseApp);
 getPerformance(firebaseApp);
+
+connectFunctionsEmulator(functions, "localhost", 5001);
 
 export { firebaseApp, functions };

@@ -1,12 +1,10 @@
-import {
-  onCall,
-  HttpsError,
-  type FunctionsErrorCode,
-} from "firebase-functions/v1/https";
-
-import { firestore, auth } from "firebase-admin";
-
+import { auth, firestore } from "firebase-admin";
 import { Timestamp } from "firebase-admin/firestore";
+import {
+  HttpsError,
+  onCall,
+  FunctionsErrorCode,
+} from "firebase-functions/v1/https";
 
 export const clearTab = onCall(async (data, context) => {
   if (context.app == undefined) {
@@ -34,7 +32,7 @@ export const clearTab = onCall(async (data, context) => {
     const user = await auth().getUserByEmail(data.email);
     const userRef = firestore().collection("users").doc(user.uid);
 
-    return await firestore().runTransaction(async (t) => {
+    await firestore().runTransaction(async (t) => {
       // Get the user's tab
       const doc = await t.get(userRef);
       const tab = doc.data()?.tab;
@@ -65,7 +63,7 @@ export const clearTab = onCall(async (data, context) => {
         paid: true,
       });
 
-      return await t.update(userRef, {
+      return t.update(userRef, {
         tab: processedTab,
       });
     });
