@@ -1,10 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore, doc } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 import { getAnalytics } from "firebase/analytics";
 import { getPerformance } from "firebase/performance";
-// import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlFp1mxhtzaCy16eXFKX9glqWDAiyS_hg",
