@@ -23,10 +23,7 @@
             <VAvatar>
               <VImg :src="user?.info.photoURL" alt="User Avatar" />
             </VAvatar>
-          </VCol>
-          <VSpacer />
-          <VSpacer />
-          <VCol>
+
             {{ user?.info.displayName }}
           </VCol>
         </VRow>
