@@ -224,7 +224,6 @@ const total = () => {
 };
 
 const visibleItems = computed(() => {
-  console.log(userDoc.data.value?.tab);
   return userDoc.data.value?.tab
     .sort((a: TabItem, b: TabItem) => b.date.toMillis() - a.date.toMillis())
     .slice((page.value - 1) * perPage, page.value * perPage);
