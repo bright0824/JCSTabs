@@ -9,4 +9,4 @@ export { clearTab, clearHistory, toggleRole } from "./user";
 export { addItem, deleteItem, updateItem } from "./items";
 
 // Auth functions
-export { beforecreate, onCreate, onDelete } from "./auth";
+export { beforeCreate, onCreate, onDelete } from "./auth";
