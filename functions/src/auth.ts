@@ -1,8 +1,9 @@
 import { auth } from "firebase-functions";
+import { identity } from "firebase-functions/v2";
 
-export const beforeCreate = auth.user().beforeCreate(async (event) => {
-  const { email } = event;
-  if (!email?.endsWith("@educbe.ca")) {
+export const beforeCreate = identity.beforeUserCreated(async (event) => {
+  const user = event.data;
+  if (!user.email?.endsWith("@educbe.ca")) {
     const { HttpsError } = await import("firebase-functions/v1/auth");
     throw new HttpsError(
       "permission-denied",
