@@ -23,13 +23,12 @@
             <VAvatar>
               <VImg :src="user?.info.photoURL" alt="User Avatar" />
             </VAvatar>
-          </VCol>
-          <VCol>
+
             {{ user?.info.displayName }}
           </VCol>
         </VRow>
       </VCardTitle>
-      <VCardText align="center">
+      <VCardText>
         <VExpansionPanels>
           <VExpansionPanel>
             <VExpansionPanelTitle>
@@ -118,8 +117,8 @@
       </VCardText>
       <VCardActions>
         <VBtn color="auto" @click="dialog = false">Close</VBtn>
-        <ClearTab :user="user" v-if="checkTabLength()" />
-        <ClearHistory :user="user" />
+        <ClearTab :user="user" v-if="checkTabLength().currentTab" />
+        <ClearHistory :user="user" v-if="checkTabLength().history" />
       </VCardActions>
     </VCard>
   </VDialog>
@@ -143,7 +142,7 @@ const props = defineProps<{
 // data
 const dialog = ref(false);
 const page = ref(1);
-const perPage = 3;
+const perPage = 5;
 
 // computed
 const total = computed(() => {
@@ -184,10 +183,9 @@ const count = computed(() => {
 
 // methods
 const checkTabLength = () => {
-  if (props.user?.tab.length) {
-    return props.user?.tab.length > 0;
-  } else {
-    return 0;
-  }
+  return {
+    currentTab: !!props.user?.tab.filter((item) => !item.paid).length,
+    history: !!props.user?.tab.length,
+  };
 };
 </script>

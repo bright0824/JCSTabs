@@ -32,16 +32,23 @@ import { ref } from "vue";
 import { useFirebaseAuth } from "vuefire";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
+import { usePreferredDark } from "@vueuse/core";
 
 import UserProfile from "@/components/UserProfile.vue";
-//components
-// const UserProfile = () => import("@/components/UserProfile.vue");
 
 // data
 const loggedIn = ref(false);
 const theme = useTheme();
 const auth = useFirebaseAuth()!;
 const router = useRouter();
+
+const prefersDark = usePreferredDark();
+
+if (prefersDark.value) {
+  theme.global.name.value = "dark";
+} else {
+  theme.global.name.value = "light";
+}
 
 auth.onAuthStateChanged((user) => {
   loggedIn.value = !!user;
@@ -50,10 +57,5 @@ auth.onAuthStateChanged((user) => {
 // methods
 const toggleTheme = () => {
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
-  localStorage.setItem("theme", theme.global.name.value);
 };
-
-if (localStorage.getItem("theme")) {
-  theme.global.name.value = localStorage.getItem("theme") as string;
-}
 </script>

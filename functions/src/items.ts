@@ -1,4 +1,6 @@
 import { onCall, HttpsError } from "firebase-functions/v1/https";
+import { firestore } from "firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 
 export const addItem = onCall(async (data, context) => {
   if (context.app === undefined) {
@@ -10,12 +12,14 @@ export const addItem = onCall(async (data, context) => {
       "You must be an admin to add an item"
     );
   }
-  const { firestore } = await import("firebase-admin");
 
   return firestore()
     .doc("admin/items")
     .update({
-      food: firestore.FieldValue.arrayUnion(data.item),
+      food: FieldValue.arrayUnion(data.item),
+    })
+    .catch((error) => {
+      throw new HttpsError("unknown", error.message);
     });
 });
 
@@ -29,12 +33,11 @@ export const deleteItem = onCall(async (data, context) => {
       "You must be an admin to delete an item"
     );
   }
-  const { firestore } = await import("firebase-admin");
 
   return firestore()
     .doc("admin/items")
     .update({
-      food: firestore.FieldValue.arrayRemove(data.item),
+      food: FieldValue.arrayRemove(data.item),
     });
 });
 
@@ -48,7 +51,6 @@ export const updateItem = onCall(async (data, context) => {
       "You must be an admin to update an item"
     );
   }
-  const { firestore } = await import("firebase-admin");
 
   return firestore().doc("admin/items").update({
     food: data.items,

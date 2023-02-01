@@ -2,7 +2,7 @@
   <VBtn color="secondary" @click="dialog = true"> Add Item </VBtn>
   <VDialog v-model="dialog" width="300px" @click:outside="close()">
     <VCard :loading="loading" :disabled="loading">
-      <VAlert v-if="error" type="error" variant="outlined">
+      <VAlert v-if="error" type="error">
         <VAlertTitle>Error Occurred</VAlertTitle>
         hello!
         {{ error }}
