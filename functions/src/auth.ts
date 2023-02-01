@@ -1,7 +1,7 @@
 import { auth } from "firebase-functions";
 import { identity } from "firebase-functions/v2";
 
-export const beforeCreate = identity.beforeUserCreated(async (event) => {
+export const beforecreate = identity.beforeUserCreated(async (event) => {
   const user = event.data;
   if (!user.email?.endsWith("@educbe.ca")) {
     const { HttpsError } = await import("firebase-functions/v1/auth");
