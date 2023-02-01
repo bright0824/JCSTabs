@@ -1,5 +1,6 @@
 import { onCall, HttpsError } from "firebase-functions/v1/https";
 import { firestore } from "firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 
 export const addItem = onCall(async (data, context) => {
   if (context.app === undefined) {
@@ -15,7 +16,10 @@ export const addItem = onCall(async (data, context) => {
   return firestore()
     .doc("admin/items")
     .update({
-      food: firestore.FieldValue.arrayUnion(data.item),
+      food: FieldValue.arrayUnion(data.item),
+    })
+    .catch((error) => {
+      throw new HttpsError("unknown", error.message);
     });
 });
 
@@ -33,7 +37,7 @@ export const deleteItem = onCall(async (data, context) => {
   return firestore()
     .doc("admin/items")
     .update({
-      food: firestore.FieldValue.arrayRemove(data.item),
+      food: FieldValue.arrayRemove(data.item),
     });
 });
 
