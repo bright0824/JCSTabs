@@ -134,7 +134,7 @@ import ClearTab from "@/components/admin/User/ClearTab.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
 
 // props
-const props = defineProps<{
+const { user, items } = defineProps<{
   user: User | null;
   items: Item[];
 }>();
@@ -147,7 +147,7 @@ const perPage = 5;
 // computed
 const total = computed(() => {
   let total = 0;
-  props.user?.tab
+  user?.tab
     ?.filter((item) => !item.paid)
     .forEach((item) => {
       total += item.price;
@@ -159,19 +159,19 @@ const visibleItems = computed(() => {
   const start = (page.value - 1) * perPage;
   const end = start + perPage;
   // @ts-expect-error
-  props.user?.tab?.sort((a, b) => b.date.toDate() - a.date.toDate());
-  return props.user?.tab?.slice(start, end);
+  user?.tab?.sort((a, b) => b.date.toDate() - a.date.toDate());
+  return user?.tab?.slice(start, end);
 });
 
 const MathTime = () => {
-  if (props.user?.tab.length) {
-    return Math.ceil(props.user?.tab.length / perPage);
+  if (user?.tab.length) {
+    return Math.ceil(user?.tab.length / perPage);
   }
 };
 
 const count = computed(() => {
   const count = {} as Record<string, number>;
-  props.user?.tab?.forEach((item) => {
+  user?.tab?.forEach((item) => {
     if (count[item.name]) {
       count[item.name] += 1;
     } else {
@@ -184,8 +184,8 @@ const count = computed(() => {
 // methods
 const checkTabLength = () => {
   return {
-    currentTab: !!props.user?.tab.filter((item) => !item.paid).length,
-    history: !!props.user?.tab.length,
+    currentTab: !!user?.tab.filter((item) => !item.paid).length,
+    history: !!user?.tab.length,
   };
 };
 </script>

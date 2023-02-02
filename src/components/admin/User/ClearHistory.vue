@@ -41,7 +41,7 @@ import { httpsCallable } from "firebase/functions";
 import { ref } from "vue";
 
 // inject the user
-const props = defineProps<{ user: User | null }>();
+const { user } = defineProps<{ user: User | null }>();
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -54,7 +54,7 @@ const clearHistory = async () => {
   loading.value = true;
   try {
     const clearHistory = httpsCallable(functions, "clearHistory");
-    await clearHistory({ email: props.user?.info.email });
+    await clearHistory({ email: user?.info.email });
     dialog.value = false;
 
     error.value = { code: null, message: null };

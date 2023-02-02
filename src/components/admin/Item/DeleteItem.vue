@@ -43,7 +43,7 @@ import { httpsCallable } from "firebase/functions";
 import { ref } from "vue";
 
 // props
-const props = defineProps<{
+const { item } = defineProps<{
   item: Item;
 }>();
 
@@ -60,7 +60,7 @@ const deleteItem = async () => {
   try {
     loading.value.confirm = true;
     const deleteItem = httpsCallable(functions, "deleteItem");
-    await deleteItem({ item: props.item });
+    await deleteItem({ item: item });
     dialog.value = false;
   } catch (err) {
     console.log(err);

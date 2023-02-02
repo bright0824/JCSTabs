@@ -79,11 +79,9 @@ const error = ref({
 });
 const { mobile, width } = useDisplay();
 
-const props = defineProps<{
-  items: Item[];
-}>();
+const { items } = defineProps<{ items: Item[] }>();
 
-props.items?.forEach((item) => {
+items?.forEach((item) => {
   loading.value[item.name] = false;
 });
 

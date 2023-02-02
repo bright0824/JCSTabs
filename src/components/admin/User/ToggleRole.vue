@@ -24,8 +24,8 @@
     >
       <VCardTitle>Are you sure?</VCardTitle>
       <VCardSubtitle>
-        This will {{ user?.roles[props.role] ? "remove" : "add" }} the user as
-        an {{ props.role }}.
+        This will {{ user?.roles[role] ? "remove" : "add" }} the user as an
+        {{ role }}.
       </VCardSubtitle>
       <VCardText v-if="!user?.roles.admin">
         When a user is an administrator they can:
@@ -54,7 +54,7 @@ import { useFirebaseAuth } from "vuefire";
 
 const auth = useFirebaseAuth();
 
-const props = defineProps<{
+const { user, role } = defineProps<{
   user: User | null;
   role: string;
 }>();
@@ -80,7 +80,7 @@ const toggleRole = async () => {
   loading.value.dialog = true;
   try {
     const toggleRole = httpsCallable(functions, "toggleRole");
-    await toggleRole({ email: props.user?.info.email, role: props.role });
+    await toggleRole({ email: user?.info.email, role: role });
     loading.value.switch = false;
     dialog.value = false;
   } catch (err) {
@@ -93,19 +93,19 @@ const toggleRole = async () => {
 };
 
 const checkPerms = () => {
-  if (props.user?.info.email == auth?.currentUser?.email) {
+  if (user?.info.email == auth?.currentUser?.email) {
     return {
       disabled: true,
       message: "You cannot change your own permissions",
     };
   }
-  if (props.user?.roles.admin) {
+  if (user?.roles.admin) {
     return {
       disabled: false,
-      message: `Click to remove ${props.role} permissions`,
+      message: `Click to remove ${role} permissions`,
     };
   }
-  if (props.user?.roles.dev) {
+  if (user?.roles.dev) {
     return {
       disabled: true,
       message: "This user is a developer",
@@ -113,7 +113,7 @@ const checkPerms = () => {
   }
   return {
     disabled: false,
-    message: `Click to add ${props.role} permissions`,
+    message: `Click to add ${role} permissions`,
   };
 };
 

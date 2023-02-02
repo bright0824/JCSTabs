@@ -43,7 +43,7 @@ import { ref } from "vue";
 import DeleteItem from "./DeleteItem.vue";
 
 // props
-const props = defineProps<{
+const { input, items } = defineProps<{
   input: Item;
   items: Item[];
 }>();
@@ -68,7 +68,7 @@ const updateItem = async () => {
       functions,
       "updateItem"
     )({
-      items: props.items,
+      items: items,
     });
   } catch (err) {
     console.error(err);

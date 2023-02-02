@@ -39,7 +39,7 @@ import { httpsCallable } from "firebase/functions";
 import { ref } from "vue";
 
 // inject the user
-const props = defineProps<{ user: User | null }>();
+const { user } = defineProps<{ user: User | null }>();
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -52,7 +52,7 @@ const clearTab = async () => {
   loading.value = true;
   try {
     const clearTab = httpsCallable(functions, "clearTab");
-    await clearTab({ email: props.user?.info.email });
+    await clearTab({ email: user?.info.email });
     dialog.value = false;
 
     error.value = { code: null, message: null };
