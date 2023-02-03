@@ -11,10 +11,9 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     VueRouter({
-      dataFetching: true,
       routesFolder: "src/pages",
+      dataFetching: true,
       routeBlockLang: "json5",
-      importMode: "async",
     }),
     vue(),
     vuetify({

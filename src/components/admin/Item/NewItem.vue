@@ -1,14 +1,13 @@
 <template>
-  <VBtn color="secondary" @click="dialog = true"> Add Item </VBtn>
+  <VBtn color="secondary" @click="dialog = true"> New Item </VBtn>
   <VDialog v-model="dialog" width="300px" @click:outside="close()">
     <VCard :loading="loading" :disabled="loading">
       <VAlert v-if="error" type="error">
         <VAlertTitle>Error Occurred</VAlertTitle>
-        hello!
         {{ error }}
       </VAlert>
       <VCardTitle>
-        <span class="headline">Add Item</span>
+        <span class="headline">New Item</span>
       </VCardTitle>
       <VCardText>
         <VForm ref="itemInput" lazy-validation>

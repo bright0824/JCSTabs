@@ -12,7 +12,7 @@
       </VAlert>
       <VCardTitle>Are you sure?</VCardTitle>
       <VCardSubtitle>this action cannot be undone.</VCardSubtitle>
-      <VCardText> Are you sure you want to clear your tab? </VCardText>
+      <VCardText> Are you sure you want to clear {{ name }} tab? </VCardText>
       <VCardActions>
         <VBtn
           color="green"
@@ -32,9 +32,11 @@
 import { functions } from "@/firebase";
 import { httpsCallable } from "firebase/functions";
 import { ref } from "vue";
-import { useFirebaseAuth } from "vuefire";
 
-const auth = useFirebaseAuth();
+const { email, name } = defineProps<{
+  email: string;
+  name: string;
+}>();
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -47,7 +49,7 @@ const clearTab = async () => {
   loading.value = true;
   try {
     const clearTab = httpsCallable(functions, "clearTab");
-    await clearTab({ email: auth?.currentUser?.email });
+    await clearTab({ email: email });
     dialog.value = false;
 
     error.value = { code: null, message: null };

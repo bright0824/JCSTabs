@@ -117,7 +117,11 @@
       </VCardText>
       <VCardActions>
         <VBtn color="auto" @click="dialog = false">Close</VBtn>
-        <ClearTab :user="user" v-if="checkTabLength().currentTab" />
+        <ClearTab
+          :email="user?.info.email!"
+          :name="user?.info.displayName! + `'s`"
+          v-if="checkTabLength().currentTab"
+        />
         <ClearHistory :user="user" v-if="checkTabLength().history" />
       </VCardActions>
     </VCard>
@@ -130,12 +134,16 @@ import { computed, ref } from "vue";
 
 // components
 import ClearHistory from "@/components/admin/User/ClearHistory.vue";
-import ClearTab from "@/components/admin/User/ClearTab.vue";
+// import ClearTab from "@/components/admin/User/ClearTab.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
+
+const ClearTab = await import("@/components/ClearTab.vue").then(
+  (m) => m.default
+);
 
 // props
 const { user, items } = defineProps<{
-  user: User | null;
+  user: User;
   items: Item[];
 }>();
 

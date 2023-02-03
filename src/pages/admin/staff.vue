@@ -94,14 +94,3 @@ const filterUsers = (letter: string) => {
     </VRow>
   </VContainer>
 </template>
-
-<route lang="json">
-{
-  "path": "/admin/staff",
-  "name": "admin-staff",
-  "meta": {
-    "requiresAuth": true,
-    "requiresAdmin": true
-  }
-}
-</route>

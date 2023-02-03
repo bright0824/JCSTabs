@@ -1,10 +1,42 @@
+<script setup lang="ts">
+import { ref } from "vue";
+// const StaffPage = async () => {
+//   await import("@/pages/admin/staff.vue").then((m) => m.default);
+// };
+// const ItemsPage = async () => {
+//   await import("@/pages/admin/items.vue").then((m) => m.default);
+// };
+
+const window = ref(0);
+</script>
+
+<route lang="json">
+{
+  "path": "/admin",
+  "name": "admin",
+  "component": "Admin",
+  "children": [
+    {
+      "path": "staff",
+      "name": "admin-staff",
+      "component": "StaffPage"
+    },
+    {
+      "path": "items",
+      "name": "admin-items",
+      "component": "ItemsPage"
+    }
+  ]
+}
+</route>
+
 <template>
   <RouterView v-slot="{ Component, route }">
-    <Transition name="slide-x-transition" appear mode="out-in">
-      <div :key="route.path">
-        <component :is="Component" />
-      </div>
-    </Transition>
+    <KeepAlive>
+      <Transition name="slide-x-transition" appear mode="out-in">
+        <component :is="Component" :key="route.name" />
+      </Transition>
+    </KeepAlive>
   </RouterView>
   <KeepAlive>
     <VBottomNavigation>
@@ -21,46 +53,3 @@
     </VBottomNavigation>
   </KeepAlive>
 </template>
-
-<route lang="json">
-{
-  "path": "/admin",
-  "name": "AdminPage",
-  "component": "AdminPage",
-  "meta": {
-    "requiresAuth": true,
-    "transition": "fade-transition"
-  },
-  "children": [
-    {
-      "path": "staff",
-      "name": "Staff",
-      "component": "StaffPage",
-      "meta": {
-        "transition": "slide-x-transition"
-      }
-    },
-    {
-      "path": "items",
-      "name": "Items",
-      "component": "ItemsPage",
-      "meta": {
-        "transition": "slide-x-transition"
-      }
-    }
-  ]
-}
-</route>
-
-<script setup lang="ts">
-import { onMounted } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-
-onMounted(() => {
-  if (router.currentRoute.value.path === "/admin") {
-    router.push({ name: "admin-staff" });
-  }
-});
-</script>

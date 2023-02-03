@@ -39,7 +39,7 @@
           <VCardText>
             <VRow>
               <VCol align="left">
-                <ClearTab />
+                <ClearTab :email="auth?.currentUser?.email!" name="your" />
               </VCol>
               <VCol align="right">
                 <h3 class="mr-2">Total: {{ total() }}</h3>
@@ -182,8 +182,13 @@ import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";
 // components
 import FeedBack from "@/components/FeedBack.vue";
 import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
-import ClearTab from "@/components/userPage/ClearTab.vue";
-import DeleteItemFromTab from "@/components/userPage/DeleteItemFromTab.vue";
+
+const ClearTab = await import("@/components/ClearTab.vue").then(
+  (m) => m.default
+);
+const DeleteItemFromTab = await import(
+  "@/components/userPage/DeleteItemFromTab.vue"
+).then((m) => m.default);
 
 const router = useRouter();
 

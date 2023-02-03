@@ -26,9 +26,13 @@ import { useFirebaseAuth } from "vuefire";
 const auth = useFirebaseAuth();
 const router = useRouter();
 
-if (auth?.currentUser) {
-  router.push("/user");
-} else {
-  router.push("/login");
-}
+auth?.onAuthStateChanged((user) => {
+  if (user) {
+    router.push("/user");
+  } else {
+    router.push("/login");
+  }
+});
+
+console.log(auth?.currentUser);
 </script>

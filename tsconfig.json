@@ -2,6 +2,7 @@
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "include": [
     "vite.config.ts",
+    "typed-router.d.ts",
     "*.d.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",

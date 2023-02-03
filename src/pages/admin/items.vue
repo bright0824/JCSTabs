@@ -1,8 +1,21 @@
+<script setup lang="ts">
+import { doc } from "firebase/firestore";
+import { useDocument, useFirestore } from "vuefire";
+
+// components
+import NewItem from "@/components/admin/Item/NewItem.vue";
+import ItemCard from "@/components/admin/Item/ItemCard.vue";
+
+// firebase
+const db = useFirestore();
+const items = useDocument(doc(db, "admin", "items"));
+</script>
+
 <template>
-  <VContainer v-if="items!.food">
+  <VContainer v-if="items">
     <VRow class="text-center">
       <VCol>
-        <AddItem />
+        <NewItem />
       </VCol>
     </VRow>
     <VRow class="text-center">
@@ -24,27 +37,3 @@
     </VRow>
   </VContainer>
 </template>
-
-<route lang="json">
-{
-  "path": "/admin/items",
-  "name": "admin-items",
-  "meta": {
-    "requiresAuth": true,
-    "requiresAdmin": true
-  }
-}
-</route>
-
-<script setup lang="ts">
-import { doc } from "firebase/firestore";
-import { useDocument, useFirestore } from "vuefire";
-
-// components
-import AddItem from "@/components/admin/Item/AddItem.vue";
-import ItemCard from "@/components/admin/Item/ItemCard.vue";
-
-// firebase
-const db = useFirestore();
-const items = useDocument(doc(db, "admin", "items"));
-</script>

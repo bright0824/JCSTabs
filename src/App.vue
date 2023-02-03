@@ -1,7 +1,11 @@
 <template>
   <VApp>
     <VAppBar color="primary" app>
-      <VAppBarNavIcon color="auto" icon="home" @click="router.push('/')" />
+      <VAppBarNavIcon
+        color="auto"
+        icon="home"
+        @click="router.push({ name: 'user' })"
+      />
       <VAppBarTitle> JCS Tabs </VAppBarTitle>
       <VBtn icon @click="toggleTheme" color="auto">
         <Transition name="fade-transition" mode="out-in">
@@ -13,15 +17,19 @@
     </VAppBar>
     <VMain>
       <VContainer fluid>
-        <RouterView v-slot="{ Component, route }">
-          <Transition
-            :name="route.meta?.transition as string || 'fade-transition'"
-            appear
-            mode="out-in"
-          >
-            <component :is="Component" />
-          </Transition>
-        </RouterView>
+        <Suspense>
+          <RouterView v-slot="{ Component, route }">
+            <Transition
+              :name="route.meta?.transition as string || ''"
+              appear
+              mode="out-in"
+            >
+              <div :key="route.fullPath">
+                <component :is="Component" />
+              </div>
+            </Transition>
+          </RouterView>
+        </Suspense>
       </VContainer>
     </VMain>
   </VApp>
@@ -49,10 +57,6 @@ if (prefersDark.value) {
 } else {
   theme.global.name.value = "light";
 }
-
-auth.onAuthStateChanged((user) => {
-  loggedIn.value = !!user;
-});
 
 // methods
 const toggleTheme = () => {
