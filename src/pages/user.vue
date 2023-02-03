@@ -39,10 +39,22 @@
           <VCardText>
             <VRow>
               <VCol align="left">
-                <ClearTab :email="auth?.currentUser?.email!" name="your" />
+                <ClearTab
+                  :email="auth?.currentUser?.email!"
+                  name="your"
+                  v-if="total() > 0"
+                />
               </VCol>
               <VCol align="right">
-                <h3 class="mr-2">Total: {{ total() }}</h3>
+                <h3 class="mr-2">
+                  Total:
+                  {{
+                    new Intl.NumberFormat("en-CA", {
+                      style: "currency",
+                      currency: "CAD",
+                    }).format(total())
+                  }}
+                </h3>
               </VCol>
             </VRow>
           </VCardText>
@@ -222,10 +234,7 @@ const total = () => {
   userDoc.data.value?.tab?.forEach((item: Item) => {
     total += item.price;
   });
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD",
-  }).format(total);
+  return total;
 };
 
 const visibleItems = computed(() => {

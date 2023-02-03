@@ -33,6 +33,4 @@ auth?.onAuthStateChanged((user) => {
     router.push("/login");
   }
 });
-
-console.log(auth?.currentUser);
 </script>
