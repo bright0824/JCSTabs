@@ -32,9 +32,7 @@
         <VForm ref="inputForm">
           <VTextarea
             v-model="input"
-            label="Feedback"
-            placeholder="Enter your feedback here..."
-            outlined
+            placeholder="Have a suggestion? Found a bug? Let us know!"
             rows="5"
             :rules="rules.text"
           />
@@ -52,7 +50,13 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 
+import { useFirebaseAuth, useFirestore, useCurrentUser } from "vuefire";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+
 const route = useRoute();
+const auth = useFirebaseAuth();
+const db = useFirestore();
+const user = useCurrentUser();
 
 const dialog = ref(false);
 const input = ref("");
@@ -75,24 +79,24 @@ const submit = async () => {
 
   loading.value = true;
 
-  const { useFirebaseAuth, useFirestore } = await import("vuefire");
-  const { addDoc, collection, Timestamp } = await import("firebase/firestore");
+  // const { useFirebaseAuth, useFirestore } = await import("vuefire");
+  // const { addDoc, collection, Timestamp } = await import("firebase/firestore");
 
   try {
-    const auth = useFirebaseAuth()!;
-    const db = useFirestore()!;
+    // const auth = useFirebaseAuth()!;
+    // const db = useFirestore()!;
 
     await addDoc(collection(db, "feedback"), {
       _meta: {
-        createdBy: auth.currentUser?.uid,
+        createdBy: auth?.currentUser?.uid,
         createdAt: Timestamp.now(),
       },
       device: {
         userAgent: navigator.userAgent,
         currentPath: route.fullPath,
       },
-      name: auth.currentUser?.displayName,
-      email: auth.currentUser?.email,
+      name: auth?.currentUser?.displayName,
+      email: auth?.currentUser?.email,
       text: input.value,
     });
 
