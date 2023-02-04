@@ -42,7 +42,7 @@
       </VCardText>
       <VCardActions>
         <VBtn color="success" text @click="submit">Submit</VBtn>
-        <VBtn color="error" text @click="dialog = false">Cancel</VBtn>
+        <VBtn color="error" text @click="close">Cancel</VBtn>
       </VCardActions>
     </VCard>
   </VDialog>
@@ -50,6 +50,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const dialog = ref(false);
 const input = ref("");
@@ -80,9 +83,16 @@ const submit = async () => {
     const db = useFirestore()!;
 
     await addDoc(collection(db, "feedback"), {
+      _meta: {
+        createdBy: auth.currentUser?.uid,
+        createdAt: Timestamp.now(),
+      },
+      device: {
+        userAgent: navigator.userAgent,
+        currentPath: route.fullPath,
+      },
       name: auth.currentUser?.displayName,
       email: auth.currentUser?.email,
-      date: Timestamp.now(),
       text: input.value,
     });
 
