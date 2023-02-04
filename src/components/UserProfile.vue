@@ -1,5 +1,5 @@
 <template>
-  <VMenu rounded v-if="user" :close-on-content-click="false">
+  <VMenu rounded v-if="user" :close-on-content-click="false" v-model="active">
     <template #activator="{ props }">
       <VBtn icon v-bind="props">
         <VAvatar>
@@ -25,7 +25,10 @@
           <VBtn
             variant="text"
             color="auto"
-            @click="logout()"
+            @click="
+              logout();
+              active = false;
+            "
             block
             class="justify-start"
           >
@@ -38,7 +41,10 @@
           <VBtn
             variant="text"
             color="auto"
-            @click="router.push('/admin/staff')"
+            @click="
+              router.push('/admin/staff');
+              active = false;
+            "
             block
             class="justify-start"
           >
@@ -85,6 +91,8 @@ const user = useCurrentUser();
 const admin = ref(false);
 const router = useRouter();
 const theme = useTheme();
+
+const active = ref(false);
 
 // firebase
 const auth = useFirebaseAuth()!;
