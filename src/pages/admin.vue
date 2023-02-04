@@ -1,15 +1,3 @@
-<script setup lang="ts">
-import { ref } from "vue";
-// const StaffPage = async () => {
-//   await import("@/pages/admin/staff.vue").then((m) => m.default);
-// };
-// const ItemsPage = async () => {
-//   await import("@/pages/admin/items.vue").then((m) => m.default);
-// };
-
-const window = ref(0);
-</script>
-
 <route lang="json">
 {
   "path": "/admin",
@@ -33,8 +21,10 @@ const window = ref(0);
 <template>
   <RouterView v-slot="{ Component, route }">
     <KeepAlive>
-      <Transition name="slide-x-transition" appear mode="out-in">
-        <component :is="Component" :key="route.name" />
+      <Transition name="slide-x-transition" mode="out-in" appear>
+        <div class="wrapper" :key="route.path">
+          <component :is="Component" />
+        </div>
       </Transition>
     </KeepAlive>
   </RouterView>

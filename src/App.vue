@@ -12,10 +12,10 @@
           <RouterView v-slot="{ Component, route }">
             <Transition
               :name="route.meta?.transition as string || ''"
-              appear
               mode="out-in"
+              appear
             >
-              <div :key="route.fullPath">
+              <div :key="route.path">
                 <component :is="Component" />
               </div>
             </Transition>
