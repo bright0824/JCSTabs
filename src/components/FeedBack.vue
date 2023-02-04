@@ -1,8 +1,16 @@
 <template>
   <VDialog v-model="dialog" max-width="500px">
     <template #activator="{ props }">
-      <VBtn v-bind="props" color="secondary" @click="dialog = true">
-        Feedback
+      <VBtn
+        v-bind="props"
+        variant="text"
+        color="auto"
+        @click="dialog = true"
+        block
+        class="justify-start"
+      >
+        <MdiMessageAlertOutline class="mr-2" />
+        Send feedback
       </VBtn>
     </template>
     <VCard :loading="loading">

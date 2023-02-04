@@ -2,7 +2,7 @@
   <VDialog v-model="dialog" max-width="400px" align="center">
     <template #activator="{ props }">
       <VBtn v-bind="props" color="red" depressed @click="dialog = true">
-        <v-icon icon="delete" />
+        <MdiDelete />
       </VBtn>
     </template>
     <VCard :loading="loading" :disabled="loading">

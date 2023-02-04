@@ -148,15 +148,6 @@
         </VExpansionPanels>
       </VCol>
     </VRow>
-    <VRow>
-      <VCol>
-        <VFooter app color="primary" height="50px">
-          <VRow justify="center" no-gutters>
-            <FeedBack />
-          </VRow>
-        </VFooter>
-      </VCol>
-    </VRow>
   </VContainer>
   <VContainer v-else fluid align="center">
     <VRow>
@@ -192,7 +183,6 @@ import { useRouter } from "vue-router";
 import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";
 
 // components
-import FeedBack from "@/components/FeedBack.vue";
 import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
 
 const ClearTab = await import("@/components/ClearTab.vue").then(

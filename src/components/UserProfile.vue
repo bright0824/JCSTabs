@@ -1,5 +1,5 @@
 <template>
-  <VMenu rounded v-if="user !== null">
+  <VMenu rounded v-if="user" :close-on-content-click="false">
     <template #activator="{ props }">
       <VBtn icon v-bind="props">
         <VAvatar>
@@ -8,34 +8,67 @@
       </VBtn>
     </template>
     <VCard color="user">
-      <VCardText class="mx-auto text-center">
-        <VAvatar size="large">
-          <VImg :src="(user?.photoURL as string)" alt="Avatar" />
-        </VAvatar>
-        <h3>{{ user?.displayName }}</h3>
-        <p class="text-caption mt-1">{{ user?.email }}</p>
-        <template v-if="admin">
-          <VDivider class="my-3" />
+      <VCardText>
+        <VRow>
+          <VCol cols="3">
+            <VAvatar size="large">
+              <VImg :src="(user?.photoURL as string)" alt="Avatar" />
+            </VAvatar>
+          </VCol>
+          <VCol>
+            <h3>{{ user?.displayName }}</h3>
+            <p class="text-caption mt-1">{{ user?.email }}</p>
+          </VCol>
+        </VRow>
+        <VRow>
+          <VDivider class="my-1" />
           <VBtn
-            rounded
+            variant="text"
+            color="auto"
+            @click="logout()"
+            block
+            class="justify-start"
+          >
+            <MdiLogout class="mr-2" />
+            Sign out
+          </VBtn>
+        </VRow>
+        <VRow v-if="admin">
+          <VDivider class="my-1" />
+          <VBtn
             variant="text"
             color="auto"
             @click="router.push('/admin/staff')"
-            prepend-icon="admin_panel_settings"
+            block
+            class="justify-start"
           >
-            admin menu
+            <MdiSecurity class="mr-2" />
+            Admin Menu
           </VBtn>
-        </template>
-        <VDivider class="my-3" />
-        <VBtn
-          rounded
-          variant="text"
-          color="auto"
-          @click="logout()"
-          prepend-icon="logout"
-        >
-          logout
-        </VBtn>
+        </VRow>
+        <VRow>
+          <VDivider class="my-1" />
+          <VBtn
+            variant="text"
+            color="auto"
+            block
+            class="justify-start"
+            @click="toggleTheme"
+          >
+            <VFabTransition>
+              <MdiWhiteBalanceSunny
+                v-if="theme.global.name.value == 'light'"
+                class="mr-2"
+              />
+              <MdiWeatherNight v-else class="mr-2" />
+            </VFabTransition>
+            Theme: {{ theme.global.name.value }}
+          </VBtn>
+        </VRow>
+        <VRow>
+          <VDivider class="my-1" />
+          <FeedBack />
+        </VRow>
       </VCardText>
     </VCard>
   </VMenu>
@@ -45,11 +78,13 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useCurrentUser, useFirebaseAuth } from "vuefire";
+import { useTheme } from "vuetify";
 
 // data
 const user = useCurrentUser();
 const admin = ref(false);
 const router = useRouter();
+const theme = useTheme();
 
 // firebase
 const auth = useFirebaseAuth()!;
@@ -66,5 +101,9 @@ auth.onAuthStateChanged((currentUser) => {
 const logout = () => {
   auth.signOut();
   router.push("/login");
+};
+
+const toggleTheme = () => {
+  theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
 };
 </script>

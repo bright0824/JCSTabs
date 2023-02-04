@@ -29,7 +29,8 @@
       "vuetify",
       "vite-plugin-pwa/client",
       "firebase/firestore",
-      "@types/webfontloader"
+      "@types/webfontloader",
+      "unplugin-icons/types/vue"
     ],
     "paths": {
       "@/*": [
