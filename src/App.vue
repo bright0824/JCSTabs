@@ -28,26 +28,21 @@
 
 <script setup lang="ts">
 import { usePreferredDark } from "@vueuse/core";
-import { useFirebaseAuth } from "vuefire";
 import { useTheme } from "vuetify";
 
 import UserProfile from "@/components/UserProfile.vue";
 
 // data
 const theme = useTheme();
-const auth = useFirebaseAuth();
 const prefersDark = usePreferredDark();
+
+// computed
 
 if (prefersDark.value) {
   theme.global.name.value = "dark";
 } else {
   theme.global.name.value = "light";
 }
-
-// methods
-const toggleTheme = () => {
-  theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
-};
 </script>
 
 <style scoped>

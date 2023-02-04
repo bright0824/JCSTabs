@@ -1,7 +1,7 @@
 <template>
   <VDialog v-model="dialog" max-width="500px" @click:outside="closeDialog()">
     <template #activator="{ props }">
-      <VBtn v-bind="props" color="red" :loading="dialog"> Clear Tab </VBtn>
+      <VBtn v-bind="props" color="red"> Clear Tab </VBtn>
     </template>
     <VCard :disabled="loading" :loading="loading">
       <VAlert type="error" v-if="error.code != null">
@@ -14,14 +14,7 @@
       <VCardSubtitle>this action cannot be undone.</VCardSubtitle>
       <VCardText> Are you sure you want to clear {{ name }} tab? </VCardText>
       <VCardActions>
-        <VBtn
-          color="green"
-          @click="clearTab()"
-          :disabled="loading"
-          :loading="loading"
-        >
-          Confirm
-        </VBtn>
+        <VBtn color="green" @click="clearTab()"> Confirm </VBtn>
         <VBtn color="red" @click="dialog = false">Cancel</VBtn>
       </VCardActions>
     </VCard>

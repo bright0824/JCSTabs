@@ -5,7 +5,6 @@
         icon
         v-bind="props"
         @click="dialog = true"
-        :loading="dialog"
         color="secondary"
         class="ml-1"
       >

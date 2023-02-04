@@ -6,7 +6,7 @@
     min-width="300px"
   >
     <template #activator="{ props }">
-      <VBtn color="success" v-bind="props" :loading="dialog" :disabled="dialog">
+      <VBtn color="success" v-bind="props">
         <MdiPlusThick class="mr-1" />
         Add Item
       </VBtn>

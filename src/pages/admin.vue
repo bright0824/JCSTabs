@@ -42,11 +42,11 @@ const window = ref(0);
     <VBottomNavigation>
       <VTabs>
         <VTab value="staff" to="/admin/staff">
-          <VIcon icon="manage_accounts" />
+          <MdiAccountCog class="mr-1" />
           Staff
         </VTab>
         <VTab value="items" to="/admin/items">
-          <VIcon icon="inventory_2" />
+          <MdiArchiveCog class="mr-1" />
           Items
         </VTab>
       </VTabs>

@@ -1,9 +1,7 @@
 <template>
   <VDialog v-model="dialog" max-width="500px" @click:outside="closeDialog()">
     <template #activator="{ props }">
-      <VBtn v-bind="props" color="error" :loading="dialog">
-        Clear History
-      </VBtn>
+      <VBtn v-bind="props" color="error"> Clear History </VBtn>
     </template>
     <VCard :disabled="loading" :loading="loading">
       <VAlert type="error" v-if="error.code != null">
@@ -20,14 +18,7 @@
         >?
       </VCardText>
       <VCardActions>
-        <VBtn
-          color="green"
-          @click="clearHistory()"
-          :disabled="loading"
-          :loading="loading"
-        >
-          Confirm
-        </VBtn>
+        <VBtn color="green" @click="clearHistory()"> Confirm </VBtn>
         <VBtn color="red" @click="dialog = false">Cancel</VBtn>
       </VCardActions>
     </VCard>
