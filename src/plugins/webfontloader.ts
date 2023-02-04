@@ -10,11 +10,7 @@ export async function loadFonts() {
   webFontLoader.load({
     google: {
       families: [
-        // "Material+Icons",
-        // "Material+Icons+Outlined",
-        // "Material+Icons+Round",
-        // "Material+Icons+Sharp",
-        // "Material+Icons+Two+Tone",
+        "Material+Icons",
         "Roboto:100,300,400,500,700,900&display=swap",
       ],
     },
