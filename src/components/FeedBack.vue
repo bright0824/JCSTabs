@@ -47,30 +47,41 @@
 </template>
 
 <script setup lang="ts">
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+import { useFirebaseAuth, useFirestore } from "vuefire";
 
-import { useFirebaseAuth, useFirestore, useCurrentUser } from "vuefire";
-import { addDoc, collection, Timestamp } from "firebase/firestore";
-
+// scaffolding
 const route = useRoute();
 const auth = useFirebaseAuth();
 const db = useFirestore();
-const user = useCurrentUser();
 
-const dialog = ref(false);
-const input = ref("");
-const inputForm = ref(null);
-const loading = ref(false);
-const error = ref({
-  code: null,
-  message: null,
-} as { code: string | null; message: string | null });
-
-const rules = {
-  text: [(v: string) => !!v || "Field cannot be empty"],
+// data
+const data = () => {
+  return {
+    dialog: ref(false),
+    input: ref(""),
+    inputForm: ref(null),
+    loading: ref(false),
+    error: ref({
+      code: null,
+      message: null,
+    } as { code: string | null; message: string | null }),
+    rules: {
+      text: [(v: string) => !!v || "Field cannot be empty"],
+    },
+  };
 };
+const { dialog, input, inputForm, loading, error, rules } = data();
 
+/**
+ * Submits feedback to firestore
+ *
+ * @import { useFirebaseAuth, useFirestore } from "vuefire";
+ * @import { addDoc, collection, Timestamp } from "firebase/firestore";
+ *
+ */
 const submit = async () => {
   // @ts-expect-error
   const { valid } = await inputForm.value.validate();
@@ -79,13 +90,7 @@ const submit = async () => {
 
   loading.value = true;
 
-  // const { useFirebaseAuth, useFirestore } = await import("vuefire");
-  // const { addDoc, collection, Timestamp } = await import("firebase/firestore");
-
   try {
-    // const auth = useFirebaseAuth()!;
-    // const db = useFirestore()!;
-
     await addDoc(collection(db, "feedback"), {
       _meta: {
         createdBy: auth?.currentUser?.uid,
@@ -111,6 +116,9 @@ const submit = async () => {
   }
 };
 
+/**
+ * Closes the dialog
+ */
 const close = () => {
   input.value = "";
 

@@ -87,12 +87,16 @@ import { useCurrentUser, useFirebaseAuth } from "vuefire";
 import { useTheme } from "vuetify";
 
 // data
-const user = useCurrentUser();
-const admin = ref(false);
-const router = useRouter();
-const theme = useTheme();
-
-const active = ref(false);
+const data = () => {
+  return {
+    user: useCurrentUser(),
+    router: useRouter(),
+    theme: useTheme(),
+    admin: ref(false),
+    active: ref(false),
+  };
+};
+const { user, router, theme, admin, active } = data();
 
 // firebase
 const auth = useFirebaseAuth()!;
@@ -106,11 +110,17 @@ auth.onAuthStateChanged((currentUser) => {
 });
 
 // methods
+/**
+ * Sign out the current user and redirect to the login page
+ */
 const logout = () => {
   auth.signOut();
   router.push("/login");
 };
 
+/**
+ * Toggle the theme between light and dark
+ */
 const toggleTheme = () => {
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
 };
