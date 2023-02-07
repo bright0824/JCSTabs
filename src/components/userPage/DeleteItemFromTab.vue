@@ -1,7 +1,7 @@
 <template>
   <VDialog v-model="dialog" max-width="400px" align="center">
     <template #activator="{ props }">
-      <VBtn v-bind="props" color="red" depressed @click="dialog = true">
+      <VBtn v-bind="props" color="red" depressed @click="dialog = true" icon>
         <MdiDelete />
       </VBtn>
     </template>
@@ -49,6 +49,7 @@ import type { TabItem } from "@/types";
 import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { ref } from "vue";
 import { useFirebaseAuth, useFirestore } from "vuefire";
+import MdiDelete from "~icons/mdi/delete";
 
 const auth = useFirebaseAuth();
 const db = useFirestore();

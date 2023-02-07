@@ -26,6 +26,7 @@ declare module '@vue/runtime-core' {
     NewItem: typeof import('./src/components/admin/Item/NewItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ThemeIcon: typeof import('./src/components/ThemeIcon.vue')['default']
     ToggleRole: typeof import('./src/components/admin/User/ToggleRole.vue')['default']
     UserCard: typeof import('./src/components/admin/User/UserCard.vue')['default']
     UserProfile: typeof import('./src/components/UserProfile.vue')['default']

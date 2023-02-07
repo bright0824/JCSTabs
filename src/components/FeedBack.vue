@@ -8,8 +8,8 @@
         @click="dialog = true"
         block
         class="justify-start"
+        :prepend-icon="MdiMessageAlertOutline"
       >
-        <MdiMessageAlertOutline class="mr-2" />
         Send feedback
       </VBtn>
     </template>
@@ -51,6 +51,7 @@ import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useFirebaseAuth, useFirestore } from "vuefire";
+import MdiMessageAlertOutline from "~icons/mdi/message-alert-outline";
 
 // scaffolding
 const route = useRoute();

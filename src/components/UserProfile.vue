@@ -31,8 +31,8 @@
             "
             block
             class="justify-start"
+            :prepend-icon="MdiLogout"
           >
-            <MdiLogout class="mr-2" />
             Sign out
           </VBtn>
         </VRow>
@@ -47,8 +47,8 @@
             "
             block
             class="justify-start"
+            :prepend-icon="MdiSecurity"
           >
-            <MdiSecurity class="mr-2" />
             Admin Menu
           </VBtn>
         </VRow>
@@ -57,17 +57,15 @@
           <VBtn
             variant="text"
             color="auto"
-            block
             class="justify-start"
             @click="toggleTheme"
+            block
+            :prepend-icon="
+              theme.global.name.value === 'light'
+                ? MdiWhiteBalanceSunny
+                : MdiWeatherNight
+            "
           >
-            <VFabTransition>
-              <MdiWhiteBalanceSunny
-                v-if="theme.global.name.value == 'light'"
-                class="mr-2"
-              />
-              <MdiWeatherNight v-else class="mr-2" />
-            </VFabTransition>
             Theme: {{ theme.global.name.value }}
           </VBtn>
         </VRow>
@@ -86,6 +84,10 @@ import { useRouter } from "vue-router";
 import { useCurrentUser, useFirebaseAuth } from "vuefire";
 import { useTheme } from "vuetify";
 
+import MdiLogout from "~icons/mdi/logout";
+import MdiSecurity from "~icons/mdi/security";
+import MdiWhiteBalanceSunny from "~icons/mdi/white-balance-sunny";
+import MdiWeatherNight from "~icons/mdi/weather-night";
 // data
 const data = () => {
   return {
