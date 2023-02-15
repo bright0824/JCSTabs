@@ -39,29 +39,24 @@
               <VTable>
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Price</th>
+                    <th>Item</th>
                     <th>Quantity</th>
+                    <th>Price</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <template
-                    v-for="(item, index) in user?.tab.filter(
-                      (item) => !item.paid
-                    )"
-                    :key="index"
-                  >
-                    <tr>
+                  <template v-for="(item, index) in items" :key="index">
+                    <tr v-if="count()[item.name] > 0">
                       <td>{{ item.name }}</td>
+                      <td>{{ count()[item.name] }}</td>
                       <td>
                         {{
-                          new Intl.NumberFormat("en", {
+                          new Intl.NumberFormat("en-CA", {
                             style: "currency",
                             currency: "CAD",
                           }).format(item.price)
                         }}
                       </td>
-                      <td>{{ count[item.name] }}</td>
                     </tr>
                   </template>
                 </tbody>
@@ -128,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Item, User } from "@/types";
+import type { Item, TabItem, User } from "@/types";
 import { computed, ref } from "vue";
 
 // components
@@ -162,6 +157,19 @@ const total = computed(() => {
   return total;
 });
 
+const count = () => {
+  const total = {} as { [key: string]: number };
+  items?.forEach((item: Item) => {
+    total[item.name] = 0;
+  });
+  user?.tab
+    ?.filter((item: TabItem) => !item.paid)
+    .forEach((item: Item) => {
+      total[item.name]++;
+    });
+  return total;
+};
+
 const visibleItems = computed(() => {
   const start = (page.value - 1) * perPage;
   const end = start + perPage;
@@ -175,18 +183,6 @@ const MathTime = () => {
     return Math.ceil(user?.tab.length / perPage);
   }
 };
-
-const count = computed(() => {
-  const count = {} as Record<string, number>;
-  user?.tab?.forEach((item) => {
-    if (count[item.name]) {
-      count[item.name] += 1;
-    } else {
-      count[item.name] = 1;
-    }
-  });
-  return count;
-});
 
 // methods
 const checkTabLength = () => {
