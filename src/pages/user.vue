@@ -205,7 +205,26 @@ const auth = useFirebaseAuth();
 const items = useDocument(doc(db, "admin", "items"));
 const userDoc = useDocument(doc(db, `users/${auth?.currentUser?.uid}`));
 
-// computed properties
+// Computed Properties
+const visibleItems = computed(() => {
+  return userDoc.data.value?.tab
+    .sort((a: TabItem, b: TabItem) => b.date.toMillis() - a.date.toMillis())
+    .slice((page.value - 1) * perPage, page.value * perPage);
+});
+
+const canDelete = (date: Timestamp, item: TabItem) => {
+  const now = new Date();
+  const diff = now.getTime() - date.toDate().getTime();
+  return diff < 300000 && !item.paid;
+};
+
+// methods
+const MathTime = () => {
+  if (userDoc.data.value?.tab.length) {
+    return Math.ceil(userDoc.data.value.tab.length / perPage);
+  }
+};
+
 const count = () => {
   const total = {} as { [key: string]: number };
   items.data.value?.food.forEach((item: Item) => {
@@ -225,25 +244,6 @@ const total = () => {
     total += item.price;
   });
   return total;
-};
-
-const visibleItems = computed(() => {
-  return userDoc.data.value?.tab
-    .sort((a: TabItem, b: TabItem) => b.date.toMillis() - a.date.toMillis())
-    .slice((page.value - 1) * perPage, page.value * perPage);
-});
-
-const canDelete = (date: Timestamp, item: TabItem) => {
-  const now = new Date();
-  const diff = now.getTime() - date.toDate().getTime();
-  return diff < 300000 && !item.paid;
-};
-
-// methods
-const MathTime = () => {
-  if (userDoc.data.value?.tab.length) {
-    return Math.ceil(userDoc.data.value.tab.length / perPage);
-  }
 };
 
 setTimeout(() => {
