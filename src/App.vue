@@ -15,7 +15,7 @@
               mode="out-in"
               appear
             >
-              <div :key="route.path">
+              <div :key="route?.name as string">
                 <component :is="Component" />
               </div>
             </Transition>

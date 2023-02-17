@@ -52,46 +52,48 @@ const filterUsers = (letter: string) => {
 </script>
 
 <template>
-  <VContainer fluid v-if="users && items">
-    <VRow>
-      <VExpansionPanels>
-        <template v-for="letter in letters" :key="letter">
-          <VExpansionPanel
-            :id="letter"
-            :value="letter"
-            class="ma-2"
-            v-if="filterUsers(letter).length > 0"
-          >
-            <VExpansionPanelTitle>
-              <VRow>
-                <VCol cols="12">
-                  <b class="text-h5">{{ letter.toUpperCase() }}</b>
-                </VCol>
-              </VRow>
-            </VExpansionPanelTitle>
-            <VExpansionPanelText>
-              <template v-for="user in filterUsers(letter)" :key="user">
-                <UserCard
-                  :user="(user as User)"
-                  :items="(items.food as Item[])"
-                />
-              </template>
-            </VExpansionPanelText>
-          </VExpansionPanel>
-        </template>
-      </VExpansionPanels>
-    </VRow>
-  </VContainer>
-  <VContainer fluid v-else>
-    <VRow>
-      <VCol align="center">
-        <h1>Fetching users...</h1>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol cols="12">
-        <VProgressLinear indeterminate />
-      </VCol>
-    </VRow>
-  </VContainer>
+  <VFadeTransition>
+    <VContainer fluid v-if="users && items">
+      <VRow>
+        <VExpansionPanels>
+          <template v-for="letter in letters" :key="letter">
+            <VExpansionPanel
+              :id="letter"
+              :value="letter"
+              class="ma-2"
+              v-if="filterUsers(letter).length > 0"
+            >
+              <VExpansionPanelTitle>
+                <VRow>
+                  <VCol cols="12">
+                    <b class="text-h5">{{ letter.toUpperCase() }}</b>
+                  </VCol>
+                </VRow>
+              </VExpansionPanelTitle>
+              <VExpansionPanelText>
+                <template v-for="user in filterUsers(letter)" :key="user">
+                  <UserCard
+                    :user="(user as User)"
+                    :items="(items.food as Item[])"
+                  />
+                </template>
+              </VExpansionPanelText>
+            </VExpansionPanel>
+          </template>
+        </VExpansionPanels>
+      </VRow>
+    </VContainer>
+    <VContainer fluid v-else>
+      <VRow>
+        <VCol align="center">
+          <h1>Fetching users...</h1>
+        </VCol>
+      </VRow>
+      <VRow>
+        <VCol cols="12">
+          <VProgressLinear indeterminate />
+        </VCol>
+      </VRow>
+    </VContainer>
+  </VFadeTransition>
 </template>

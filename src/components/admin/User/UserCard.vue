@@ -33,7 +33,7 @@
             <VExpansionPanelTitle>
               Tab
               <vSpacer />
-              Total: ${{ total }}
+              Total: {{ total }}
             </VExpansionPanelTitle>
             <VExpansionPanelText>
               <VTable>
@@ -46,9 +46,9 @@
                 </thead>
                 <tbody>
                   <template v-for="(item, index) in items" :key="index">
-                    <tr v-if="count()[item.name] > 0">
+                    <tr v-if="countItemsInTab(user.tab, items)[item.name] > 0">
                       <td>{{ item.name }}</td>
-                      <td>{{ count()[item.name] }}</td>
+                      <td>{{ countItemsInTab(user.tab, items)[item.name] }}</td>
                       <td>
                         {{
                           new Intl.NumberFormat("en-CA", {
@@ -68,8 +68,8 @@
             <VExpansionPanelText>
               <VPagination
                 v-model="page"
-                :length="MathTime()"
-                :totalVisible="MathTime()"
+                :length="calculatePages(user.tab.length, 5)"
+                :totalVisible="calculatePages(user.tab.length, 5)"
               />
               <VTable>
                 <thead>
@@ -88,7 +88,7 @@
                       <td>{{ item.paid ? "Yes" : "No" }}</td>
                       <td>
                         {{
-                          new Intl.NumberFormat("en", {
+                          new Intl.NumberFormat("en-CA", {
                             style: "currency",
                             currency: "CAD",
                           }).format(item.price)
@@ -123,13 +123,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Item, TabItem, User } from "@/types";
+import type { Item, User } from "@/types";
 import { computed, ref } from "vue";
+import { computeVisibleItems } from "@/util/user";
 
 // components
 import ClearHistory from "@/components/admin/User/ClearHistory.vue";
-// import ClearTab from "@/components/admin/User/ClearTab.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
+import { countItemsInTab, getTabTotal, calculatePages } from "@/util/user";
 
 const ClearTab = await import("@/components/ClearTab.vue").then(
   (m) => m.default
@@ -144,45 +145,18 @@ const { user, items } = defineProps<{
 // data
 const dialog = ref(false);
 const page = ref(1);
-const perPage = 5;
 
 // computed
+const visibleItems = computed(() =>
+  computeVisibleItems(user?.tab, page.value, 5)
+);
+
 const total = computed(() => {
-  let total = 0;
-  user?.tab
-    ?.filter((item) => !item.paid)
-    .forEach((item) => {
-      total += item.price;
-    });
-  return total;
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  }).format(getTabTotal(user?.tab));
 });
-
-const count = () => {
-  const total = {} as { [key: string]: number };
-  items?.forEach((item: Item) => {
-    total[item.name] = 0;
-  });
-  user?.tab
-    ?.filter((item: TabItem) => !item.paid)
-    .forEach((item: Item) => {
-      total[item.name]++;
-    });
-  return total;
-};
-
-const visibleItems = computed(() => {
-  const start = (page.value - 1) * perPage;
-  const end = start + perPage;
-  // @ts-expect-error
-  user?.tab?.sort((a, b) => b.date.toDate() - a.date.toDate());
-  return user?.tab?.slice(start, end);
-});
-
-const MathTime = () => {
-  if (user?.tab.length) {
-    return Math.ceil(user?.tab.length / perPage);
-  }
-};
 
 // methods
 const checkTabLength = () => {
