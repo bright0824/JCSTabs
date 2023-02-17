@@ -1,5 +1,5 @@
 <template v-if="user != null">
-  <VTooltip :text="user?.info.displayName">
+  <VTooltip :text="user?.info.displayName" :disabled="mobile">
     <template #activator="{ props }">
       <VBtn
         icon
@@ -126,6 +126,7 @@
 import type { Item, User } from "@/types";
 import { computed, ref } from "vue";
 import { computeVisibleItems } from "@/util/user";
+import { useDisplay } from "vuetify";
 
 // components
 import ClearHistory from "@/components/admin/User/ClearHistory.vue";
@@ -145,6 +146,8 @@ const { user, items } = defineProps<{
 // data
 const dialog = ref(false);
 const page = ref(1);
+
+const { mobile } = useDisplay();
 
 // computed
 const visibleItems = computed(() =>
