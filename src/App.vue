@@ -15,7 +15,7 @@
               mode="out-in"
               appear
             >
-              <div :key="route?.name as string">
+              <div :key="(route?.name as string)">
                 <component :is="Component" />
               </div>
             </Transition>
@@ -37,7 +37,6 @@ const theme = useTheme();
 const prefersDark = usePreferredDark();
 
 // computed
-
 if (prefersDark.value) {
   theme.global.name.value = "dark";
 } else {
