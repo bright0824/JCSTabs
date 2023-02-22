@@ -9,7 +9,55 @@
       <VRow>
         <VCol>
           <VCard>
-            <VCardTitle> Current Tab </VCardTitle>
+            <VCardTitle> Recent Transactions </VCardTitle>
+            <VCardText>
+              <VTable>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-for="(item, index) in userDoc.tab" :key="index">
+                    <tr
+                      v-if="
+                        countItemsInTab(userDoc.tab, items.food)[item.name] > 0
+                      "
+                    >
+                      <td>{{ item.name }}</td>
+                      <td>
+                        {{
+                          new Intl.NumberFormat("en-CA", {
+                            style: "currency",
+                            currency: "CAD",
+                          }).format(item.price)
+                        }}
+                      </td>
+                      <td>
+                        {{ item.date.toDate().toLocaleDateString() }}
+                      </td>
+                      <td>
+                        {{ item.date.toDate().toLocaleTimeString() }}
+                      </td>
+                      <DeleteItemFromTab
+                        :item="item"
+                        v-if="canDelete(item.date, item.paid)"
+                      />
+                    </tr>
+                  </template>
+                </tbody>
+              </VTable>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
+      <VRow>
+        <VCol>
+          <VCard>
+            <VCardTitle> Summery </VCardTitle>
             <VCardText>
               <VTable>
                 <thead>
@@ -68,53 +116,6 @@
       <VRow>
         <VCol>
           <VExpansionPanels>
-            <VExpansionPanel>
-              <VExpansionPanelTitle>
-                <h3>Recent Transactions</h3>
-              </VExpansionPanelTitle>
-              <VExpansionPanelText>
-                <VTable>
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Price</th>
-                      <th>Date</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-for="(item, index) in userDoc.tab" :key="index">
-                      <tr
-                        v-if="
-                          countItemsInTab(userDoc.tab, items.food)[item.name] >
-                          0
-                        "
-                      >
-                        <td>{{ item.name }}</td>
-                        <td>
-                          {{
-                            new Intl.NumberFormat("en-CA", {
-                              style: "currency",
-                              currency: "CAD",
-                            }).format(item.price)
-                          }}
-                        </td>
-                        <td>
-                          {{ item.date.toDate().toLocaleDateString() }}
-                        </td>
-                        <td>
-                          {{ item.date.toDate().toLocaleTimeString() }}
-                        </td>
-                        <DeleteItemFromTab
-                          :item="item"
-                          v-if="canDelete(item.date, item.paid)"
-                        />
-                      </tr>
-                    </template>
-                  </tbody>
-                </VTable>
-              </VExpansionPanelText>
-            </VExpansionPanel>
             <VExpansionPanel>
               <VExpansionPanelTitle>
                 <h3>History</h3>

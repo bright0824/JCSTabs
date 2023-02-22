@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     AddItemToTab: typeof import('./src/components/userPage/AddItemToTab.vue')['default']
     ClearHistory: typeof import('./src/components/admin/User/ClearHistory.vue')['default']
     ClearTab: typeof import('./src/components/ClearTab.vue')['default']
+    CustomItem: typeof import('./src/components/userPage/CustomItem.vue')['default']
     DeleteItem: typeof import('./src/components/admin/Item/DeleteItem.vue')['default']
     DeleteItemFromTab: typeof import('./src/components/userPage/DeleteItemFromTab.vue')['default']
     FeedBack: typeof import('./src/components/FeedBack.vue')['default']

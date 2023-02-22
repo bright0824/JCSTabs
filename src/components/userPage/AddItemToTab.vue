@@ -47,6 +47,7 @@
             }).format(item.price)
           }}
         </VBtn>
+        <CustomItem @close="close" />
       </VCardText>
       <VCardActions>
         <VBtn color="red" @click="close()"> Cancel </VBtn>
@@ -62,6 +63,7 @@ import { ref } from "vue";
 import { useFirebaseAuth, useFirestore } from "vuefire";
 import { useDisplay } from "vuetify";
 import MdiPlusThick from "~icons/mdi/plus-thick";
+import CustomItem from "./CustomItem.vue";
 
 const db = useFirestore();
 const auth = useFirebaseAuth();
