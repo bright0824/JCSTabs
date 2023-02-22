@@ -5,9 +5,12 @@ export const getTabTotal = (input: TabItem[]) => {
   return input.reduce((acc, item) => acc + item.price, 0) as number;
 };
 
-export const countItemsInTab = (tab: TabItem[], items: Item[]) => {
+export const countItemsInTab = (tab: TabItem[]) => {
   const count = {} as { [key: string]: number };
-  items.forEach((item: Item) => {
+  // items.forEach((item: Item) => {
+  //   count[item.name] = 0;
+  // });
+  tab.forEach((item: TabItem) => {
     count[item.name] = 0;
   });
   tab
@@ -15,7 +18,17 @@ export const countItemsInTab = (tab: TabItem[], items: Item[]) => {
     .forEach((item: Item) => {
       count[item.name]++;
     });
+  console.log(count);
   return count;
+};
+
+export const dedupeArray = (arr: TabItem[]) => {
+  const seen = new Set();
+  return arr.filter((item) => {
+    const duplicate = seen.has(item.name);
+    seen.add(item.name);
+    return !duplicate;
+  });
 };
 
 export const calculatePages = (length: number, itemsPerPage: number) => {

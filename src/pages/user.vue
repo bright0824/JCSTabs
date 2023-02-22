@@ -18,15 +18,15 @@
                     <th>Price</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="(item, index) in userDoc.tab" :key="index">
-                    <tr
-                      v-if="
-                        countItemsInTab(userDoc.tab, items.food)[item.name] > 0
-                      "
-                    >
+                  <template
+                    v-for="(item, index) in userDoc.tab.filter((e: TabItem) => !e.paid)"
+                    :key="index"
+                  >
+                    <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">
                       <td>{{ item.name }}</td>
                       <td>
                         {{
@@ -42,10 +42,12 @@
                       <td>
                         {{ item.date.toDate().toLocaleTimeString() }}
                       </td>
-                      <DeleteItemFromTab
-                        :item="item"
-                        v-if="canDelete(item.date, item.paid)"
-                      />
+                      <td>
+                        <DeleteItemFromTab
+                          :item="item"
+                          v-if="canDelete(item.date, item.paid)"
+                        />
+                      </td>
                     </tr>
                   </template>
                 </tbody>
@@ -68,17 +70,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="(item, index) in items.food" :key="index">
-                    <tr
-                      v-if="
-                        countItemsInTab(userDoc.tab, items.food)[item.name] > 0
-                      "
-                    >
+                  <template v-for="(item, index) in dedupedTab" :key="index">
+                    <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">
                       <td>{{ item.name }}</td>
                       <td>
-                        {{
-                          countItemsInTab(userDoc.tab, items.food)[item.name]
-                        }}
+                        {{ countItemsInTab(userDoc.tab)[item.name] }}
                       </td>
                       <td>
                         {{
@@ -203,6 +199,7 @@ import {
   countItemsInTab,
   getTabTotal,
   computeVisibleItems,
+  dedupeArray,
 } from "@/util/user";
 
 // components
@@ -230,8 +227,10 @@ const userDoc = useDocument(doc(db, `users/${auth?.currentUser?.uid}`));
 
 // computed
 const visibleItems = computed(() =>
-  computeVisibleItems(userDoc.data.value?.tab, page.value, perPage)
+  computeVisibleItems([...userDoc.data.value?.tab], page.value, perPage)
 );
+
+const dedupedTab = computed(() => dedupeArray(userDoc.data.value?.tab));
 
 const total = computed(() =>
   new Intl.NumberFormat("en-CA", {
@@ -241,10 +240,10 @@ const total = computed(() =>
 );
 
 // methods
-const canDelete = (date: Timestamp, item: TabItem) => {
+const canDelete = (date: Timestamp, paid: Boolean) => {
   const now = new Date();
   const diff = now.getTime() - date.toDate().getTime();
-  return diff < 300000 && !item.paid;
+  return diff < 300000 && !paid;
 };
 
 setTimeout(() => {

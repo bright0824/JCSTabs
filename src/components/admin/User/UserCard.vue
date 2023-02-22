@@ -45,10 +45,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="(item, index) in items" :key="index">
-                    <tr v-if="countItemsInTab(user.tab, items)[item.name] > 0">
+                  <template
+                    v-for="(item, index) in dedupeArray(user.tab)"
+                    :key="index"
+                  >
+                    <tr v-if="countItemsInTab(user.tab)[item.name] > 0">
                       <td>{{ item.name }}</td>
-                      <td>{{ countItemsInTab(user.tab, items)[item.name] }}</td>
+                      <td>{{ countItemsInTab(user.tab)[item.name] }}</td>
                       <td>
                         {{
                           new Intl.NumberFormat("en-CA", {
@@ -125,7 +128,7 @@
 <script setup lang="ts">
 import type { Item, User } from "@/types";
 import { computed, ref } from "vue";
-import { computeVisibleItems } from "@/util/user";
+import { computeVisibleItems, dedupeArray } from "@/util/user";
 import { useDisplay } from "vuetify";
 
 // components
