@@ -189,28 +189,32 @@
 
 <script setup lang="ts">
 import type { TabItem } from "@/types";
-import type { Timestamp } from "firebase/firestore";
-import { doc } from "firebase/firestore";
-import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";
 import {
   calculatePages,
-  countItemsInTab,
-  getTabTotal,
   computeVisibleItems,
+  countItemsInTab,
   dedupeArray,
+  getTabTotal,
 } from "@/util/user";
+import type { Timestamp } from "firebase/firestore";
+import { doc } from "firebase/firestore";
+import { computed, defineAsyncComponent, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";
 
 // components
-import AddItemToTab from "@/components/userPage/AddItemToTab.vue";
 
-const ClearTab = await import("@/components/ClearTab.vue").then(
-  (m) => m.default
+const AddItemToTab = defineAsyncComponent(
+  () => import("@/components/userPage/AddItemToTab.vue")
 );
-const DeleteItemFromTab = await import(
-  "@/components/userPage/DeleteItemFromTab.vue"
-).then((m) => m.default);
+
+const ClearTab = defineAsyncComponent(
+  () => import("@/components/ClearTab.vue")
+);
+
+const DeleteItemFromTab = defineAsyncComponent(
+  () => import("@/components/userPage/DeleteItemFromTab.vue")
+);
 
 const router = useRouter();
 
