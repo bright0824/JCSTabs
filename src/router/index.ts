@@ -1,26 +1,34 @@
 import { createRouter, createWebHistory } from "vue-router/auto";
-import { useFirebaseAuth } from "vuefire";
+import { getCurrentUser, useFirebaseAuth } from "vuefire";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 });
 
 router.beforeEach(async (to, from) => {
-  const auth = useFirebaseAuth();
-  const { admin } =
-    (await auth?.currentUser
-      ?.getIdTokenResult()
-      .then((idTokenResult) => idTokenResult.claims)) || {};
+  const currentUser = await getCurrentUser();
 
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
 
-  if (requiresAuth && !auth?.currentUser) {
-    return { name: "login" };
-  }
-
-  if (requiresAdmin && !admin) {
-    return from.path;
+  if (requiresAuth) {
+    if (!currentUser) {
+      return {
+        path: "/login",
+        query: {
+          redirect: to.fullPath,
+        },
+      };
+    }
+    if (requiresAdmin) {
+      const { admin } =
+        (await currentUser
+          ?.getIdTokenResult()
+          .then((idTokenResult) => idTokenResult.claims)) || {};
+      if (!admin) {
+        return false;
+      }
+    }
   }
 });
 

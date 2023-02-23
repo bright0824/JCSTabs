@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useFirebaseAuth } from "vuefire";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { getCurrentUser, useFirebaseAuth } from "vuefire";
 
 // data
 const loggedIn = ref(false);
@@ -20,32 +20,42 @@ const ignoreErrorCode = [
 ];
 
 const router = useRouter();
+const route = useRoute();
 const auth = useFirebaseAuth()!;
 const provider = new GoogleAuthProvider();
 
-// computed
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    router.push({ name: "user" });
-    loggedIn.value = true;
+// lifecycle
+onMounted(async () => {
+  const currentUser = await getCurrentUser();
+  if (currentUser) {
+    const to =
+      route.query.redirect && typeof route.query.redirect === "string"
+        ? route.query.redirect
+        : "/";
+
+    router.push(to);
   }
 });
 
 // methods
 const signIn = () => {
-  signInWithPopup(auth, provider).catch((err) => {
-    if (!ignoreErrorCode.includes(err.code)) {
-      try {
-        const { error } = JSON.parse(err.message.match(/{.*}/g));
-        error.value = error;
-      } catch {
-        error.value = {
-          message: err.message,
-          status: err.code,
-        };
+  signInWithPopup(auth, provider)
+    .then(() => {
+      router.push("/user");
+    })
+    .catch((err) => {
+      if (!ignoreErrorCode.includes(err.code)) {
+        try {
+          const { error } = JSON.parse(err.message.match(/{.*}/g));
+          error.value = error;
+        } catch {
+          error.value = {
+            message: err.message,
+            status: err.code,
+          };
+        }
       }
-    }
-  });
+    });
 };
 </script>
 
