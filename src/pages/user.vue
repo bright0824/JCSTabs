@@ -59,7 +59,7 @@
       <VRow>
         <VCol>
           <VCard>
-            <VCardTitle> Summery </VCardTitle>
+            <VCardTitle> Summary </VCardTitle>
             <VCardText>
               <VTable>
                 <thead>
