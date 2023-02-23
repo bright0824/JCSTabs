@@ -100,6 +100,7 @@ const addItem = async () => {
       }),
     });
     close();
+    emit("close");
   } catch (err) {
     const { code, message } = err as { code: string; message: string };
     error.value = { code, message };
@@ -114,7 +115,5 @@ const close = () => {
   error.value.code = null;
   error.value.message = null;
   dialog.value = false;
-
-  emit("close");
 };
 </script>
