@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import UserCard from "@/components/admin/User/UserCard.vue";
 import type { Item, User } from "@/types";
 import { collection, doc } from "firebase/firestore";
+import { computed } from "vue";
 import { useCollection, useDocument, useFirestore } from "vuefire";
-
-// components
-import UserCard from "@/components/admin/User/UserCard.vue";
 
 const letters = [
   "a",
@@ -40,6 +39,16 @@ const db = useFirestore();
 const users = useCollection(collection(db, "users"));
 const items = useDocument(doc(db, "admin", "items"));
 
+// computed
+
+const isLoading = computed(() => {
+  if (users.pending.value || items.pending.value) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
 // methods
 const filterUsers = (letter: string) => {
   return users?.value.filter((user) => {
@@ -52,48 +61,43 @@ const filterUsers = (letter: string) => {
 </script>
 
 <template>
-  <VFadeTransition>
-    <VContainer fluid v-if="users && items">
-      <VRow>
-        <VExpansionPanels>
-          <template v-for="letter in letters" :key="letter">
-            <VExpansionPanel
-              :id="letter"
-              :value="letter"
-              class="ma-2"
-              v-if="filterUsers(letter).length > 0"
-            >
-              <VExpansionPanelTitle>
-                <VRow>
-                  <VCol cols="12">
-                    <b class="text-h5">{{ letter.toUpperCase() }}</b>
-                  </VCol>
-                </VRow>
-              </VExpansionPanelTitle>
-              <VExpansionPanelText>
-                <template v-for="user in filterUsers(letter)" :key="user">
-                  <UserCard
-                    :user="(user as User)"
-                    :items="(items.food as Item[])"
-                  />
-                </template>
-              </VExpansionPanelText>
-            </VExpansionPanel>
-          </template>
-        </VExpansionPanels>
-      </VRow>
-    </VContainer>
-    <VContainer fluid v-else>
-      <VRow>
-        <VCol align="center">
-          <h1>Fetching users...</h1>
-        </VCol>
-      </VRow>
-      <VRow>
-        <VCol cols="12">
-          <VProgressLinear indeterminate />
-        </VCol>
-      </VRow>
-    </VContainer>
-  </VFadeTransition>
+  <VOverlay
+    persistent
+    :close-on-content-click="false"
+    class="align-center justify-center"
+    :model-value="isLoading"
+  >
+    <h1>Fetching staff list...</h1>
+    <VProgressLinear indeterminate rounded stream />
+  </VOverlay>
+  <VContainer fluid v-if="users && items">
+    <VRow>
+      <VExpansionPanels>
+        <template v-for="letter in letters" :key="letter">
+          <VExpansionPanel
+            :id="letter"
+            :value="letter"
+            class="ma-2"
+            v-if="filterUsers(letter).length > 0"
+          >
+            <VExpansionPanelTitle>
+              <VRow>
+                <VCol cols="12">
+                  <b class="text-h5">{{ letter.toUpperCase() }}</b>
+                </VCol>
+              </VRow>
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <template v-for="user in filterUsers(letter)" :key="user">
+                <UserCard
+                  :user="(user as User)"
+                  :items="(items.food as Item[])"
+                />
+              </template>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+        </template>
+      </VExpansionPanels>
+    </VRow>
+  </VContainer>
 </template>

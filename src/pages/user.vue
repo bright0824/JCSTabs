@@ -1,16 +1,135 @@
 <template>
-  <VFadeTransition>
-    <VContainer align="center" v-if="userDoc && items">
-      <VRow>
-        <VCol>
-          <AddItemToTab :items="items.food" />
-        </VCol>
-      </VRow>
-      <VRow>
-        <VCol>
-          <VCard>
-            <VCardTitle> Recent Transactions </VCardTitle>
-            <VCardText>
+  <VOverlay
+    persistent
+    :close-on-content-click="false"
+    class="align-center justify-center"
+    :model-value="isLoading"
+    rounded
+  >
+    <h1>Fetching your profile...</h1>
+    <VProgressLinear indeterminate rounded stream />
+  </VOverlay>
+  <VContainer align="center" v-if="userDoc && items">
+    <VRow>
+      <VCol>
+        <AddItemToTab :items="items.food" />
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol>
+        <VCard>
+          <VCardTitle> Recent Transactions </VCardTitle>
+          <VCardText>
+            <VTable>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Price</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <template
+                  v-for="(item, index) in userDoc.tab.filter((e: TabItem) => !e.paid)"
+                  :key="index"
+                >
+                  <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">
+                    <td>{{ item.name }}</td>
+                    <td>
+                      {{
+                        new Intl.NumberFormat("en-CA", {
+                          style: "currency",
+                          currency: "CAD",
+                        }).format(item.price)
+                      }}
+                    </td>
+                    <td>
+                      {{ item.date.toDate().toLocaleDateString() }}
+                    </td>
+                    <td>
+                      {{ item.date.toDate().toLocaleTimeString() }}
+                    </td>
+                    <td>
+                      <DeleteItemFromTab
+                        :item="item"
+                        v-if="canDelete(item.date, item.paid)"
+                      />
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </VTable>
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol>
+        <VCard>
+          <VCardTitle> Summary </VCardTitle>
+          <VCardText>
+            <VTable>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-for="(item, index) in dedupedTab" :key="index">
+                  <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">
+                    <td>{{ item.name }}</td>
+                    <td>
+                      {{ countItemsInTab(userDoc.tab)[item.name] }}
+                    </td>
+                    <td>
+                      {{
+                        new Intl.NumberFormat("en-CA", {
+                          style: "currency",
+                          currency: "CAD",
+                        }).format(item.price)
+                      }}
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </VTable>
+          </VCardText>
+          <VCardText>
+            <VRow>
+              <VCol align="left">
+                <ClearTab
+                  :email="auth?.currentUser?.email!"
+                  name="your"
+                  v-if="getTabTotal(userDoc.tab) > 0"
+                />
+              </VCol>
+              <VCol align="right">
+                <h3 class="mr-2">
+                  Total:
+                  {{ total }}
+                </h3>
+              </VCol>
+            </VRow>
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol>
+        <VExpansionPanels>
+          <VExpansionPanel>
+            <VExpansionPanelTitle>
+              <h3>History</h3>
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <VPagination
+                v-model="page"
+                :length="calculatePages(userDoc.tab.length, perPage)"
+              />
               <VTable>
                 <thead>
                   <tr>
@@ -18,15 +137,11 @@
                     <th>Price</th>
                     <th>Date</th>
                     <th>Time</th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <template
-                    v-for="(item, index) in userDoc.tab.filter((e: TabItem) => !e.paid)"
-                    :key="index"
-                  >
-                    <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">
+                  <template v-for="(item, index) in visibleItems" :key="index">
+                    <tr>
                       <td>{{ item.name }}</td>
                       <td>
                         {{
@@ -42,138 +157,16 @@
                       <td>
                         {{ item.date.toDate().toLocaleTimeString() }}
                       </td>
-                      <td>
-                        <DeleteItemFromTab
-                          :item="item"
-                          v-if="canDelete(item.date, item.paid)"
-                        />
-                      </td>
                     </tr>
                   </template>
                 </tbody>
               </VTable>
-            </VCardText>
-          </VCard>
-        </VCol>
-      </VRow>
-      <VRow>
-        <VCol>
-          <VCard>
-            <VCardTitle> Summary </VCardTitle>
-            <VCardText>
-              <VTable>
-                <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <template v-for="(item, index) in dedupedTab" :key="index">
-                    <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">
-                      <td>{{ item.name }}</td>
-                      <td>
-                        {{ countItemsInTab(userDoc.tab)[item.name] }}
-                      </td>
-                      <td>
-                        {{
-                          new Intl.NumberFormat("en-CA", {
-                            style: "currency",
-                            currency: "CAD",
-                          }).format(item.price)
-                        }}
-                      </td>
-                    </tr>
-                  </template>
-                </tbody>
-              </VTable>
-            </VCardText>
-            <VCardText>
-              <VRow>
-                <VCol align="left">
-                  <ClearTab
-                    :email="auth?.currentUser?.email!"
-                    name="your"
-                    v-if="getTabTotal(userDoc.tab) > 0"
-                  />
-                </VCol>
-                <VCol align="right">
-                  <h3 class="mr-2">
-                    Total:
-                    {{ total }}
-                  </h3>
-                </VCol>
-              </VRow>
-            </VCardText>
-          </VCard>
-        </VCol>
-      </VRow>
-      <VRow>
-        <VCol>
-          <VExpansionPanels>
-            <VExpansionPanel>
-              <VExpansionPanelTitle>
-                <h3>History</h3>
-              </VExpansionPanelTitle>
-              <VExpansionPanelText>
-                <VPagination
-                  v-model="page"
-                  :length="calculatePages(userDoc.tab.length, perPage)"
-                />
-                <VTable>
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Price</th>
-                      <th>Date</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template
-                      v-for="(item, index) in visibleItems"
-                      :key="index"
-                    >
-                      <tr>
-                        <td>{{ item.name }}</td>
-                        <td>
-                          {{
-                            new Intl.NumberFormat("en-CA", {
-                              style: "currency",
-                              currency: "CAD",
-                            }).format(item.price)
-                          }}
-                        </td>
-                        <td>
-                          {{ item.date.toDate().toLocaleDateString() }}
-                        </td>
-                        <td>
-                          {{ item.date.toDate().toLocaleTimeString() }}
-                        </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </VTable>
-              </VExpansionPanelText>
-            </VExpansionPanel>
-          </VExpansionPanels>
-        </VCol>
-      </VRow>
-    </VContainer>
-    <VContainer v-else fluid align="center">
-      <VRow>
-        <VCol>
-          <h1>Fetching your profile...</h1>
-        </VCol>
-      </VRow>
-      <VRow>
-        <VCol cols="12">
-          <VProgressLinear indeterminate />
-        </VCol>
-      </VRow>
-    </VContainer>
-  </VFadeTransition>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+        </VExpansionPanels>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>
 
 <route lang="json">
@@ -203,7 +196,6 @@ import { useRouter } from "vue-router";
 import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";
 
 // components
-
 const AddItemToTab = defineAsyncComponent(
   () => import("@/components/userPage/AddItemToTab.vue")
 );
@@ -235,6 +227,14 @@ const visibleItems = computed(() =>
 );
 
 const dedupedTab = computed(() => dedupeArray(userDoc.data.value?.tab));
+
+const isLoading = computed(() => {
+  if (items.pending.value || userDoc.pending.value) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 const total = computed(() =>
   new Intl.NumberFormat("en-CA", {

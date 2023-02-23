@@ -21,10 +21,9 @@ router.beforeEach(async (to, from) => {
       };
     }
     if (requiresAdmin) {
-      const { admin } =
-        (await currentUser
-          ?.getIdTokenResult()
-          .then((idTokenResult) => idTokenResult.claims)) || {};
+      const { admin } = await currentUser
+        ?.getIdTokenResult()
+        .then((idTokenResult) => idTokenResult.claims);
       if (!admin) {
         return false;
       }
