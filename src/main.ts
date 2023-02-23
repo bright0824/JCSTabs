@@ -30,10 +30,8 @@ const app = createApp(App);
 app.use(router);
 app.use(vuetify);
 app.use(VueFire, {
-  // imported above but could also just be created here
   firebaseApp,
   modules: [
-    // we will see other modules later on
     VueFireAuth(),
     VueFireAppCheck({
       provider: new ReCaptchaV3Provider(
