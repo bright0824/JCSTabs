@@ -14,7 +14,7 @@
       </VBtn>
     </template>
   </VTooltip>
-  <VDialog v-model="dialog" maxWidth="80%" maxheight="80%">
+  <VDialog v-model="dialog" :fullscreen="mobile">
     <VCard>
       <VCardTitle>
         <VRow>
@@ -28,44 +28,39 @@
         </VRow>
       </VCardTitle>
       <VCardText>
+        <h3 align="center">Current Tab {{ total }}</h3>
+        <VTable>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template
+              v-for="(item, index) in dedupeArray(user.tab)"
+              :key="index"
+            >
+              <tr v-if="countItemsInTab(user.tab)[item.name] > 0">
+                <td>{{ item.name }}</td>
+                <td>{{ countItemsInTab(user.tab)[item.name] }}</td>
+                <td>
+                  {{
+                    new Intl.NumberFormat("en-CA", {
+                      style: "currency",
+                      currency: "CAD",
+                    }).format(item.price)
+                  }}
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </VTable>
+      </VCardText>
+      <VDivider class="my-1" />
+      <VCardText>
         <VExpansionPanels>
-          <VExpansionPanel>
-            <VExpansionPanelTitle>
-              Tab
-              <vSpacer />
-              Total: {{ total }}
-            </VExpansionPanelTitle>
-            <VExpansionPanelText>
-              <VTable>
-                <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <template
-                    v-for="(item, index) in dedupeArray(user.tab)"
-                    :key="index"
-                  >
-                    <tr v-if="countItemsInTab(user.tab)[item.name] > 0">
-                      <td>{{ item.name }}</td>
-                      <td>{{ countItemsInTab(user.tab)[item.name] }}</td>
-                      <td>
-                        {{
-                          new Intl.NumberFormat("en-CA", {
-                            style: "currency",
-                            currency: "CAD",
-                          }).format(item.price)
-                        }}
-                      </td>
-                    </tr>
-                  </template>
-                </tbody>
-              </VTable>
-            </VExpansionPanelText>
-          </VExpansionPanel>
           <VExpansionPanel>
             <VExpansionPanelTitle> History </VExpansionPanelTitle>
             <VExpansionPanelText>

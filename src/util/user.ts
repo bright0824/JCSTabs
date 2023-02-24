@@ -40,9 +40,10 @@ export const computeVisibleItems = (
   page: number,
   itemsPerPage: number
 ) => {
+  const tabCopy = [...tab];
   const start = (page - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return tab
+  return tabCopy
     .sort(
       (a, b) => (a.date as Timestamp).seconds - (b.date as Timestamp).seconds
     )
