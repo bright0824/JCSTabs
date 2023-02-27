@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import ItemCard from "@/components/admin/Item/ItemCard.vue";
 import NewItem from "@/components/admin/Item/NewItem.vue";
+import type { Items } from "@/types";
 import { doc } from "firebase/firestore";
 import { computed } from "vue";
 import { useDocument, useFirestore } from "vuefire";
 
 // firebase
 const db = useFirestore();
-const items = useDocument(doc(db, "admin", "items"));
+const items = useDocument<Items>(doc(db, "admin", "items"));
 
 // computed
 const isLoading = computed(() => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UserCard from "@/components/admin/User/UserCard.vue";
-import type { Item, User } from "@/types";
+import type { Item, Items, User } from "@/types";
 import { collection, doc } from "firebase/firestore";
 import { computed } from "vue";
 import { useCollection, useDocument, useFirestore } from "vuefire";
@@ -36,8 +36,8 @@ const letters = [
 
 // firestore snapshots
 const db = useFirestore();
-const users = useCollection(collection(db, "users"));
-const items = useDocument(doc(db, "admin", "items"));
+const users = useCollection<User[]>(collection(db, "users"));
+const items = useDocument<Items>(doc(db, "admin", "items"));
 
 // computed
 

@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFunctions } from "firebase/functions";
 import { getAnalytics } from "firebase/analytics";
 import { getPerformance } from "firebase/performance";
+import { enableIndexedDbPersistence, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlFp1mxhtzaCy16eXFKX9glqWDAiyS_hg",
@@ -16,6 +17,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 const functions = getFunctions(firebaseApp);
+const db = getFirestore(firebaseApp);
+
+enableIndexedDbPersistence(db).catch((err) => {
+  console.log(err);
+});
+
 getAnalytics(firebaseApp);
 getPerformance(firebaseApp);
 

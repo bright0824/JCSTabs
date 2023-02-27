@@ -181,7 +181,7 @@
 </route>
 
 <script setup lang="ts">
-import type { TabItem } from "@/types";
+import type { Items, TabItem, User } from "@/types";
 import {
   calculatePages,
   computeVisibleItems,
@@ -218,15 +218,15 @@ const perPage = 5;
 const db = useFirestore();
 const auth = useFirebaseAuth();
 
-const items = useDocument(doc(db, "admin", "items"));
-const userDoc = useDocument(doc(db, `users/${auth?.currentUser?.uid}`));
+const items = useDocument<Items>(doc(db, "admin", "items"));
+const userDoc = useDocument<User>(doc(db, `users/${auth?.currentUser?.uid}`));
 
 // computed
 const visibleItems = computed(() =>
-  computeVisibleItems([...userDoc.data.value?.tab], page.value, perPage)
+  computeVisibleItems([...(userDoc.data.value?.tab ?? [])], page.value, perPage)
 );
 
-const dedupedTab = computed(() => dedupeArray(userDoc.data.value?.tab));
+const dedupedTab = computed(() => dedupeArray(userDoc.data.value?.tab ?? []));
 
 const isLoading = computed(() => {
   if (items.pending.value || userDoc.pending.value) {
@@ -240,7 +240,7 @@ const total = computed(() =>
   new Intl.NumberFormat("en-CA", {
     style: "currency",
     currency: "CAD",
-  }).format(getTabTotal(userDoc.data.value?.tab))
+  }).format(getTabTotal(userDoc.data.value?.tab ?? []))
 );
 
 // methods
@@ -250,25 +250,5 @@ const canDelete = (date: Timestamp, paid: Boolean) => {
   return diff < 300000 && !paid;
 };
 
-setTimeout(() => {
-  if (!auth?.currentUser) {
-    router.push({
-      name: "error",
-      query: {
-        err: "503",
-      },
-    });
-  }
-}, 5000);
-
-setTimeout(() => {
-  if (!userDoc.value) {
-    router.push({
-      name: "error",
-      params: {
-        err: "408",
-      },
-    });
-  }
-}, 20000);
+userDoc.error.value && router.push("/error");
 </script>
