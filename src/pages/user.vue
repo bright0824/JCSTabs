@@ -32,7 +32,7 @@
               </thead>
               <tbody>
                 <template
-                  v-for="(item, index) in userDoc.tab.filter((e: TabItem) => !e.paid)"
+                  v-for="(item, index) in userDoc.tab.filter((e: TabItem) => !e.paid).reverse()"
                   :key="index"
                 >
                   <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">

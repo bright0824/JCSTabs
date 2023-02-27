@@ -27,6 +27,8 @@ registerSW({
 
 const app = createApp(App);
 
+// self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+
 app.use(router);
 app.use(vuetify);
 app.use(VueFire, {
