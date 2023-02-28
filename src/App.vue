@@ -27,14 +27,24 @@
 </template>
 
 <script setup lang="ts">
-import { usePreferredDark } from "@vueuse/core";
+import { usePreferredDark, useWebNotification } from "@vueuse/core";
 import { useTheme } from "vuetify";
-
 import UserProfile from "@/components/UserProfile.vue";
+import { useFirebaseAuth } from "vuefire";
+import { useRouter } from "vue-router/auto";
 
 // data
 const theme = useTheme();
 const prefersDark = usePreferredDark();
+
+const auth = useFirebaseAuth();
+const router = useRouter();
+
+auth?.onAuthStateChanged((user) => {
+  if (!user) {
+    router.push("/login");
+  }
+});
 
 // computed
 if (prefersDark.value) {

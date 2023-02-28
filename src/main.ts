@@ -1,10 +1,10 @@
+import { ReCaptchaV3Provider } from "firebase/app-check";
+import { registerSW } from "virtual:pwa-register";
 import { createApp } from "vue";
+import { VueFire, VueFireAppCheck, VueFireAuth } from "vuefire";
+import { firebaseApp } from "./firebase";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
-import { registerSW } from "virtual:pwa-register";
-import { VueFire, VueFireAuth, VueFireAppCheck } from "vuefire";
-import { firebaseApp } from "./firebase";
-import { ReCaptchaV3Provider } from "firebase/app-check";
 
 import App from "./App.vue";
 import router from "./router";
@@ -27,11 +27,8 @@ registerSW({
 
 const app = createApp(App);
 
-if (import.meta.env.DEV) {
-  // @ts-expect-error
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN =
-    import.meta.env.FIREBASE_APPCHECK_DEBUG_TOKEN ?? true;
-}
+// @ts-expect-error
+self.FIREBASE_APPCHECK_DEBUG_TOKEN = "8b2e056a-0e9c-41b4-a666-99d6d12ff6ba";
 
 app.use(router);
 app.use(vuetify);

@@ -189,8 +189,7 @@ import {
   dedupeArray,
   getTabTotal,
 } from "@/util/user";
-import type { Timestamp } from "firebase/firestore";
-import { doc } from "firebase/firestore";
+import { doc, type Timestamp } from "firebase/firestore";
 import { computed, defineAsyncComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";

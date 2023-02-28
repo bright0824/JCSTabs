@@ -1,18 +1,24 @@
-import { fileURLToPath, URL } from "node:url";
-
-import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-
-import vuetify from "vite-plugin-vuetify";
-import VueRouter from "unplugin-vue-router/vite";
-import { VitePWA } from "vite-plugin-pwa";
-
-import Icons from "unplugin-icons/vite";
+import { fileURLToPath, URL } from "node:url";
 import IconsResolver from "unplugin-icons/resolver";
+import Icons from "unplugin-icons/vite";
 import Components from "unplugin-vue-components/vite";
+import VueRouter from "unplugin-vue-router/vite";
+import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
+import vuetify from "vite-plugin-vuetify";
+import mkcert from "vite-plugin-mkcert";
+import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    https: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Referrer-Policy": "no-referrer",
+    },
+  },
   plugins: [
     VueRouter({
       routesFolder: "src/pages",
@@ -21,6 +27,8 @@ export default defineConfig({
       importMode: "async",
     }),
     vue(),
+
+    mkcert(),
     vuetify({
       autoImport: true,
     }),
@@ -36,6 +44,19 @@ export default defineConfig({
       compiler: "vue3",
       autoInstall: true,
     }),
+    // VitePWA({
+    //   strategies: "injectManifest",
+    //   srcDir: "src/firebase",
+    //   filename: "firebase-messaging-sw.ts",
+    //   injectRegister: "inline",
+    //   workbox: {
+    //     globPatterns: [],
+    //     globIgnores: ["*"],
+    //   },
+    //   devOptions: {
+    //     enabled: true,
+    //   },
+    // }),
     VitePWA({
       injectRegister: "inline",
       registerType: "autoUpdate",
@@ -45,6 +66,9 @@ export default defineConfig({
         "robots.txt",
         "apple-touch-icon.png",
       ],
+      devOptions: {
+        enabled: false,
+      },
       manifest: {
         name: "JCS Tab Tracker",
         short_name: "JCS Tabs",
@@ -137,12 +161,15 @@ export default defineConfig({
     __VUE_PROD_DEVTOOLS__: false,
   },
   esbuild: {
-    drop: ["console", "debugger"],
+    // drop: ["console", "debugger"],
     legalComments: "none",
     format: "esm",
   },
   build: {
     rollupOptions: {
+      input: {
+        "firebase-messaging-sw": "./src/firebase/firebase-messaging-sw.ts",
+      },
       output: {
         manualChunks: {
           firebase: [
@@ -158,12 +185,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-    },
-  },
-  server: {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Referrer-Policy": "no-referrer",
     },
   },
 });

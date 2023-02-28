@@ -9,7 +9,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "components.d.ts"
-  ],
+, "src/firebase/firebase-messaging-sw.js", "src/firebase/firebase-messaging-sw.js"  ],
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",
@@ -23,7 +23,8 @@
     "esModuleInterop": true,
     "lib": [
       "esnext",
-      "dom"
+      "dom",
+      "WebWorker"
     ],
     "types": [
       "vuetify",

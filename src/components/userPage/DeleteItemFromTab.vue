@@ -1,7 +1,7 @@
 <template>
   <VDialog v-model="dialog" max-width="400px" align="center">
     <template #activator="{ props }">
-      <VBtn v-bind="props" color="red" depressed @click="dialog = true" icon>
+      <VBtn v-bind="props" color="red" @click="dialog = true" icon>
         <MdiDelete />
       </VBtn>
     </template>

@@ -18,7 +18,6 @@ export const countItemsInTab = (tab: TabItem[]) => {
     .forEach((item: Item) => {
       count[item.name]++;
     });
-  console.log(count);
   return count;
 };
 

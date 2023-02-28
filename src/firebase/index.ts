@@ -1,8 +1,8 @@
+import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getFunctions } from "firebase/functions";
-import { getAnalytics } from "firebase/analytics";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { getPerformance } from "firebase/performance";
-import { enableIndexedDbPersistence, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlFp1mxhtzaCy16eXFKX9glqWDAiyS_hg",
@@ -17,13 +17,32 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 const functions = getFunctions(firebaseApp);
-const db = getFirestore(firebaseApp);
-
-enableIndexedDbPersistence(db).catch((err) => {
-  console.log(err);
-});
+const messaging = getMessaging(firebaseApp);
 
 getAnalytics(firebaseApp);
 getPerformance(firebaseApp);
 
-export { firebaseApp, functions };
+getToken(messaging, {
+  vapidKey:
+    "BBeXegOCfTcMiYKK1PcATi7prahLmEeNvbxjDYN97EF8yqp_KflRfQHPB3HSveJbLCVKL2OSV6qMb3lC8GWWqvU",
+})
+  .then((currentToken) => {
+    if (currentToken) {
+      console.log("current token for client: ", currentToken);
+      // Perform any other necessary action with the token
+    } else {
+      // Show permission request UI
+      console.log(
+        "No registration token available. Request permission to generate one."
+      );
+    }
+  })
+  .catch((err) => {
+    console.log("An error occurred while retrieving token. ", err);
+  });
+
+onMessage(messaging, (payload) => {
+  console.log("Message received. ", payload);
+});
+
+export { firebaseApp, functions, messaging };
