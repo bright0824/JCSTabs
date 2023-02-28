@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "run-p dev:swkr dev:vite",
+    "dev:vite": "vite",
+    "dev:swkr": "tsc --watch --project tsconfig.sw.json",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",

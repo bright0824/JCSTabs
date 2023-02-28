@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "public",
+    "target": "ESNext"
+  },
+  "include": [
+    "src/firebase/firebase-messaging-sw.ts"
+  ]
+}

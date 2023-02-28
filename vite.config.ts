@@ -48,13 +48,15 @@ export default defineConfig({
     //   strategies: "injectManifest",
     //   srcDir: "src/firebase",
     //   filename: "firebase-messaging-sw.ts",
-    //   injectRegister: "inline",
-    //   workbox: {
-    //     globPatterns: [],
-    //     globIgnores: ["*"],
-    //   },
+    //   registerType: "autoUpdate",
     //   devOptions: {
     //     enabled: true,
+    //     type: "module",
+    //     navigateFallback: "index.html",
+    //   },
+    //   workbox: {
+    //     importScripts: ["./src/firebase/firebase-messaging-sw.ts"],
+    //     globIgnores: ["**/node_modules/**/*", "**/sw-custom.js"],
     //   },
     // }),
     VitePWA({

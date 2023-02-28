@@ -36,7 +36,7 @@ const letters = [
 
 // firestore snapshots
 const db = useFirestore();
-const users = useCollection<User[]>(collection(db, "users"));
+const users = useCollection<User>(collection(db, "users"));
 const items = useDocument<Items>(doc(db, "admin", "items"));
 
 // computed
@@ -49,10 +49,12 @@ const isLoading = computed(() => {
   }
 });
 
+console.log(users.data.value);
+
 // methods
 const filterUsers = (letter: string) => {
-  return users?.value.filter((user) => {
-    return user.info.displayName
+  return users?.data.value.filter((user: User) => {
+    return user?.info.displayName
       .split(" ")[1]
       ?.toLowerCase()
       .startsWith(letter);
@@ -89,10 +91,7 @@ const filterUsers = (letter: string) => {
             </VExpansionPanelTitle>
             <VExpansionPanelText>
               <template v-for="user in filterUsers(letter)" :key="user">
-                <UserCard
-                  :user="(user as User)"
-                  :items="(items.food as Item[])"
-                />
+                <UserCard :user="user" :items="(items.food as Item[])" />
               </template>
             </VExpansionPanelText>
           </VExpansionPanel>

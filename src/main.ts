@@ -27,8 +27,11 @@ registerSW({
 
 const app = createApp(App);
 
-// @ts-expect-error
-self.FIREBASE_APPCHECK_DEBUG_TOKEN = "8b2e056a-0e9c-41b4-a666-99d6d12ff6ba";
+if (import.meta.env.DEV) {
+  // @ts-expect-error
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN =
+    import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
+}
 
 app.use(router);
 app.use(vuetify);
