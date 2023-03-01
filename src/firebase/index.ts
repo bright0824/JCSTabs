@@ -37,17 +37,6 @@ getToken(messaging, {
         storedToken.value = currentToken;
       }
       console.log("current token for client: ", currentToken);
-
-      const db = useFirestore();
-
-      const token = {
-        token: currentToken,
-        createdAt: Timestamp.now(),
-      };
-
-      await updateDoc(doc(db, "admin/FCM"), {
-        tokens: arrayUnion(token),
-      });
     } else {
       // Show permission request UI
       console.log(
