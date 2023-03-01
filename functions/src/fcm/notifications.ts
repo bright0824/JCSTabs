@@ -1,7 +1,7 @@
 import { messaging } from "firebase-admin";
 import { firestore } from "firebase-functions";
 
-export const itemsUpdated = firestore
+export const itemsUpdated = firestore()
   .document("items/{itemId}")
   .onUpdate((change) => {
     const { food: before } = change.after.data();
