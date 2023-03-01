@@ -61,6 +61,4 @@ onMessage(messaging, (payload) => {
   new Notification(notificationTitle, notificationOptions);
 });
 
-connectFunctionsEmulator(functions, "localhost", 5001);
-
 export { firebaseApp, functions, messaging };
