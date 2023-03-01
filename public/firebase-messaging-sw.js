@@ -24,5 +24,7 @@ messaging.onBackgroundMessage(function (payload) {
     icon: "/pwa-192x192.png",
   };
 
+  console.log("[FCM SW] Received background message ", payload)
+
   self.registration.showNotification(notificationTitle, notificationOptions);
 });

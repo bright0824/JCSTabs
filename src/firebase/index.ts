@@ -1,8 +1,10 @@
+import { updateDoc, doc, arrayUnion, Timestamp } from "@firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getFunctions } from "firebase/functions";
+import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { getPerformance } from "firebase/performance";
+import { useFirestore } from "vuefire";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlFp1mxhtzaCy16eXFKX9glqWDAiyS_hg",
@@ -26,10 +28,21 @@ getToken(messaging, {
   vapidKey:
     "BBeXegOCfTcMiYKK1PcATi7prahLmEeNvbxjDYN97EF8yqp_KflRfQHPB3HSveJbLCVKL2OSV6qMb3lC8GWWqvU",
 })
-  .then((currentToken) => {
+  .then(async (currentToken) => {
     if (currentToken) {
       console.log("current token for client: ", currentToken);
-      // Perform any other necessary action with the token
+
+      const db = useFirestore();
+
+      const token = {
+        token: currentToken,
+        createdAt: Timestamp.now(),
+      }
+
+      await updateDoc(doc(db, 'admin/FCM'), {
+        tokens: arrayUnion(token)
+      })
+
     } else {
       // Show permission request UI
       console.log(
@@ -49,7 +62,11 @@ onMessage(messaging, (payload) => {
     icon: "/pwa-192x192.png",
   };
 
+  console.log("[FCM] ", payload)
+
   new Notification(notificationTitle, notificationOptions);
 });
+
+connectFunctionsEmulator(functions, "localhost", 5001);
 
 export { firebaseApp, functions, messaging };

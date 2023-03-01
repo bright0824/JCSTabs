@@ -17,6 +17,8 @@ declare module '@vue/runtime-core' {
     DeleteItemFromTab: typeof import('./src/components/userPage/DeleteItemFromTab.vue')['default']
     FeedBack: typeof import('./src/components/FeedBack.vue')['default']
     ItemCard: typeof import('./src/components/admin/Item/ItemCard.vue')['default']
+    MdiAccountCog: typeof import('~icons/mdi/account-cog')['default']
+    MdiArchiveCog: typeof import('~icons/mdi/archive-cog')['default']
     NewItem: typeof import('./src/components/admin/Item/NewItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
