@@ -1,11 +1,9 @@
-import { updateDoc, doc, arrayUnion, Timestamp } from "@firebase/firestore";
 import { useLocalStorage } from "@vueuse/core";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
+import { getFunctions } from "firebase/functions";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { getPerformance } from "firebase/performance";
-import { useFirestore } from "vuefire";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlFp1mxhtzaCy16eXFKX9glqWDAiyS_hg",
