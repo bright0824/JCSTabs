@@ -1,4 +1,5 @@
 import { updateDoc, doc, arrayUnion, Timestamp } from "@firebase/firestore";
+import { useLocalStorage } from "@vueuse/core";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
@@ -24,12 +25,17 @@ const messaging = getMessaging(firebaseApp);
 getAnalytics(firebaseApp);
 getPerformance(firebaseApp);
 
+const storedToken = useLocalStorage("fcmToken", "");
+
 getToken(messaging, {
   vapidKey:
     "BBeXegOCfTcMiYKK1PcATi7prahLmEeNvbxjDYN97EF8yqp_KflRfQHPB3HSveJbLCVKL2OSV6qMb3lC8GWWqvU",
 })
   .then(async (currentToken) => {
     if (currentToken) {
+      if (storedToken.value !== currentToken) {
+        storedToken.value = currentToken;
+      }
       console.log("current token for client: ", currentToken);
 
       const db = useFirestore();
@@ -37,12 +43,11 @@ getToken(messaging, {
       const token = {
         token: currentToken,
         createdAt: Timestamp.now(),
-      }
+      };
 
-      await updateDoc(doc(db, 'admin/FCM'), {
-        tokens: arrayUnion(token)
-      })
-
+      await updateDoc(doc(db, "admin/FCM"), {
+        tokens: arrayUnion(token),
+      });
     } else {
       // Show permission request UI
       console.log(
@@ -62,7 +67,7 @@ onMessage(messaging, (payload) => {
     icon: "/pwa-192x192.png",
   };
 
-  console.log("[FCM] ", payload)
+  console.log("[FCM] ", payload);
 
   new Notification(notificationTitle, notificationOptions);
 });
