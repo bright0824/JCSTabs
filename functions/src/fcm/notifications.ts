@@ -2,7 +2,7 @@ import { messaging } from "firebase-admin";
 import { firestore } from "firebase-functions";
 
 export const itemsUpdated = firestore
-  .document("items/{itemId}")
+  .document("admin/items")
   .onUpdate((change) => {
     const { food: before } = change.after.data();
     const { food: after } = change.before.data();
