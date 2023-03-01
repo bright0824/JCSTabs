@@ -44,21 +44,6 @@ export default defineConfig({
       compiler: "vue3",
       autoInstall: true,
     }),
-    // VitePWA({
-    //   strategies: "injectManifest",
-    //   srcDir: "src/firebase",
-    //   filename: "firebase-messaging-sw.ts",
-    //   registerType: "autoUpdate",
-    //   devOptions: {
-    //     enabled: true,
-    //     type: "module",
-    //     navigateFallback: "index.html",
-    //   },
-    //   workbox: {
-    //     importScripts: ["./src/firebase/firebase-messaging-sw.ts"],
-    //     globIgnores: ["**/node_modules/**/*", "**/sw-custom.js"],
-    //   },
-    // }),
     VitePWA({
       injectRegister: "inline",
       registerType: "autoUpdate",
@@ -169,9 +154,6 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      input: {
-        "firebase-messaging-sw": "./src/firebase/firebase-messaging-sw.ts",
-      },
       output: {
         manualChunks: {
           firebase: [

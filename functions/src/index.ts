@@ -13,7 +13,7 @@ export { addItem, deleteItem, updateItem } from "./items";
 export { beforeCreate, onCreate, onDelete } from "./auth";
 
 // Notification functions
-export { itemsUpdate } from "./notifications/items";
+// export { itemsUpdate } from "./notifications/items";
 
 // Token functions
 // export { subscribe } from "./notifications/tokens";
