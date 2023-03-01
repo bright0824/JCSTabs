@@ -44,6 +44,9 @@ app.use(VueFire, {
         "6LfgHEEgAAAAAEaYmNJkZHGvxQ4-c6syHPdOb5r5"
       ),
       isTokenAutoRefreshEnabled: true,
+      debug: import.meta.env.DEV
+        ? import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN
+        : false,
     }),
   ],
 });

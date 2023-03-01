@@ -9,7 +9,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "components.d.ts"
-, "src/firebase/firebase-messaging-sw.js", "src/firebase/firebase-messaging-sw.js"  ],
+, "src/firebase/firebase-messaging-sw.js", "src/firebase/firebase-messaging-sw.js", "firebase-messaging-sw.ts", "firebase-messaging-sw.ts"  ],
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",

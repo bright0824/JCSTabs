@@ -42,7 +42,14 @@ getToken(messaging, {
   });
 
 onMessage(messaging, (payload) => {
-  console.log("Message received. ", payload);
+  // display the notification
+  const notificationTitle = payload.notification?.title || "";
+  const notificationOptions = {
+    body: payload.notification?.body,
+    icon: "/pwa-192x192.png",
+  };
+
+  new Notification(notificationTitle, notificationOptions);
 });
 
 export { firebaseApp, functions, messaging };
