@@ -10,3 +10,7 @@ export { addItem, deleteItem, updateItem } from "./items";
 
 // Auth functions
 export { beforeCreate, onCreate, onDelete } from "./auth";
+
+// FCM functions
+export { subscribeToTopic } from "./fcm/token";
+export { itemsUpdated } from "./fcm/notifications";

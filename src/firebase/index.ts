@@ -1,7 +1,7 @@
 import { useLocalStorage } from "@vueuse/core";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getFunctions } from "firebase/functions";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { getPerformance } from "firebase/performance";
 
@@ -32,6 +32,11 @@ getToken(messaging, {
   .then(async (currentToken) => {
     if (currentToken) {
       if (storedToken.value !== currentToken) {
+        await httpsCallable(functions, "subscribeToTopic")({
+          topic: "items",
+          token: currentToken,
+          oldToken: storedToken.value || undefined,
+        })
         storedToken.value = currentToken;
       }
       console.log("current token for client: ", currentToken);
