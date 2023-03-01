@@ -49,11 +49,9 @@ const isLoading = computed(() => {
   }
 });
 
-console.log(users.data.value);
-
 // methods
 const filterUsers = (letter: string) => {
-  return users?.data.value.filter((user: User) => {
+  return users?.data.value.filter((user) => {
     return user?.info.displayName
       .split(" ")[1]
       ?.toLowerCase()
