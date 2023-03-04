@@ -1,53 +1,52 @@
 import { messaging } from "firebase-admin";
 import { firestore } from "firebase-functions";
+import { Item, ItemMap, Change } from "./types";
 
 export const itemsUpdated = firestore
   .document("admin/items")
   .onUpdate((change) => {
-    const { food: before } = change.after.data();
-    const { food: after } = change.before.data();
+    const { food: before } = change.before.data();
+    const { food: after } = change.after.data();
 
     const diff = computeDifference(before, after);
 
-    console.log(diff);
+    // change which notification is sent based on the diff
+    const changed = diff.find((item) => item.before && item.after);
+    const added = diff.find((item) => !item.before && item.after);
 
-    // change what a notification looks like depending if it's an update or add
+    let message = {};
 
-    diff.forEach((item) => {
-      if (item.before) {
-        console.log(
-          // eslint-disable-next-line max-len
-          `Item ${item.before.name} changed from ${item.before.price} to ${item.after?.price}`
-        );
-      } else {
-        console.log(`Item ${item.after?.name} added`);
-      }
-    });
+    if (changed) {
+      console.log("changed", changed);
+      message = {
+        notification: {
+          title: "Item Updated",
+          body: `${changed.after?.name} is now ${new Intl.NumberFormat(
+            "en-CA",
+            {
+              style: "currency",
+              currency: "CAD",
+            }
+          ).format(changed.after?.price || 0)}`,
+        },
+      };
+    } else if (added) {
+      console.log("added", added);
+      message = {
+        notification: {
+          title: "Item Added",
+          body: `${added.after?.name} is now available.`,
+        },
+      };
+    } else {
+      console.log(
+        "removed",
+        diff.find((item) => item.before && !item.after)
+      );
+    }
 
-    return messaging().sendToTopic("items", {
-      notification: {
-        title: "Items Updated",
-        body: "Items have been updated",
-      },
-      data: {
-        diff: JSON.stringify(diff),
-      },
-    });
+    return messaging().sendToTopic("items", message);
   });
-
-interface Item {
-  name: string;
-  price: number;
-}
-
-interface Change {
-  before?: Item;
-  after?: Item;
-}
-
-interface ItemMap {
-  [key: string]: Item;
-}
 
 const computeDifference = (before: Item[], after: Item[]): Change[] => {
   const beforeMap: ItemMap = before.reduce(

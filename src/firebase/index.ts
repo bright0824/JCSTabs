@@ -1,7 +1,11 @@
 import { useLocalStorage } from "@vueuse/core";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getFunctions, httpsCallable } from "firebase/functions";
+import {
+  connectFunctionsEmulator,
+  getFunctions,
+  httpsCallable,
+} from "firebase/functions";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { getPerformance } from "firebase/performance";
 
@@ -23,6 +27,8 @@ const messaging = getMessaging(firebaseApp);
 getAnalytics(firebaseApp);
 getPerformance(firebaseApp);
 
+// connectFunctionsEmulator(functions, "localhost", 5001);
+
 const storedToken = useLocalStorage("fcmToken", "");
 
 getToken(messaging, {
@@ -31,14 +37,17 @@ getToken(messaging, {
 })
   .then(async (currentToken) => {
     if (currentToken) {
-      if (storedToken.value !== currentToken) {
-        await httpsCallable(functions, "subscribeToTopic")({
-          topic: "items",
-          token: currentToken,
-          oldToken: storedToken.value || undefined,
-        })
-        storedToken.value = currentToken;
-      }
+      // if (storedToken.value !== currentToken) {
+      //   await httpsCallable(
+      //     functions,
+      //     "subscribeToTopic"
+      //   )({
+      //     topic: "items",
+      //     token: currentToken,
+      //     oldToken: storedToken.value || undefined,
+      //   });
+      //   storedToken.value = currentToken;
+      // }
       console.log("current token for client: ", currentToken);
     } else {
       // Show permission request UI
