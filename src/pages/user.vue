@@ -188,7 +188,7 @@ import {
   countItemsInTab,
   dedupeArray,
   getTabTotal,
-} from "@/util/user";
+} from "@/utils";
 import { doc, type Timestamp } from "firebase/firestore";
 import { computed, defineAsyncComponent, ref } from "vue";
 import { useRouter } from "vue-router";

@@ -2,7 +2,7 @@ import { onCall, HttpsError } from "firebase-functions/v1/https";
 import { messaging } from "firebase-admin";
 
 interface SubscribeToTopicData {
-  topic: string;
+  topics: string[];
   token: string;
   oldToken?: string;
 }
@@ -16,10 +16,10 @@ export const subscribeToTopic = onCall(
       throw new HttpsError("failed-precondition", "Unknown origin");
     }
 
-    const { topic, token, oldToken } = data;
+    const { topics, token, oldToken } = data;
 
-    if (!topic) {
-      throw new HttpsError("invalid-argument", "Topic is required");
+    if (!topics) {
+      throw new HttpsError("invalid-argument", "Topics are required");
     }
 
     if (!token) {
@@ -27,17 +27,21 @@ export const subscribeToTopic = onCall(
     }
 
     if (oldToken) {
+      topics.forEach(async (topic) => {
+        await messaging()
+          .unsubscribeFromTopic(oldToken, topic)
+          .catch((err) => {
+            throw new HttpsError("internal", err);
+          });
+      });
+    }
+
+    return topics.forEach(async (topic) => {
       await messaging()
-        .unsubscribeFromTopic(oldToken, topic)
+        .subscribeToTopic(token, topic)
         .catch((err) => {
           throw new HttpsError("internal", err);
         });
-    }
-
-    return await messaging()
-      .subscribeToTopic(token, topic)
-      .catch((err) => {
-        throw new HttpsError("internal", err);
-      });
+    });
   }
 );

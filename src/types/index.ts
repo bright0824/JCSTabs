@@ -28,4 +28,5 @@ export type User = {
   roles: {
     [key: string]: boolean;
   };
+  topics: string[];
 };

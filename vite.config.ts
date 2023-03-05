@@ -5,10 +5,9 @@ import Icons from "unplugin-icons/vite";
 import Components from "unplugin-vue-components/vite";
 import VueRouter from "unplugin-vue-router/vite";
 import { defineConfig } from "vite";
+import mkcert from "vite-plugin-mkcert";
 import { VitePWA } from "vite-plugin-pwa";
 import vuetify from "vite-plugin-vuetify";
-import mkcert from "vite-plugin-mkcert";
-import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -169,6 +168,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "~utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
     },
   },
 });

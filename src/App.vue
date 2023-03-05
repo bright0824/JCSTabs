@@ -4,8 +4,18 @@
       <VAppBarTitle>
         <RouterLink to="/user"> JCS Tabs </RouterLink>
       </VAppBarTitle>
+      <VBtn icon @click="openSettings = !openSettings" color="auto">
+        <VIcon :icon="MdiCog" />
+      </VBtn>
       <UserProfile />
     </VAppBar>
+    <VNavigationDrawer
+      v-model="openSettings"
+      temporary
+      :location="mobile ? 'bottom' : 'left'"
+    >
+      <Settings v-if="auth?.currentUser" />
+    </VNavigationDrawer>
     <VMain>
       <VContainer fluid>
         <Suspense>
@@ -27,23 +37,35 @@
 </template>
 
 <script setup lang="ts">
-import { usePreferredDark, useWebNotification } from "@vueuse/core";
-import { useTheme } from "vuetify";
+import Settings from "@/components/Settings.vue";
 import UserProfile from "@/components/UserProfile.vue";
-import { useFirebaseAuth } from "vuefire";
+import { usePreferredDark } from "@vueuse/core";
+import { ref } from "vue";
 import { useRouter } from "vue-router/auto";
+import { useFirebaseAuth } from "vuefire";
+import { useDisplay, useTheme } from "vuetify";
+import MdiCog from "~icons/mdi/cog";
+import { activate } from "./firebase/fcm";
+import { useFCMStore } from "./store/fcm";
 
 // data
 const theme = useTheme();
 const prefersDark = usePreferredDark();
+const { mobile } = useDisplay();
 
 const auth = useFirebaseAuth();
 const router = useRouter();
+
+const openSettings = ref(false);
 
 auth?.onAuthStateChanged((user) => {
   if (!user) {
     router.push("/login");
   }
+
+  setTimeout(() => {
+    activate();
+  }, 30000);
 });
 
 // computed

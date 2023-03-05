@@ -1,13 +1,7 @@
-import { useLocalStorage } from "@vueuse/core";
-import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import {
-  connectFunctionsEmulator,
-  getFunctions,
-  httpsCallable,
-} from "firebase/functions";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import { getPerformance } from "firebase/performance";
+import { getFunctions } from "firebase/functions";
+import { getMessaging } from "firebase/messaging";
+import { enableIndexedDbPersistence, getFirestore } from "@firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlFp1mxhtzaCy16eXFKX9glqWDAiyS_hg",
@@ -23,54 +17,29 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const functions = getFunctions(firebaseApp);
 const messaging = getMessaging(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
-getAnalytics(firebaseApp);
-getPerformance(firebaseApp);
+enableIndexedDbPersistence(firestore).catch((err) => {
+  if (err.code === "failed-precondition") {
+    // Multiple tabs open, persistence can only be enabled
+    // in one tab at a a time.
+    // ...
 
-// connectFunctionsEmulator(functions, "localhost", 5001);
+    console.error(
+      "Multiple tabs open, persistence can only be enabled in one tab at a a time."
+    );
+  } else if (err.code === "unimplemented") {
+    // The current browser does not support all of the
+    // features required to enable persistence
+    // ...
 
-const storedToken = useLocalStorage("fcmToken", "");
-
-getToken(messaging, {
-  vapidKey:
-    "BBeXegOCfTcMiYKK1PcATi7prahLmEeNvbxjDYN97EF8yqp_KflRfQHPB3HSveJbLCVKL2OSV6qMb3lC8GWWqvU",
-})
-  .then(async (currentToken) => {
-    if (currentToken) {
-      // if (storedToken.value !== currentToken) {
-      //   await httpsCallable(
-      //     functions,
-      //     "subscribeToTopic"
-      //   )({
-      //     topic: "items",
-      //     token: currentToken,
-      //     oldToken: storedToken.value || undefined,
-      //   });
-      //   storedToken.value = currentToken;
-      // }
-      console.log("current token for client: ", currentToken);
-    } else {
-      // Show permission request UI
-      console.log(
-        "No registration token available. Request permission to generate one."
-      );
-    }
-  })
-  .catch((err) => {
-    console.log("An error occurred while retrieving token. ", err);
-  });
-
-onMessage(messaging, (payload) => {
-  // display the notification
-  const notificationTitle = payload.notification?.title || "";
-  const notificationOptions = {
-    body: payload.notification?.body,
-    icon: "/pwa-192x192.png",
-  };
-
-  console.log("[FCM] ", payload);
-
-  new Notification(notificationTitle, notificationOptions);
+    console.error(
+      "The current browser does not support all of the features required to enable persistence"
+    );
+  }
 });
+
+// getAnalytics(firebaseApp);
+// getPerformance(firebaseApp);
 
 export { firebaseApp, functions, messaging };
