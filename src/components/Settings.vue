@@ -1,38 +1,59 @@
 <script setup lang="ts">
+import { functions } from "@/firebase";
+import { useFCMStore } from "@/store/fcm";
+import type { User } from "@/types";
 import { doc, updateDoc } from "@firebase/firestore";
+import { httpsCallable } from "@firebase/functions";
 import { ref } from "vue";
 import { useCurrentUser, useDocument, useFirestore } from "vuefire";
 import MdiBell from "~icons/mdi/bell";
-import type { User } from "@/types";
 
 const currentUser = useCurrentUser();
-
 const userRef = doc(useFirestore(), "users", currentUser.value?.uid || "");
-
 const userDoc = useDocument<User>(userRef);
 
-const topics = ["items"];
+const fcm = useFCMStore();
+
+console.log(userDoc.data.value?.topics);
 
 const changes = ref({
-  topics: topics.reduce((acc, topic) => {
-    if (userDoc.value?.topics) {
-      acc[topic] = userDoc.value?.topics?.includes(topic) || false;
-    }
-    return acc;
-  }, {} as Record<string, boolean>),
+  topics: {
+    items: userDoc.data.value?.topics?.includes("items") || false,
+  },
 });
 
 const saveChanges = async () => {
+  const before = userDoc.data.value?.topics || [];
+  const after = Object.entries(changes.value.topics)
+    .filter(([, value]) => value)
+    .map(([key]) => key);
+
   await updateDoc(userRef, {
-    topics: changes.value.topics,
+    topics: after,
+  });
+
+  interface UpdateTopicsData {
+    before: string[];
+    after: string[];
+    token: string;
+  }
+
+  await httpsCallable<UpdateTopicsData>(
+    functions,
+    "updateTopics"
+  )({
+    before,
+    after,
+    token: fcm.token,
   });
 };
 
 const cancel = () => {
-  changes.value.topics = topics.reduce((acc, topic) => {
-    acc[topic] = userDoc.value?.topics?.includes(topic) || false;
-    return acc;
-  }, {} as Record<string, boolean>);
+  changes.value = {
+    topics: {
+      items: userDoc.data.value?.topics?.includes("items") || false,
+    },
+  };
 };
 </script>
 
@@ -52,7 +73,7 @@ const cancel = () => {
         <VSwitch label="Items" v-model="changes.topics.items">
           <template #details>
             Receive topics when new items are available or when prices for items
-            are updated. This could be a lot of topics.
+            are updated. This could be a lot of notifications.
           </template>
         </VSwitch>
       </VCol>

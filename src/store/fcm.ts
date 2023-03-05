@@ -20,6 +20,12 @@ export const useFCMStore = defineStore("token", {
   },
 });
 
+interface UpdateTokenData {
+  topics: string[];
+  token: string;
+  oldToken?: string;
+}
+
 const updateSubscription = async (token: string) => {
   const userDoc = useDocument<User>(
     doc(useFirestore(), `users/${useCurrentUser().value?.uid}`)
@@ -29,12 +35,12 @@ const updateSubscription = async (token: string) => {
 
   // once the userDoc is loaded, we can update the subscription
   if (!userDoc.pending.value) {
-    return await httpsCallable(
+    return await httpsCallable<UpdateTokenData>(
       functions,
-      "subscribeToTopic"
+      "updateToken"
     )({
+      topics: userDoc.data.value?.topics as string[],
       token,
-      topics: userDoc.data.value?.topics,
       oldToken: useFCMStore().token,
     });
   }
