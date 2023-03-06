@@ -13,7 +13,7 @@
   "dependencies": {
     "@vueuse/core": "^9.13.0",
     "firebase": "^9.17.2",
-    "pinia": "^2.0.32",
+    "pinia": "^2.0.33",
     "roboto-fontface": "^0.10.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
@@ -22,7 +22,7 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.30",
+    "@iconify/json": "^2.2.31",
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/node": "^18.14.6",
     "@types/webfontloader": "^1.6.35",

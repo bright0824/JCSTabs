@@ -1,18 +1,21 @@
 import { useFCMStore } from "@/store/fcm";
-import { getToken, onMessage } from "firebase/messaging";
+import { getToken, onMessage, isSupported } from "firebase/messaging";
 import { useStorage } from "@vueuse/core";
 import { messaging } from ".";
 
 const storedToken = useStorage("fcmToken", "");
 
-export const activate = () => {
-  Notification.requestPermission().then((permission) => {
-    if (permission === "granted") {
-      console.log("Notification permission granted.");
-    } else {
-      console.log("Unable to get permission to notify.");
-    }
-  });
+export const activate = async () => {
+  if (await isSupported()) {
+
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+      } else {
+        console.log("Unable to get permission to notify.");
+      }
+    });
+  }
 };
 
 getToken(messaging, {

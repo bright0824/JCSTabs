@@ -4,7 +4,7 @@
       <VAppBarTitle>
         <RouterLink to="/user"> JCS Tabs </RouterLink>
       </VAppBarTitle>
-      <VBtn icon @click="openSettings = !openSettings" color="auto">
+      <VBtn icon @click="openSettings = !openSettings" color="auto" v-if="auth?.currentUser">
         <VIcon :icon="MdiCog" />
       </VBtn>
       <UserProfile />

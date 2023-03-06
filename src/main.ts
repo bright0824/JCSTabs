@@ -38,7 +38,7 @@ app.use(VueFire, {
       ),
       isTokenAutoRefreshEnabled: true,
       debug: import.meta.env.DEV
-        ? import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN
+        ? import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN || true
         : false,
     }),
   ],

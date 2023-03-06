@@ -2205,13 +2205,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify/json@npm:^2.2.30":
-  version: 2.2.30
-  resolution: "@iconify/json@npm:2.2.30"
+"@iconify/json@npm:^2.2.31":
+  version: 2.2.31
+  resolution: "@iconify/json@npm:2.2.31"
   dependencies:
     "@iconify/types": "*"
     pathe: ^1.0.0
-  checksum: 98a39fd4894a39be896d22537fbcdb45af84dd58355ba55dd42a9ce0389e716bf1a5a62092f050fead3292cc9de99d9d9764e6586a103e19400de8d590d8920d
+  checksum: 569a1311ae276574e636810053a5d47116ae4f5025e4af16356ff4bcc09c22ba1bbca5af0aa392744cfcd618f8bbd47b7dc7f211752a1593fdb99480c3cc9c7d
   languageName: node
   linkType: hard
 
@@ -6367,7 +6367,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "jcstabs@workspace:."
   dependencies:
-    "@iconify/json": ^2.2.30
+    "@iconify/json": ^2.2.31
     "@rushstack/eslint-patch": ^1.2.0
     "@types/node": ^18.14.6
     "@types/webfontloader": ^1.6.35
@@ -6380,7 +6380,7 @@ __metadata:
     eslint-plugin-vue: ^9.9.0
     firebase: ^9.17.2
     npm-run-all: ^4.1.5
-    pinia: ^2.0.32
+    pinia: ^2.0.33
     prettier: ^2.8.4
     roboto-fontface: ^0.10.0
     typescript: ^4.9.5
@@ -7762,9 +7762,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pinia@npm:^2.0.32":
-  version: 2.0.32
-  resolution: "pinia@npm:2.0.32"
+"pinia@npm:^2.0.33":
+  version: 2.0.33
+  resolution: "pinia@npm:2.0.33"
   dependencies:
     "@vue/devtools-api": ^6.5.0
     vue-demi: "*"
@@ -7777,7 +7777,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: cd02a7cb852b055a37bf91570b2831ac493b1e79ffd0096901177e5764f4b1fe392939c6a5c08d46962dc42db8f4f2750b8af250639bb5fa2e5b4270b6507670
+  checksum: efd9cf1d61521ab2a4549f93ada6e2c1b9feeb6c8f2f482281a53c0079e0008f02adaebb07a782865ccfe896876ac60447ef4586fc6eeaeaf17d634767e22638
   languageName: node
   linkType: hard
 
