@@ -147,7 +147,7 @@ export default defineConfig({
     __VUE_PROD_DEVTOOLS__: false,
   },
   esbuild: {
-    // drop: ["console", "debugger"],
+    drop: ["console", "debugger"],
     legalComments: "none",
     format: "esm",
   },
@@ -159,6 +159,8 @@ export default defineConfig({
             "firebase/auth",
             "firebase/firestore",
             "firebase/functions",
+            "firebase/messaing",
+            "firebase/*",
           ],
           vue: ["vue", "vue-router"],
         },
