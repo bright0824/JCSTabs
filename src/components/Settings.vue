@@ -2,8 +2,8 @@
 import { functions } from "@/firebase";
 import { useFCMStore } from "@/store/fcm";
 import type { User } from "@/types";
-import { doc, updateDoc } from "@firebase/firestore";
-import { httpsCallable } from "@firebase/functions";
+import { doc, updateDoc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 import { ref } from "vue";
 import { useCurrentUser, useDocument, useFirestore } from "vuefire";
 import MdiBell from "~icons/mdi/bell";

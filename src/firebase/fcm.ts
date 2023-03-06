@@ -1,5 +1,5 @@
 import { useFCMStore } from "@/store/fcm";
-import { getToken, onMessage } from "@firebase/messaging";
+import { getToken, onMessage } from "firebase/messaging";
 import { useStorage } from "@vueuse/core";
 import { messaging } from ".";
 
