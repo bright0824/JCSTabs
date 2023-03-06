@@ -28,12 +28,6 @@ registerSW({
 
 const app = createApp(App);
 
-if (import.meta.env.DEV) {
-  // @ts-expect-error
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN =
-    import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
-}
-
 app.use(VueFire, {
   firebaseApp,
   modules: [
