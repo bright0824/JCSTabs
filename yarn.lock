@@ -6399,6 +6399,7 @@ __metadata:
     webfontloader: ^1.6.28
     workbox-core: ^6.5.4
     workbox-precaching: ^6.5.4
+    workbox-window: ^6.5.4
   languageName: unknown
   linkType: soft
 

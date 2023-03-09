@@ -121,15 +121,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Item, User } from "@/types";
-import { computed, ref } from "vue";
-import { computeVisibleItems, dedupeArray } from "@/util/user";
-import { useDisplay } from "vuetify";
-
-// components
 import ClearHistory from "@/components/admin/User/ClearHistory.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
-import { countItemsInTab, getTabTotal, calculatePages } from "@/util/user";
+import type { Item, User } from "@/types";
+import { calculatePages, computeVisibleItems, countItemsInTab, dedupeArray, getTabTotal } from "@/utils";
+import { computed, ref } from "vue";
+import { useDisplay } from "vuetify";
 
 const ClearTab = await import("@/components/ClearTab.vue").then(
   (m) => m.default

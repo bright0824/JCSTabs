@@ -159,8 +159,6 @@ export default defineConfig({
             "firebase/auth",
             "firebase/firestore",
             "firebase/functions",
-            "firebase/messaing",
-            "firebase/*",
           ],
           vue: ["vue", "vue-router"],
         },
