@@ -1,11 +1,11 @@
 import { ReCaptchaV3Provider } from "firebase/app-check";
+import { createPinia } from "pinia";
 import { registerSW } from "virtual:pwa-register";
 import { createApp } from "vue";
 import { VueFire, VueFireAppCheck, VueFireAuth } from "vuefire";
 import { firebaseApp } from "./firebase";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
-import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import router from "./router";

@@ -83,11 +83,11 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useCurrentUser, useFirebaseAuth } from "vuefire";
 import { useTheme } from "vuetify";
-
 import MdiLogout from "~icons/mdi/logout";
 import MdiSecurity from "~icons/mdi/security";
-import MdiWhiteBalanceSunny from "~icons/mdi/white-balance-sunny";
 import MdiWeatherNight from "~icons/mdi/weather-night";
+import MdiWhiteBalanceSunny from "~icons/mdi/white-balance-sunny";
+
 // data
 const data = () => {
   return {

@@ -1,8 +1,8 @@
 import { functions } from "@/firebase";
 import type { User } from "@/types";
-import { httpsCallable } from "firebase/functions";
 import { useStorage } from "@vueuse/core";
 import { doc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 import { defineStore } from "pinia";
 import { useCurrentUser, useDocument, useFirestore } from "vuefire";
 

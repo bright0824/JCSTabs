@@ -4,7 +4,12 @@
       <VAppBarTitle>
         <RouterLink to="/user"> JCS Tabs </RouterLink>
       </VAppBarTitle>
-      <VBtn icon @click="openSettings = !openSettings" color="auto" v-if="auth?.currentUser">
+      <VBtn
+        icon
+        @click="openSettings = !openSettings"
+        color="auto"
+        v-if="auth?.currentUser"
+      >
         <VIcon :icon="MdiCog" />
       </VBtn>
       <UserProfile />
@@ -46,7 +51,6 @@ import { useFirebaseAuth } from "vuefire";
 import { useDisplay, useTheme } from "vuetify";
 import MdiCog from "~icons/mdi/cog";
 import { activate } from "./firebase/fcm";
-import { useFCMStore } from "./store/fcm";
 
 // data
 const theme = useTheme();

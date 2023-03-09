@@ -1,4 +1,4 @@
-import type { TabItem, Item } from "@/types";
+import type { Item, TabItem } from "@/types";
 import type { Timestamp } from "firebase/firestore";
 
 export const getTabTotal = (input: TabItem[]) => {

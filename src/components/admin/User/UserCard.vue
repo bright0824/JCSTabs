@@ -124,7 +124,13 @@
 import ClearHistory from "@/components/admin/User/ClearHistory.vue";
 import ToggleRole from "@/components/admin/User/ToggleRole.vue";
 import type { Item, User } from "@/types";
-import { calculatePages, computeVisibleItems, countItemsInTab, dedupeArray, getTabTotal } from "@/utils";
+import {
+  calculatePages,
+  computeVisibleItems,
+  countItemsInTab,
+  dedupeArray,
+  getTabTotal,
+} from "@/utils";
 import { computed, ref } from "vue";
 import { useDisplay } from "vuetify";
 

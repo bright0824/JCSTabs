@@ -1,7 +1,7 @@
 export {
-  getTabTotal,
-  countItemsInTab,
-  dedupeArray,
   calculatePages,
   computeVisibleItems,
+  countItemsInTab,
+  dedupeArray,
+  getTabTotal,
 } from "./user";
