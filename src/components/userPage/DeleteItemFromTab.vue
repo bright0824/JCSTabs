@@ -46,9 +46,6 @@
 
 <script setup lang="ts">
 import type { TabItem } from "@/types";
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
-import { ref } from "vue";
-import { useFirebaseAuth, useFirestore } from "vuefire";
 import MdiDelete from "~icons/mdi/delete";
 
 const auth = useFirebaseAuth();
@@ -61,9 +58,11 @@ const error = ref({
   message: null as string | null,
 });
 
-const { item } = defineProps<{
+const props = defineProps<{
   item: TabItem;
 }>();
+
+const { item } = toRefs(props);
 
 const deleteItem = async () => {
   loading.value = true;

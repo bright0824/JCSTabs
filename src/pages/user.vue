@@ -1,3 +1,68 @@
+<script setup lang="ts">
+import type { Items, TabItem, User } from "@/types";
+import {
+  calculatePages,
+  computeVisibleItems,
+  countItemsInTab,
+  dedupeArray,
+  getTabTotal,
+} from "@/utils";
+import type { Timestamp } from "@firebase/firestore";
+
+definePage({
+  path: "/user",
+  name: "user",
+  meta: {
+    requiresAuth: true,
+    transition: "fade-transition",
+  },
+});
+
+const router = useRouter();
+
+// data
+const page = ref(1);
+const perPage = 5;
+
+// firebase
+const db = useFirestore();
+const auth = useFirebaseAuth();
+
+const items = useDocument<Items>(doc(db, "admin", "items"));
+const userDoc = useDocument<User>(doc(db, `users/${auth?.currentUser?.uid}`));
+
+// computed
+const visibleItems = computed(() =>
+  computeVisibleItems([...(userDoc.data.value?.tab ?? [])], page.value, perPage)
+);
+
+const dedupedTab = computed(() => dedupeArray(userDoc.data.value?.tab ?? []));
+
+const isLoading = computed(() => {
+  if (items.pending.value || userDoc.pending.value) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const total = computed(() =>
+  new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  }).format(getTabTotal(userDoc.data.value?.tab ?? []))
+);
+
+// methods
+const canDelete = (date: Timestamp, paid: Boolean) => {
+  const now = new Date();
+  const diff = now.getTime() - date.toDate().getTime();
+  return diff < 300000 && !paid;
+};
+
+userDoc.error.value && router.push("/error");
+</script>
+
 <template>
   <VOverlay
     persistent
@@ -168,86 +233,3 @@
     </VRow>
   </VContainer>
 </template>
-
-<route lang="json">
-{
-  "path": "/user",
-  "name": "user",
-  "meta": {
-    "requiresAuth": true,
-    "transition": "fade-transition"
-  }
-}
-</route>
-
-<script setup lang="ts">
-import type { Items, TabItem, User } from "@/types";
-import {
-  calculatePages,
-  computeVisibleItems,
-  countItemsInTab,
-  dedupeArray,
-  getTabTotal,
-} from "@/utils";
-import { doc, type Timestamp } from "firebase/firestore";
-import { computed, defineAsyncComponent, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useDocument, useFirebaseAuth, useFirestore } from "vuefire";
-
-// components
-const AddItemToTab = defineAsyncComponent(
-  () => import("@/components/userPage/AddItemToTab.vue")
-);
-
-const ClearTab = defineAsyncComponent(
-  () => import("@/components/ClearTab.vue")
-);
-
-const DeleteItemFromTab = defineAsyncComponent(
-  () => import("@/components/userPage/DeleteItemFromTab.vue")
-);
-
-const router = useRouter();
-
-// data
-const page = ref(1);
-const perPage = 5;
-
-// firebase
-const db = useFirestore();
-const auth = useFirebaseAuth();
-
-const items = useDocument<Items>(doc(db, "admin", "items"));
-const userDoc = useDocument<User>(doc(db, `users/${auth?.currentUser?.uid}`));
-
-// computed
-const visibleItems = computed(() =>
-  computeVisibleItems([...(userDoc.data.value?.tab ?? [])], page.value, perPage)
-);
-
-const dedupedTab = computed(() => dedupeArray(userDoc.data.value?.tab ?? []));
-
-const isLoading = computed(() => {
-  if (items.pending.value || userDoc.pending.value) {
-    return true;
-  } else {
-    return false;
-  }
-});
-
-const total = computed(() =>
-  new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD",
-  }).format(getTabTotal(userDoc.data.value?.tab ?? []))
-);
-
-// methods
-const canDelete = (date: Timestamp, paid: Boolean) => {
-  const now = new Date();
-  const diff = now.getTime() - date.toDate().getTime();
-  return diff < 300000 && !paid;
-};
-
-userDoc.error.value && router.push("/error");
-</script>

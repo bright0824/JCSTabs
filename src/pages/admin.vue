@@ -1,22 +1,9 @@
-<route lang="json">
-{
-  "path": "/admin",
-  "name": "admin",
-  "component": "Admin",
-  "children": [
-    {
-      "path": "staff",
-      "name": "admin-staff",
-      "component": "StaffPage"
-    },
-    {
-      "path": "items",
-      "name": "admin-items",
-      "component": "ItemsPage"
-    }
-  ]
-}
-</route>
+<script setup lang="ts">
+// definePage({
+//   // path: "/admin",
+//   name: "admin",
+// });
+</script>
 
 <template>
   <RouterView v-slot="{ Component, route }">

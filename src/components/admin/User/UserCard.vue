@@ -1,3 +1,49 @@
+<script setup lang="ts">
+import type { Item, User } from "@/types";
+import {
+  calculatePages,
+  computeVisibleItems,
+  countItemsInTab,
+  dedupeArray,
+  getTabTotal,
+} from "@/utils";
+import { useDisplay } from "vuetify";
+
+// props
+const props = defineProps<{
+  user: User;
+  items: Item[];
+}>();
+
+const { user } = toRefs(props);
+
+// data
+const dialog = ref(false);
+const page = ref(1);
+
+const { mobile } = useDisplay();
+
+// computed
+const visibleItems = computed(() =>
+  computeVisibleItems(user.value?.tab, page.value, 5)
+);
+
+const total = computed(() => {
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  }).format(getTabTotal(user.value?.tab));
+});
+
+// methods
+const checkTabLength = () => {
+  return {
+    currentTab: !!user.value?.tab.filter((item) => !item.paid).length,
+    history: !!user.value?.tab.length,
+  };
+};
+</script>
+
 <template v-if="user != null">
   <VTooltip :text="user?.info.displayName" :disabled="mobile">
     <template #activator="{ props }">
@@ -119,54 +165,3 @@
     </VCard>
   </VDialog>
 </template>
-
-<script setup lang="ts">
-import ClearHistory from "@/components/admin/User/ClearHistory.vue";
-import ToggleRole from "@/components/admin/User/ToggleRole.vue";
-import type { Item, User } from "@/types";
-import {
-  calculatePages,
-  computeVisibleItems,
-  countItemsInTab,
-  dedupeArray,
-  getTabTotal,
-} from "@/utils";
-import { computed, ref } from "vue";
-import { useDisplay } from "vuetify";
-
-const ClearTab = await import("@/components/ClearTab.vue").then(
-  (m) => m.default
-);
-
-// props
-const { user, items } = defineProps<{
-  user: User;
-  items: Item[];
-}>();
-
-// data
-const dialog = ref(false);
-const page = ref(1);
-
-const { mobile } = useDisplay();
-
-// computed
-const visibleItems = computed(() =>
-  computeVisibleItems(user?.tab, page.value, 5)
-);
-
-const total = computed(() => {
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD",
-  }).format(getTabTotal(user?.tab));
-});
-
-// methods
-const checkTabLength = () => {
-  return {
-    currentTab: !!user?.tab.filter((item) => !item.paid).length,
-    history: !!user?.tab.length,
-  };
-};
-</script>

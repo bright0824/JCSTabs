@@ -8,6 +8,8 @@ import { defineConfig } from "vite";
 import mkcert from "vite-plugin-mkcert";
 import { VitePWA } from "vite-plugin-pwa";
 import vuetify from "vite-plugin-vuetify";
+import AutoImport from "unplugin-auto-import/vite";
+import { VueRouterAutoImports } from "unplugin-vue-router";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,10 +28,42 @@ export default defineConfig({
       importMode: "async",
     }),
     vue(),
-
     mkcert(),
     vuetify({
       autoImport: true,
+    }),
+    AutoImport({
+      eslintrc: {
+        enabled: true,
+      },
+      imports: [
+        "vue",
+        VueRouterAutoImports,
+        "@vueuse/core",
+        "pinia",
+        {
+          vuefire: [
+            "getCurrentUser",
+            "useAppCheck",
+            "useAppCheckToken",
+            "useCollection",
+            "useCurrentUser",
+            "useDocument",
+            "useFirebaseApp",
+            "useFirebaseAuth",
+            "useFirestore",
+          ],
+          "firebase/firestore": [
+            "doc",
+            "collection",
+            "Timestamp",
+            "addDoc",
+            "updateDoc",
+            "arrayUnion",
+            "arrayRemove",
+          ],
+        },
+      ],
     }),
     Components({
       dts: true,

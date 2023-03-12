@@ -50,10 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { arrayUnion, doc, Timestamp, updateDoc } from "firebase/firestore";
-import { ref } from "vue";
-import { useFirebaseAuth, useFirestore } from "vuefire";
-
 const emit = defineEmits(["close"]);
 
 // firebase

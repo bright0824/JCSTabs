@@ -1,4 +1,51 @@
 <!-- eslint-disable vue/no-mutating-props -->
+<script setup lang="ts">
+import { functions } from "@/firebase";
+import type { Item } from "@/types";
+import { httpsCallable } from "firebase/functions";
+
+// components
+import DeleteItem from "./DeleteItem.vue";
+
+// props
+const props = defineProps<{
+  input: Item;
+  items: Item[];
+}>();
+
+const { input, items } = toRefs(props);
+
+// data
+const loading = ref({
+  update: false,
+  delete: false,
+  dialog: false,
+});
+
+const error = ref(null as string | null);
+const rules = {
+  price: [(v: number) => !!v || "Price is required"],
+};
+
+// methods
+const updateItem = async () => {
+  loading.value.update = true;
+  try {
+    await httpsCallable(
+      functions,
+      "updateItem"
+    )({
+      items: items,
+    });
+  } catch (err) {
+    console.error(err);
+    error.value = err as string;
+  } finally {
+    loading.value.update = false;
+  }
+};
+</script>
+
 <template>
   <VCard
     width="200px"
@@ -32,49 +79,3 @@
     </VCardActions>
   </VCard>
 </template>
-
-<script setup lang="ts">
-import { functions } from "@/firebase";
-import type { Item } from "@/types";
-import { httpsCallable } from "firebase/functions";
-import { ref } from "vue";
-
-// components
-import DeleteItem from "./DeleteItem.vue";
-
-// props
-const { input, items } = defineProps<{
-  input: Item;
-  items: Item[];
-}>();
-
-// data
-const loading = ref({
-  update: false,
-  delete: false,
-  dialog: false,
-});
-
-const error = ref(null as string | null);
-const rules = {
-  price: [(v: number) => !!v || "Price is required"],
-};
-
-// methods
-const updateItem = async () => {
-  loading.value.update = true;
-  try {
-    await httpsCallable(
-      functions,
-      "updateItem"
-    )({
-      items: items,
-    });
-  } catch (err) {
-    console.error(err);
-    error.value = err as string;
-  } finally {
-    loading.value.update = false;
-  }
-};
-</script>

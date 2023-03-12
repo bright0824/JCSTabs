@@ -1,46 +1,6 @@
-<template>
-  <VBtn color="secondary" @click="dialog = true"> New Item </VBtn>
-  <VDialog v-model="dialog" width="300px" @click:outside="close()">
-    <VCard :loading="loading" :disabled="loading">
-      <VAlert v-if="error" type="error">
-        <VAlertTitle>Error Occurred</VAlertTitle>
-        {{ error }}
-      </VAlert>
-      <VCardTitle>
-        <span class="headline">New Item</span>
-      </VCardTitle>
-      <VCardText>
-        <VForm ref="itemInput" lazy-validation>
-          <VTextField
-            label="Item Name"
-            variant="outlined"
-            v-model="input.name"
-            :rules="rules.name"
-            @keyup.enter="addItem"
-          />
-          <VTextField
-            label="Item Price"
-            variant="outlined"
-            type="number"
-            v-model="input.price"
-            prefix="$"
-            :rules="rules.price"
-            @keyup.enter="addItem"
-          />
-        </VForm>
-      </VCardText>
-      <VCardActions>
-        <VBtn color="green" @click="addItem" :loading="loading"> Submit </VBtn>
-        <VBtn color="red" @click="close()"> Cancel </VBtn>
-      </VCardActions>
-    </VCard>
-  </VDialog>
-</template>
-
 <script setup lang="ts">
 import { functions } from "@/firebase";
 import { httpsCallable } from "firebase/functions";
-import { ref } from "vue";
 
 // data
 const dialog = ref(false);
@@ -86,3 +46,42 @@ const close = () => {
   dialog.value = false;
 };
 </script>
+
+<template>
+  <VBtn color="secondary" @click="dialog = true"> New Item </VBtn>
+  <VDialog v-model="dialog" width="300px" @click:outside="close()">
+    <VCard :loading="loading" :disabled="loading">
+      <VAlert v-if="error" type="error">
+        <VAlertTitle>Error Occurred</VAlertTitle>
+        {{ error }}
+      </VAlert>
+      <VCardTitle>
+        <span class="headline">New Item</span>
+      </VCardTitle>
+      <VCardText>
+        <VForm ref="itemInput" lazy-validation>
+          <VTextField
+            label="Item Name"
+            variant="outlined"
+            v-model="input.name"
+            :rules="rules.name"
+            @keyup.enter="addItem"
+          />
+          <VTextField
+            label="Item Price"
+            variant="outlined"
+            type="number"
+            v-model="input.price"
+            prefix="$"
+            :rules="rules.price"
+            @keyup.enter="addItem"
+          />
+        </VForm>
+      </VCardText>
+      <VCardActions>
+        <VBtn color="green" @click="addItem" :loading="loading"> Submit </VBtn>
+        <VBtn color="red" @click="close()"> Cancel </VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
+</template>

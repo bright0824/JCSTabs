@@ -58,12 +58,8 @@
 
 <script setup lang="ts">
 import type { Item } from "@/types";
-import { arrayUnion, doc, Timestamp, updateDoc } from "firebase/firestore";
-import { ref } from "vue";
-import { useFirebaseAuth, useFirestore } from "vuefire";
 import { useDisplay } from "vuetify";
 import MdiPlusThick from "~icons/mdi/plus-thick";
-import CustomItem from "./CustomItem.vue";
 
 const db = useFirestore();
 const auth = useFirebaseAuth();
@@ -76,9 +72,10 @@ const error = ref({
 });
 const { mobile, width } = useDisplay();
 
-const { items } = defineProps<{ items: Item[] }>();
+const props = defineProps<{ items: Item[] }>();
+const { items } = toRefs(props);
 
-items?.forEach((item) => {
+items.value?.forEach((item) => {
   loading.value[item.name] = false;
 });
 

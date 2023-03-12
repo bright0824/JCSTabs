@@ -1,56 +1,4 @@
-<template>
-  <VDialog v-model="dialog" max-width="500px">
-    <template #activator="{ props }">
-      <VBtn
-        v-bind="props"
-        variant="text"
-        color="auto"
-        @click="dialog = true"
-        block
-        class="justify-start"
-        :prepend-icon="MdiMessageAlertOutline"
-      >
-        Send feedback
-      </VBtn>
-    </template>
-    <VCard :loading="loading">
-      <VAlert
-        v-if="error.code"
-        type="error"
-        dismissible
-        transition="scale-transition"
-        elevation="2"
-        color="red"
-      >
-        <VAlertTitle>
-          {{ error.code }}
-        </VAlertTitle>
-        {{ error.message }}
-      </VAlert>
-      <VCardTitle class="headline">Feedback Submission</VCardTitle>
-      <VCardText>
-        <VForm ref="inputForm">
-          <VTextarea
-            v-model="input"
-            placeholder="Have a suggestion? Found a bug? Let us know!"
-            rows="5"
-            :rules="rules.text"
-          />
-        </VForm>
-      </VCardText>
-      <VCardActions>
-        <VBtn color="success" text @click="submit">Submit</VBtn>
-        <VBtn color="error" text @click="close">Cancel</VBtn>
-      </VCardActions>
-    </VCard>
-  </VDialog>
-</template>
-
 <script setup lang="ts">
-import { addDoc, collection, Timestamp } from "firebase/firestore";
-import { ref } from "vue";
-import { useRoute } from "vue-router";
-import { useFirebaseAuth, useFirestore } from "vuefire";
 import MdiMessageAlertOutline from "~icons/mdi/message-alert-outline";
 
 // scaffolding
@@ -76,13 +24,6 @@ const data = () => {
 };
 const { dialog, input, inputForm, loading, error, rules } = data();
 
-/**
- * Submits feedback to firestore
- *
- * @import { useFirebaseAuth, useFirestore } from "vuefire";
- * @import { addDoc, collection, Timestamp } from "firebase/firestore";
- *
- */
 const submit = async () => {
   // @ts-expect-error
   const { valid } = await inputForm.value.validate();
@@ -131,3 +72,51 @@ const close = () => {
   dialog.value = false;
 };
 </script>
+
+<template>
+  <VDialog v-model="dialog" max-width="500px">
+    <template #activator="{ props }">
+      <VBtn
+        v-bind="props"
+        variant="text"
+        color="auto"
+        @click="dialog = true"
+        block
+        class="justify-start"
+        :prepend-icon="MdiMessageAlertOutline"
+      >
+        Send feedback
+      </VBtn>
+    </template>
+    <VCard :loading="loading">
+      <VAlert
+        v-if="error.code"
+        type="error"
+        dismissible
+        transition="scale-transition"
+        elevation="2"
+        color="red"
+      >
+        <VAlertTitle>
+          {{ error.code }}
+        </VAlertTitle>
+        {{ error.message }}
+      </VAlert>
+      <VCardTitle class="headline">Feedback Submission</VCardTitle>
+      <VCardText>
+        <VForm ref="inputForm">
+          <VTextarea
+            v-model="input"
+            placeholder="Have a suggestion? Found a bug? Let us know!"
+            rows="5"
+            :rules="rules.text"
+          />
+        </VForm>
+      </VCardText>
+      <VCardActions>
+        <VBtn color="success" text @click="submit">Submit</VBtn>
+        <VBtn color="error" text @click="close">Cancel</VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
+</template>

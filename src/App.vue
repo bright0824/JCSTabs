@@ -42,12 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import Settings from "@/components/Settings.vue";
-import UserProfile from "@/components/UserProfile.vue";
-import { usePreferredDark } from "@vueuse/core";
-import { ref } from "vue";
-import { useRouter } from "vue-router/auto";
-import { useFirebaseAuth } from "vuefire";
 import { useDisplay, useTheme } from "vuetify";
 import MdiCog from "~icons/mdi/cog";
 import { activate } from "./firebase/fcm";

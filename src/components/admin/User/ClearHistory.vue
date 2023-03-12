@@ -1,3 +1,43 @@
+<script setup lang="ts">
+import { functions } from "@/firebase";
+import type { User } from "@/types";
+import { httpsCallable } from "firebase/functions";
+
+// inject the user
+const props = defineProps<{ user: User | null }>();
+const { user } = toRefs(props);
+
+// reactive variables
+const dialog = ref(false);
+const loading = ref(false);
+const error = ref({
+  code: null,
+  message: null,
+} as { code: string | null; message: string | null });
+
+const clearHistory = async () => {
+  loading.value = true;
+  try {
+    const clearHistory = httpsCallable(functions, "clearHistory");
+    await clearHistory({ email: user.value?.info.email });
+    dialog.value = false;
+
+    error.value = { code: null, message: null };
+  } catch (err) {
+    console.log(err);
+    const { code, message } = err as { code: string; message: string };
+    error.value = { code, message };
+  } finally {
+    loading.value = false;
+  }
+};
+
+const closeDialog = () => {
+  dialog.value = false;
+  error.value = { code: null, message: null };
+};
+</script>
+
 <template>
   <VDialog v-model="dialog" max-width="500px" @click:outside="closeDialog()">
     <template #activator="{ props }">
@@ -24,42 +64,3 @@
     </VCard>
   </VDialog>
 </template>
-
-<script setup lang="ts">
-import { functions } from "@/firebase";
-import type { User } from "@/types";
-import { httpsCallable } from "firebase/functions";
-import { ref } from "vue";
-
-// inject the user
-const { user } = defineProps<{ user: User | null }>();
-
-const dialog = ref(false);
-const loading = ref(false);
-const error = ref({
-  code: null,
-  message: null,
-} as { code: string | null; message: string | null });
-
-const clearHistory = async () => {
-  loading.value = true;
-  try {
-    const clearHistory = httpsCallable(functions, "clearHistory");
-    await clearHistory({ email: user?.info.email });
-    dialog.value = false;
-
-    error.value = { code: null, message: null };
-  } catch (err) {
-    console.log(err);
-    const { code, message } = err as { code: string; message: string };
-    error.value = { code, message };
-  } finally {
-    loading.value = false;
-  }
-};
-
-const closeDialog = () => {
-  dialog.value = false;
-  error.value = { code: null, message: null };
-};
-</script>

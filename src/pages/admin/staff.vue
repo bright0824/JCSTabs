@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import UserCard from "@/components/admin/User/UserCard.vue";
 import type { Item, Items, User } from "@/types";
-import { collection, doc } from "firebase/firestore";
-import { computed } from "vue";
-import { useCollection, useDocument, useFirestore } from "vuefire";
+
+definePage({
+  name: "Staff",
+  path: "/admin/staff",
+});
 
 const letters = [
   "a",

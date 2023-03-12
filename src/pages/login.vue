@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { getCurrentUser, useFirebaseAuth } from "vuefire";
+
+definePage({
+  path: "/login",
+  name: "login",
+  meta: {
+    requiresAuth: false,
+    transition: "fade-transition",
+  },
+});
 
 // data
 const loggedIn = ref(false);
@@ -92,14 +98,3 @@ const signIn = () => {
     </VCard>
   </VRow>
 </template>
-
-<route lang="json">
-{
-  "path": "/login",
-  "name": "login",
-  "meta": {
-    "requiresAuth": false,
-    "transition": "fade-transition"
-  }
-}
-</route>
