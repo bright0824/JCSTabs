@@ -11,8 +11,6 @@ const userDoc = useDocument<User>(userRef);
 
 const fcm = useFCMStore();
 
-console.log(userDoc.data.value?.topics);
-
 const changes = ref({
   topics: {
     items: userDoc.data.value?.topics?.includes("items") || false,
