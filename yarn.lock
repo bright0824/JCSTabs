@@ -2216,13 +2216,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify/json@npm:^2.2.36":
-  version: 2.2.36
-  resolution: "@iconify/json@npm:2.2.36"
+"@iconify/json@npm:^2.2.37":
+  version: 2.2.37
+  resolution: "@iconify/json@npm:2.2.37"
   dependencies:
     "@iconify/types": "*"
     pathe: ^1.0.0
-  checksum: 3d06b636f1873d0a4164919197f5d845d70f476b933a97b8b9530ee8246763a1327d54a2b34c4d404082158f3ab5c65506841059bb5a93b7b8031cdec1109e8d
+  checksum: 6f4d809f64d20ae270e1436b65d4fc22ad03724b32fcb48fc19761f61cc8ff93bc50f6aba6ea910a604b14de1bb38c38e5ee48db27d4b5abfbf4dc6d130ffd25
   languageName: node
   linkType: hard
 
@@ -2826,10 +2826,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.15.3":
-  version: 18.15.3
-  resolution: "@types/node@npm:18.15.3"
-  checksum: 31b1d92475a82c30de29aa6c0771b18a276552d191283b4423ba2d61b3f01159bf0d02576c0b7cc834b043997893800db6bb47f246083ed85aa45e79c80875d7
+"@types/node@npm:^18.15.5":
+  version: 18.15.5
+  resolution: "@types/node@npm:18.15.5"
+  checksum: 5fbf3453bd5ce1402bb2964e55d928fc8a8a7de5451b1b0fe66587fecb8a3eb86854ca9cefa5076a5971e2cff00e1773ceeb5d872a54f6c6ddfbbc1064b4e91a
   languageName: node
   linkType: hard
 
@@ -6186,9 +6186,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "jcstabs@workspace:."
   dependencies:
-    "@iconify/json": ^2.2.36
+    "@iconify/json": ^2.2.37
     "@rushstack/eslint-patch": ^1.2.0
-    "@types/node": ^18.15.3
+    "@types/node": ^18.15.5
     "@types/webfontloader": ^1.6.35
     "@vitejs/plugin-vue": ^4.1.0
     "@vue/eslint-config-prettier": ^7.1.0
@@ -6200,14 +6200,14 @@ __metadata:
     firebase: ^9.18.0
     npm-run-all: ^4.1.5
     pinia: ^2.0.33
-    prettier: ^2.8.4
+    prettier: ^2.8.5
     roboto-fontface: ^0.10.0
     typescript: ^5.0.2
     unplugin-auto-import: ^0.15.1
     unplugin-icons: ^0.15.3
     unplugin-vue-components: ^0.24.1
     unplugin-vue-router: ^0.5.4
-    vite: ^4.2.0
+    vite: ^4.2.1
     vite-plugin-mkcert: ^1.13.3
     vite-plugin-pwa: ^0.14.4
     vite-plugin-vuetify: ^1.0.2
@@ -7620,12 +7620,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.8.4":
-  version: 2.8.4
-  resolution: "prettier@npm:2.8.4"
+"prettier@npm:^2.8.5":
+  version: 2.8.5
+  resolution: "prettier@npm:2.8.5"
   bin:
     prettier: bin-prettier.js
-  checksum: c173064bf3df57b6d93d19aa98753b9b9dd7657212e33b41ada8e2e9f9884066bb9ca0b4005b89b3ab137efffdf8fbe0b462785aba20364798ff4303aadda57e
+  checksum: b7f8d30e14061e0478bc5a59d4d889688d804c173a0daa91b1b85dc08eef5eb6956d1b59f4037770776fda5b967f6c9ca3b7a8a43c50bedb4c7b182029f865aa
   languageName: node
   linkType: hard
 
@@ -9222,9 +9222,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "vite@npm:4.2.0"
+"vite@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "vite@npm:4.2.1"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
@@ -9256,7 +9256,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 1088cdc0c89ab835aab07a0a114397b749e8dfb20f4b94241ba179d9c371b72d31e13782b22893860c3d65da596e43b24fce5e023f79cfde427f42549f2e1844
+  checksum: 70eb162ffc299017a3c310e3adc95e9661def6b17aafd1f8e5e02e516766060435590dbe3df1e4e95acc3583c728a76e91f07c546221d1e701f1b2b021293f45
   languageName: node
   linkType: hard
 
