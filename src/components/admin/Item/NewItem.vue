@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { functions } from "@/firebase";
 import { httpsCallable } from "firebase/functions";
+import { useToast } from "vue-toastification";
+
+// composables
+const toast = useToast();
 
 // data
 const dialog = ref(false);
@@ -30,10 +34,18 @@ const addItem = async () => {
   loading.value = true;
   try {
     const addItem = httpsCallable(functions, "addItem");
-    await addItem({ item: input.value });
+    await addItem({
+      item: {
+        name: input.value.name,
+        price: Number(input.value.price),
+      },
+    });
+
+    toast.success(`'${input.value.name}' added successfully`);
     close();
   } catch (err) {
     console.error(err);
+    toast.error(`${err}`);
     error.value = err as string;
   } finally {
     loading.value = false;
@@ -79,7 +91,7 @@ const close = () => {
         </VForm>
       </VCardText>
       <VCardActions>
-        <VBtn color="green" @click="addItem" :loading="loading"> Submit </VBtn>
+        <VBtn color="green" @click="addItem"> Submit </VBtn>
         <VBtn color="red" @click="close()"> Cancel </VBtn>
       </VCardActions>
     </VCard>

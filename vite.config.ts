@@ -8,6 +8,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import vuetify from "vite-plugin-vuetify";
 import AutoImport from "unplugin-auto-import/vite";
 import { VueRouterAutoImports } from "unplugin-vue-router";
+import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -30,6 +31,10 @@ export default defineConfig({
     vuetify({
       autoImport: true,
     }),
+    VueI18nPlugin({
+      fullInstall: false,
+      runtimeOnly: true,
+    }),
     AutoImport({
       eslintrc: {
         enabled: true,
@@ -39,6 +44,7 @@ export default defineConfig({
         VueRouterAutoImports,
         "@vueuse/core",
         "pinia",
+        "vue-i18n",
         {
           vuefire: [
             "getCurrentUser",
@@ -166,6 +172,7 @@ export default defineConfig({
     }),
   ],
   define: {
+    // vue
     __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: false,
   },

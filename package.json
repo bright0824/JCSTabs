@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@iconify/json": "^2.2.40",
+    "@intlify/unplugin-vue-i18n": "^0.10.0",
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/node": "^18.15.10",
     "@types/webfontloader": "^1.6.35",

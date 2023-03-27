@@ -31,6 +31,9 @@ const isLoading = computed(() => {
       <VCol v-for="(item, index) in items?.food" :key="index" align="center">
         <ItemCard :items="items?.food" :input="item" />
       </VCol>
+      <VCol v-if="items.food.length < 1">
+        <h1>Nothings here... Lets change that!</h1>
+      </VCol>
     </VRow>
   </VContainer>
 </template>

@@ -2,11 +2,15 @@
 import { functions } from "@/firebase";
 import type { Item } from "@/types";
 import { httpsCallable } from "firebase/functions";
+import { useToast } from "vue-toastification";
 
 // props
 const props = defineProps<{
   item: Item;
 }>();
+
+// composables
+const toast = useToast();
 
 // data
 const loading = ref({
@@ -22,9 +26,14 @@ const deleteItem = async () => {
     loading.value.confirm = true;
     const deleteItem = httpsCallable(functions, "deleteItem");
     await deleteItem({ item: props.item });
+
+    toast.success(`'${props.item.name}' deleted successfully`);
+
     dialog.value = false;
   } catch (err) {
     console.log(err);
+
+    toast.error(`${err}`);
     error.value = err as string;
   } finally {
     loading.value = {

@@ -24,7 +24,11 @@ const loading = ref({
 
 const error = ref(null as string | null);
 const rules = {
-  price: [(v: number) => !!v || "Price is required"],
+  price: [
+    (v: number) => !!v || "Price is required",
+    (v: number) => v > 0 || "Price must be greater than 0",
+    (v: any) => !isNaN(v) || "Price must be a number",
+  ],
 };
 
 // methods
