@@ -2,10 +2,20 @@
 import type { Item } from "@/types";
 import { useDisplay } from "vuetify";
 import { mdiPlusThick } from "@mdi/js";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
+// props
+const props = defineProps<{ items: Item[] }>();
+const { items } = toRefs(props);
+
+// composables
 const db = useFirestore();
 const auth = useFirebaseAuth();
+const toast = useToast();
+const i18n = useI18n();
 
+// data
 const dialog = ref(false);
 const loading = ref({} as Record<string, boolean>);
 const error = ref({
@@ -14,13 +24,11 @@ const error = ref({
 });
 const { mobile, width } = useDisplay();
 
-const props = defineProps<{ items: Item[] }>();
-const { items } = toRefs(props);
-
 items.value?.forEach((item) => {
   loading.value[item.name] = false;
 });
 
+// methods
 const addItem = async (item: Item) => {
   loading.value[item.name] = true;
   if (!auth?.currentUser) return;
@@ -32,6 +40,11 @@ const addItem = async (item: Item) => {
         paid: false,
       }),
     });
+
+    toast.success(
+      `${item.name}: ${i18n.n(item.price, "currency")} added to tab`
+    );
+
     close();
   } catch (err) {
     const { code, message } = err as { code: string; message: string };
@@ -91,12 +104,7 @@ const close = () => {
           width="100%"
         >
           {{ item.name }}:
-          {{
-            new Intl.NumberFormat("en-CA", {
-              style: "currency",
-              currency: "CAD",
-            }).format(item.price)
-          }}
+          {{ $n(item.price, "currency") }}
         </VBtn>
         <CustomItem @close="close" />
       </VCardText>

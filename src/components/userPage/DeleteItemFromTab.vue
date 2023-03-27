@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import type { TabItem } from "@/types";
 import { mdiDelete } from "@mdi/js";
+import { useToast } from "vue-toastification";
 
+// composables
 const auth = useFirebaseAuth();
 const db = useFirestore();
+const toast = useToast();
 
+// props
+const props = defineProps<{
+  item: TabItem;
+}>();
+
+// data
 const dialog = ref(false);
 const loading = ref(false);
 const error = ref({
@@ -12,10 +21,7 @@ const error = ref({
   message: null as string | null,
 });
 
-const props = defineProps<{
-  item: TabItem;
-}>();
-
+// methods
 const deleteItem = async () => {
   loading.value = true;
   try {
@@ -23,13 +29,15 @@ const deleteItem = async () => {
     if (!user) {
       throw new Error("User not logged in");
     }
+
     const userDoc = doc(db, "users", user.uid);
     await updateDoc(userDoc, {
       tab: arrayRemove(props.item),
     });
+
+    toast.success(`${props.item.name} deleted from tab`);
     dialog.value = false;
   } catch (err) {
-    // extract error code and message
     const { code, message } = err as { code: string; message: string };
     error.value = { code, message };
   } finally {

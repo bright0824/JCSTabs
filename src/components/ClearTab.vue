@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { functions } from "@/firebase";
 import { httpsCallable } from "firebase/functions";
+import { useToast } from "vue-toastification";
 
+// composables
+const toast = useToast();
+
+// props
 const props = defineProps<{
   email: string;
   name: string;
 }>();
 
-const { email, name } = toRefs(props);
-
+// data
 const dialog = ref(false);
 const loading = ref(false);
 const error = ref({
@@ -16,17 +20,21 @@ const error = ref({
   message: null,
 } as { code: string | null; message: string | null });
 
+// methods
 const clearTab = async () => {
   loading.value = true;
   try {
     const clearTab = httpsCallable(functions, "clearTab");
-    await clearTab({ email: email });
+    await clearTab({ email: props.email });
     dialog.value = false;
+
+    toast.success(`Your tab has been cleared.`);
 
     error.value = { code: null, message: null };
   } catch (err) {
     console.log(err);
     const { code, message } = err as { code: string; message: string };
+
     error.value = { code, message };
   } finally {
     loading.value = false;

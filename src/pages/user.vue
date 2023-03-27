@@ -8,7 +8,9 @@ import {
   getTabTotal,
 } from "@/utils";
 import type { Timestamp } from "@firebase/firestore";
+import { useI18n } from "vue-i18n";
 
+// composables
 definePage({
   path: "/user",
   name: "user",
@@ -19,6 +21,7 @@ definePage({
 });
 
 const router = useRouter();
+const i18n = useI18n();
 
 // data
 const page = ref(1);
@@ -47,10 +50,7 @@ const isLoading = computed(() => {
 });
 
 const total = computed(() =>
-  new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD",
-  }).format(getTabTotal(userDoc.data.value?.tab ?? []))
+  i18n.n(getTabTotal(userDoc.data.value?.tab ?? []), "currency")
 );
 
 // methods
@@ -103,12 +103,7 @@ userDoc.error.value && router.push("/error");
                   <tr v-if="countItemsInTab(userDoc.tab)[item.name] > 0">
                     <td>{{ item.name }}</td>
                     <td>
-                      {{
-                        new Intl.NumberFormat("en-CA", {
-                          style: "currency",
-                          currency: "CAD",
-                        }).format(item.price)
-                      }}
+                      {{ $n(item.price, "currency") }}
                     </td>
                     <td>
                       {{ item.date.toDate().toLocaleDateString() }}
@@ -151,12 +146,7 @@ userDoc.error.value && router.push("/error");
                       {{ countItemsInTab(userDoc.tab)[item.name] }}
                     </td>
                     <td>
-                      {{
-                        new Intl.NumberFormat("en-CA", {
-                          style: "currency",
-                          currency: "CAD",
-                        }).format(item.price)
-                      }}
+                      {{ $n(item.price, "currency") }}
                     </td>
                   </tr>
                 </template>
@@ -209,12 +199,7 @@ userDoc.error.value && router.push("/error");
                     <tr>
                       <td>{{ item.name }}</td>
                       <td>
-                        {{
-                          new Intl.NumberFormat("en-CA", {
-                            style: "currency",
-                            currency: "CAD",
-                          }).format(item.price)
-                        }}
+                        {{ $n(item.price, "currency") }}
                       </td>
                       <td>
                         {{ item.date.toDate().toLocaleDateString() }}

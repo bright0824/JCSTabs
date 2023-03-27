@@ -7,6 +7,7 @@ import {
   dedupeArray,
   getTabTotal,
 } from "@/utils";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 // props
@@ -15,11 +16,13 @@ const props = defineProps<{
   items: Item[];
 }>();
 
+// composables
+const { mobile } = useDisplay();
+const i18n = useI18n();
+
 // data
 const dialog = ref(false);
 const page = ref(1);
-
-const { mobile } = useDisplay();
 
 // computed
 const visibleItems = computed(() =>
@@ -27,10 +30,7 @@ const visibleItems = computed(() =>
 );
 
 const total = computed(() => {
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD",
-  }).format(getTabTotal(props.user?.tab));
+  return i18n.n(getTabTotal(props.user?.tab), "currency");
 });
 
 // methods
@@ -90,12 +90,7 @@ const checkTabLength = () => {
                 <td>{{ item.name }}</td>
                 <td>{{ countItemsInTab(user.tab)[item.name] }}</td>
                 <td>
-                  {{
-                    new Intl.NumberFormat("en-CA", {
-                      style: "currency",
-                      currency: "CAD",
-                    }).format(item.price)
-                  }}
+                  {{ $n(item.price, "currency") }}
                 </td>
               </tr>
             </template>
@@ -129,12 +124,7 @@ const checkTabLength = () => {
                       <td>{{ item.name }}</td>
                       <td>{{ item.paid ? "Yes" : "No" }}</td>
                       <td>
-                        {{
-                          new Intl.NumberFormat("en-CA", {
-                            style: "currency",
-                            currency: "CAD",
-                          }).format(item.price)
-                        }}
+                        {{ $n(item.price, "currency") }}
                       </td>
                       <td>{{ item.date.toDate().toLocaleDateString() }}</td>
                       <td>{{ item.date.toDate().toLocaleTimeString() }}</td>

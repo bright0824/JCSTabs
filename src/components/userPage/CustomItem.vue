@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import { useToast } from "vue-toastification";
+
+// emits
 const emit = defineEmits<{
   (e: "close"): void;
 }>();
 
-// firebase
+// composables
 const auth = useFirebaseAuth();
 const db = useFirestore();
+const toast = useToast();
 
 // data
 const dialog = ref(false);
@@ -46,6 +50,8 @@ const addItem = async () => {
         paid: false,
       }),
     });
+
+    toast.success(`${input.value.name} added to tab`);
     close();
     emit("close");
   } catch (err) {
