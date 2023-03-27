@@ -15,8 +15,6 @@ const props = defineProps<{
   items: Item[];
 }>();
 
-const { user } = toRefs(props);
-
 // data
 const dialog = ref(false);
 const page = ref(1);
@@ -25,21 +23,21 @@ const { mobile } = useDisplay();
 
 // computed
 const visibleItems = computed(() =>
-  computeVisibleItems(user.value?.tab, page.value, 5)
+  computeVisibleItems(props.user?.tab, page.value, 5)
 );
 
 const total = computed(() => {
   return new Intl.NumberFormat("en-CA", {
     style: "currency",
     currency: "CAD",
-  }).format(getTabTotal(user.value?.tab));
+  }).format(getTabTotal(props.user?.tab));
 });
 
 // methods
 const checkTabLength = () => {
   return {
-    currentTab: !!user.value?.tab.filter((item) => !item.paid).length,
-    history: !!user.value?.tab.length,
+    currentTab: !!props.user?.tab.filter((item) => !item.paid).length,
+    history: !!props.user?.tab.length,
   };
 };
 </script>

@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import { useDisplay, useTheme } from "vuetify";
+import { mdiCog } from "@mdi/js";
+import { activate } from "./firebase/fcm";
+
+// composables
+const theme = useTheme();
+const prefersDark = usePreferredDark();
+const { mobile } = useDisplay();
+
+const auth = useFirebaseAuth();
+const router = useRouter();
+
+// data
+const openSettings = ref(false);
+const loggedIn = ref(false);
+
+// computed
+auth?.onAuthStateChanged((user) => {
+  if (!user) {
+    router.push("/login");
+  }
+
+  loggedIn.value = !!user;
+
+  setTimeout(() => {
+    activate();
+  }, 30000);
+});
+
+if (prefersDark.value) {
+  theme.global.name.value = "dark";
+} else {
+  theme.global.name.value = "light";
+}
+</script>
+
 <template>
   <VApp>
     <VAppBar color="primary" app>
@@ -8,9 +45,9 @@
         icon
         @click="openSettings = !openSettings"
         color="auto"
-        v-if="auth?.currentUser"
+        v-if="loggedIn"
       >
-        <VIcon :icon="MdiCog" />
+        <VIcon :icon="mdiCog" />
       </VBtn>
       <UserProfile />
     </VAppBar>
@@ -19,7 +56,7 @@
       temporary
       :location="mobile ? 'bottom' : 'left'"
     >
-      <Settings v-if="auth?.currentUser" />
+      <Settings v-if="loggedIn" />
     </VNavigationDrawer>
     <VMain>
       <VContainer fluid>
@@ -40,39 +77,6 @@
     </VMain>
   </VApp>
 </template>
-
-<script setup lang="ts">
-import { useDisplay, useTheme } from "vuetify";
-import MdiCog from "~icons/mdi/cog";
-import { activate } from "./firebase/fcm";
-
-// data
-const theme = useTheme();
-const prefersDark = usePreferredDark();
-const { mobile } = useDisplay();
-
-const auth = useFirebaseAuth();
-const router = useRouter();
-
-const openSettings = ref(false);
-
-auth?.onAuthStateChanged((user) => {
-  if (!user) {
-    router.push("/login");
-  }
-
-  setTimeout(() => {
-    activate();
-  }, 30000);
-});
-
-// computed
-if (prefersDark.value) {
-  theme.global.name.value = "dark";
-} else {
-  theme.global.name.value = "light";
-}
-</script>
 
 <style scoped>
 a {

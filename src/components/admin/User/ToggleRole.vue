@@ -6,11 +6,9 @@ import { httpsCallable } from "firebase/functions";
 const auth = useFirebaseAuth();
 
 const props = defineProps<{
-  user: User | null;
+  user: User;
   role: string;
 }>();
-
-const { user, role } = toRefs(props);
 
 // data
 const dialog = ref(false);
@@ -33,7 +31,7 @@ const toggleRole = async () => {
   loading.value.dialog = true;
   try {
     const toggleRole = httpsCallable(functions, "toggleRole");
-    await toggleRole({ email: user.value?.info.email, role: role });
+    await toggleRole({ email: props.user?.info.email, role: props.role });
     loading.value.switch = false;
     dialog.value = false;
   } catch (err) {
@@ -46,19 +44,19 @@ const toggleRole = async () => {
 };
 
 const checkPerms = () => {
-  if (user.value?.info.email == auth?.currentUser?.email) {
+  if (props.user?.info.email == auth?.currentUser?.email) {
     return {
       disabled: true,
       message: "You cannot change your own permissions",
     };
   }
-  if (user.value?.roles.admin) {
+  if (props.user?.roles.admin) {
     return {
       disabled: false,
-      message: `Click to remove ${role} permissions`,
+      message: `Click to remove ${props.role} permissions`,
     };
   }
-  if (user.value?.roles.dev) {
+  if (props.user?.roles.dev) {
     return {
       disabled: true,
       message: "This user is a developer",
@@ -66,7 +64,7 @@ const checkPerms = () => {
   }
   return {
     disabled: false,
-    message: `Click to add ${role} permissions`,
+    message: `Click to add ${props.role} permissions`,
   };
 };
 

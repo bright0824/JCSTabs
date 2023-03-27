@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router/auto";
-import { getCurrentUser, useFirebaseAuth } from "vuefire";
+import { getCurrentUser } from "vuefire";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 });
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   const currentUser = await getCurrentUser();
 
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
@@ -22,7 +22,7 @@ router.beforeEach(async (to, from) => {
     }
     if (requiresAdmin) {
       const { admin } = await currentUser
-        ?.getIdTokenResult()
+        .getIdTokenResult()
         .then((idTokenResult) => idTokenResult.claims);
       if (!admin) {
         return false;

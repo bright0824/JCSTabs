@@ -31,7 +31,7 @@
             "
             block
             class="justify-start"
-            :prepend-icon="MdiLogout"
+            :prepend-icon="mdiLogout"
           >
             Sign out
           </VBtn>
@@ -47,7 +47,7 @@
             "
             block
             class="justify-start"
-            :prepend-icon="MdiSecurity"
+            :prepend-icon="mdiSecurity"
           >
             Admin Menu
           </VBtn>
@@ -62,8 +62,8 @@
             block
             :prepend-icon="
               theme.global.name.value === 'light'
-                ? MdiWhiteBalanceSunny
-                : MdiWeatherNight
+                ? mdiWhiteBalanceSunny
+                : mdiWeatherNight
             "
           >
             Theme: {{ theme.global.name.value }}
@@ -80,10 +80,12 @@
 
 <script setup lang="ts">
 import { useTheme } from "vuetify";
-import MdiLogout from "~icons/mdi/logout";
-import MdiSecurity from "~icons/mdi/security";
-import MdiWeatherNight from "~icons/mdi/weather-night";
-import MdiWhiteBalanceSunny from "~icons/mdi/white-balance-sunny";
+import {
+  mdiLogout,
+  mdiSecurity,
+  mdiWeatherNight,
+  mdiWhiteBalanceSunny,
+} from "@mdi/js";
 
 // data
 const data = () => {

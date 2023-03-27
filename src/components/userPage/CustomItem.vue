@@ -1,56 +1,7 @@
-<template>
-  <VDialog v-model="dialog" width="300px" @click:outside="close()">
-    <template #activator="{ props }">
-      <VBtn color="secondary" v-bind="props" class="ma-1" width="100%">
-        Custom Item
-      </VBtn>
-    </template>
-    <VAlert
-      type="error"
-      prominent
-      class="text-center"
-      elevation="2"
-      v-if="error.code !== null"
-    >
-      <VAlertTitle>
-        {{ error.code }}
-      </VAlertTitle>
-      {{ error.message }}
-    </VAlert>
-    <VCard :loading="loading" :disabled="loading">
-      <VCardTitle>
-        <span class="headline">New Item</span>
-      </VCardTitle>
-      <VCardText>
-        <VForm ref="itemInput" lazy-validation @submit.prevent>
-          <VTextField
-            label="Item Name"
-            variant="outlined"
-            v-model="input.name"
-            :rules="rules.name"
-            @keyup.enter="addItem"
-          />
-          <VTextField
-            label="Item Price"
-            variant="outlined"
-            type="number"
-            v-model="input.price"
-            prefix="$"
-            :rules="rules.price"
-            @keyup.enter="addItem"
-          />
-        </VForm>
-      </VCardText>
-      <VCardActions>
-        <VBtn color="green" @click="addItem"> Submit </VBtn>
-        <VBtn color="red" @click="close()"> Cancel </VBtn>
-      </VCardActions>
-    </VCard>
-  </VDialog>
-</template>
-
 <script setup lang="ts">
-const emit = defineEmits(["close"]);
+const emit = defineEmits<{
+  (e: "close"): void;
+}>();
 
 // firebase
 const auth = useFirebaseAuth();
@@ -113,3 +64,54 @@ const close = () => {
   dialog.value = false;
 };
 </script>
+
+<template>
+  <VDialog v-model="dialog" width="300px" @click:outside="close()">
+    <template #activator="{ props }">
+      <VBtn color="secondary" v-bind="props" class="ma-1" width="100%">
+        Custom Item
+      </VBtn>
+    </template>
+    <VAlert
+      type="error"
+      prominent
+      class="text-center"
+      elevation="2"
+      v-if="error.code !== null"
+    >
+      <VAlertTitle>
+        {{ error.code }}
+      </VAlertTitle>
+      {{ error.message }}
+    </VAlert>
+    <VCard :loading="loading" :disabled="loading">
+      <VCardTitle>
+        <span class="headline">New Item</span>
+      </VCardTitle>
+      <VCardText>
+        <VForm ref="itemInput" lazy-validation @submit.prevent>
+          <VTextField
+            label="Item Name"
+            variant="outlined"
+            v-model="input.name"
+            :rules="rules.name"
+            @keyup.enter="addItem"
+          />
+          <VTextField
+            label="Item Price"
+            variant="outlined"
+            type="number"
+            v-model="input.price"
+            prefix="$"
+            :rules="rules.price"
+            @keyup.enter="addItem"
+          />
+        </VForm>
+      </VCardText>
+      <VCardActions>
+        <VBtn color="green" @click="addItem"> Submit </VBtn>
+        <VBtn color="red" @click="close()"> Cancel </VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
+</template>

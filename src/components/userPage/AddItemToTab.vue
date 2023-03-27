@@ -1,3 +1,54 @@
+<script setup lang="ts">
+import type { Item } from "@/types";
+import { useDisplay } from "vuetify";
+import { mdiPlusThick } from "@mdi/js";
+
+const db = useFirestore();
+const auth = useFirebaseAuth();
+
+const dialog = ref(false);
+const loading = ref({} as Record<string, boolean>);
+const error = ref({
+  code: null as string | null,
+  message: null as string | null,
+});
+const { mobile, width } = useDisplay();
+
+const props = defineProps<{ items: Item[] }>();
+const { items } = toRefs(props);
+
+items.value?.forEach((item) => {
+  loading.value[item.name] = false;
+});
+
+const addItem = async (item: Item) => {
+  loading.value[item.name] = true;
+  if (!auth?.currentUser) return;
+  try {
+    await updateDoc(doc(db, "users", auth.currentUser?.uid), {
+      tab: arrayUnion({
+        ...item,
+        date: Timestamp.now(),
+        paid: false,
+      }),
+    });
+    close();
+  } catch (err) {
+    const { code, message } = err as { code: string; message: string };
+    error.value = { code, message };
+  }
+};
+
+const close = () => {
+  dialog.value = false;
+  loading.value = {};
+  error.value = {
+    code: null,
+    message: null,
+  };
+};
+</script>
+
 <template>
   <VDialog
     v-model="dialog"
@@ -6,7 +57,7 @@
     min-width="300px"
   >
     <template #activator="{ props }">
-      <VBtn color="success" v-bind="props" :prepend-icon="MdiPlusThick">
+      <VBtn color="success" v-bind="props" :prepend-icon="mdiPlusThick">
         Add Item
       </VBtn>
     </template>
@@ -55,54 +106,3 @@
     </VCard>
   </VDialog>
 </template>
-
-<script setup lang="ts">
-import type { Item } from "@/types";
-import { useDisplay } from "vuetify";
-import MdiPlusThick from "~icons/mdi/plus-thick";
-
-const db = useFirestore();
-const auth = useFirebaseAuth();
-
-const dialog = ref(false);
-const loading = ref({} as Record<string, boolean>);
-const error = ref({
-  code: null as string | null,
-  message: null as string | null,
-});
-const { mobile, width } = useDisplay();
-
-const props = defineProps<{ items: Item[] }>();
-const { items } = toRefs(props);
-
-items.value?.forEach((item) => {
-  loading.value[item.name] = false;
-});
-
-const addItem = async (item: Item) => {
-  loading.value[item.name] = true;
-  if (!auth?.currentUser) return;
-  try {
-    await updateDoc(doc(db, "users", auth.currentUser?.uid), {
-      tab: arrayUnion({
-        ...item,
-        date: Timestamp.now(),
-        paid: false,
-      }),
-    });
-    close();
-  } catch (err) {
-    const { code, message } = err as { code: string; message: string };
-    error.value = { code, message };
-  }
-};
-
-const close = () => {
-  dialog.value = false;
-  loading.value = {};
-  error.value = {
-    code: null,
-    message: null,
-  };
-};
-</script>

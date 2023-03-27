@@ -15,16 +15,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antfu/install-pkg@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@antfu/install-pkg@npm:0.1.1"
-  dependencies:
-    execa: ^5.1.1
-    find-up: ^5.0.0
-  checksum: a463af6a0df3cf0769fd88ec94d135ca54e4f7329422fa3815bf1e71fb4ca510ec02bb39935bec65a15a8d8df5e76bf8e6a7df0c7c6cc512aefa3bec85ad903f
-  languageName: node
-  linkType: hard
-
 "@antfu/utils@npm:^0.7.2":
   version: 0.7.2
   resolution: "@antfu/utils@npm:0.7.2"
@@ -2237,24 +2227,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify/types@npm:*, @iconify/types@npm:^2.0.0":
+"@iconify/types@npm:*":
   version: 2.0.0
   resolution: "@iconify/types@npm:2.0.0"
   checksum: 029f58542c160e9d4a746869cf2e475b603424d3adf3994c5cc8d0406c47e6e04a3b898b2707840c1c5b9bd5563a1660a34b110d89fce43923baca5222f4e597
-  languageName: node
-  linkType: hard
-
-"@iconify/utils@npm:^2.1.5":
-  version: 2.1.5
-  resolution: "@iconify/utils@npm:2.1.5"
-  dependencies:
-    "@antfu/install-pkg": ^0.1.1
-    "@antfu/utils": ^0.7.2
-    "@iconify/types": ^2.0.0
-    debug: ^4.3.4
-    kolorist: ^1.7.0
-    local-pkg: ^0.4.3
-  checksum: 042ec9f026d2d23e63e2ee30cea9079ff392b654ec5aa981d6603743dff3f48dd59c41f882b162dbd8c574372c5933d0404b42e03ac7142280aba73c41da3b7c
   languageName: node
   linkType: hard
 
@@ -2317,6 +2293,13 @@ __metadata:
     "@jridgewell/resolve-uri": 3.1.0
     "@jridgewell/sourcemap-codec": 1.4.14
   checksum: 9d703b859cff5cd83b7308fd457a431387db5db96bd781a63bf48e183418dd9d3d44e76b9e4ae13237f6abeeb25d739ec9215c1d5bfdd08f66f750a50074a339
+  languageName: node
+  linkType: hard
+
+"@mdi/js@npm:^7.2.96":
+  version: 7.2.96
+  resolution: "@mdi/js@npm:7.2.96"
+  checksum: f8e22da5d994a4b764580d22290c825c1d789a6e015c166e271e2164fb80d33551d6632632897e30ae9033a3fe4aa6a28f2e97c5d3ad56c823f89f859944899e
   languageName: node
   linkType: hard
 
@@ -4181,7 +4164,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
+"cross-spawn@npm:^7.0.2":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
   dependencies:
@@ -4973,23 +4956,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"execa@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "execa@npm:5.1.1"
-  dependencies:
-    cross-spawn: ^7.0.3
-    get-stream: ^6.0.0
-    human-signals: ^2.1.0
-    is-stream: ^2.0.0
-    merge-stream: ^2.0.0
-    npm-run-path: ^4.0.1
-    onetime: ^5.1.2
-    signal-exit: ^3.0.3
-    strip-final-newline: ^2.0.0
-  checksum: fba9022c8c8c15ed862847e94c252b3d946036d7547af310e344a527e59021fd8b6bb0723883ea87044dc4f0201f949046993124a42ccb0855cae5bf8c786343
-  languageName: node
-  linkType: hard
-
 "express@npm:^4.17.1":
   version: 4.18.2
   resolution: "express@npm:4.18.2"
@@ -5491,13 +5457,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-stream@npm:^6.0.0":
-  version: 6.0.1
-  resolution: "get-stream@npm:6.0.1"
-  checksum: e04ecece32c92eebf5b8c940f51468cd53554dcbb0ea725b2748be583c9523d00128137966afce410b9b051eb2ef16d657cd2b120ca8edafcf5a65e81af63cad
-  languageName: node
-  linkType: hard
-
 "get-symbol-description@npm:^1.0.0":
   version: 1.0.0
   resolution: "get-symbol-description@npm:1.0.0"
@@ -5809,13 +5768,6 @@ __metadata:
     agent-base: 6
     debug: 4
   checksum: 571fccdf38184f05943e12d37d6ce38197becdd69e58d03f43637f7fa1269cf303a7d228aa27e5b27bbd3af8f09fd938e1c91dcfefff2df7ba77c20ed8dfc765
-  languageName: node
-  linkType: hard
-
-"human-signals@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "human-signals@npm:2.1.0"
-  checksum: b87fd89fce72391625271454e70f67fe405277415b48bcc0117ca73d31fa23a4241787afdc8d67f5a116cf37258c052f59ea82daffa72364d61351423848e3b8
   languageName: node
   linkType: hard
 
@@ -6198,6 +6150,7 @@ __metadata:
   resolution: "jcstabs@workspace:."
   dependencies:
     "@iconify/json": ^2.2.40
+    "@mdi/js": ^7.2.96
     "@rushstack/eslint-patch": ^1.2.0
     "@types/node": ^18.15.10
     "@types/webfontloader": ^1.6.35
@@ -6215,7 +6168,6 @@ __metadata:
     roboto-fontface: ^0.10.0
     typescript: ^5.0.2
     unplugin-auto-import: ^0.15.2
-    unplugin-icons: ^0.16.0
     unplugin-vue-components: ^0.24.1
     unplugin-vue-router: ^0.5.4
     vite: ^4.2.1
@@ -6495,13 +6447,6 @@ __metadata:
   dependencies:
     graceful-fs: ^4.1.9
   checksum: 1bf9de22392c80d28de8a2babd6f0de29fa52fcdc1654838fd35174b3641c168ec32b8b03022191e3c190efd535c31fce23f85e29cb260245571da7263ef418e
-  languageName: node
-  linkType: hard
-
-"kolorist@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "kolorist@npm:1.7.0"
-  checksum: 0eb64d22a204be11ddd7d2017525bf2603de38b15c571f79d6f0c5f1c869b8adfd40c3aa71c12e0cfe5496c25b2bbe891267cbc11f5b3fbc858d74ae79bac293
   languageName: node
   linkType: hard
 
@@ -6882,13 +6827,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mimic-fn@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "mimic-fn@npm:2.1.0"
-  checksum: d2421a3444848ce7f84bd49115ddacff29c15745db73f54041edc906c14b131a38d05298dae3081667627a59b2eb1ca4b436ff2e1b80f69679522410418b478a
-  languageName: node
-  linkType: hard
-
 "minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
   version: 3.1.2
   resolution: "minimatch@npm:3.1.2"
@@ -7243,15 +7181,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-run-path@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "npm-run-path@npm:4.0.1"
-  dependencies:
-    path-key: ^3.0.0
-  checksum: 5374c0cea4b0bbfdfae62da7bbdf1e1558d338335f4cacf2515c282ff358ff27b2ecb91ffa5330a8b14390ac66a1e146e10700440c1ab868208430f56b5f4d23
-  languageName: node
-  linkType: hard
-
 "npmlog@npm:^6.0.0":
   version: 6.0.2
   resolution: "npmlog@npm:6.0.2"
@@ -7339,15 +7268,6 @@ __metadata:
   dependencies:
     wrappy: 1
   checksum: cd0a88501333edd640d95f0d2700fbde6bff20b3d4d9bdc521bdd31af0656b5706570d6c6afe532045a20bb8dc0849f8332d6f2a416e0ba6d3d3b98806c7db68
-  languageName: node
-  linkType: hard
-
-"onetime@npm:^5.1.2":
-  version: 5.1.2
-  resolution: "onetime@npm:5.1.2"
-  dependencies:
-    mimic-fn: ^2.1.0
-  checksum: 2478859ef817fc5d4e9c2f9e5728512ddd1dbc9fb7829ad263765bb6d3b91ce699d6e2332eef6b7dff183c2f490bd3349f1666427eaba4469fba0ac38dfd0d34
   languageName: node
   linkType: hard
 
@@ -7478,7 +7398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-key@npm:^3.0.0, path-key@npm:^3.1.0":
+"path-key@npm:^3.1.0":
   version: 3.1.1
   resolution: "path-key@npm:3.1.1"
   checksum: 55cd7a9dd4b343412a8386a743f9c746ef196e57c823d90ca3ab917f90ab9f13dd0ded27252ba49dbdfcab2b091d998bc446f6220cd3cea65db407502a740020
@@ -8294,7 +8214,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"signal-exit@npm:^3.0.3, signal-exit@npm:^3.0.7":
+"signal-exit@npm:^3.0.7":
   version: 3.0.7
   resolution: "signal-exit@npm:3.0.7"
   checksum: a2f098f247adc367dffc27845853e9959b9e88b01cb301658cfe4194352d8d2bb32e18467c786a7fe15f1d44b233ea35633d076d5e737870b7139949d1ab6318
@@ -8542,13 +8462,6 @@ __metadata:
   version: 2.0.1
   resolution: "strip-comments@npm:2.0.1"
   checksum: 36cd122e1c27b5be69df87e1687770a62fe183bdee9f3ff5cf85d30bbc98280afc012581f2fd50c7ad077c90f656f272560c9d2e520d28604b8b7ea3bc87d6f9
-  languageName: node
-  linkType: hard
-
-"strip-final-newline@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "strip-final-newline@npm:2.0.0"
-  checksum: 69412b5e25731e1938184b5d489c32e340605bb611d6140344abc3421b7f3c6f9984b21dff296dfcf056681b82caa3bb4cc996a965ce37bcfad663e92eae9c64
   languageName: node
   linkType: hard
 
@@ -9020,35 +8933,6 @@ __metadata:
     "@vueuse/core":
       optional: true
   checksum: 9c1f3a602ae8529de0bf0f44ee7972d838e9965a26100261a20c2312b1a77352fe5ba5bff67d9a3f32c61fc35322ba45f2d0448c160b24a00b80f3543b07384c
-  languageName: node
-  linkType: hard
-
-"unplugin-icons@npm:^0.16.0":
-  version: 0.16.0
-  resolution: "unplugin-icons@npm:0.16.0"
-  dependencies:
-    "@antfu/install-pkg": ^0.1.1
-    "@antfu/utils": ^0.7.2
-    "@iconify/utils": ^2.1.5
-    debug: ^4.3.4
-    kolorist: ^1.7.0
-    local-pkg: ^0.4.3
-    unplugin: ^1.3.1
-  peerDependencies:
-    "@svgr/core": ">=7.0.0"
-    "@vue/compiler-sfc": ^3.0.2 || ^2.7.0
-    vue-template-compiler: ^2.6.12
-    vue-template-es2015-compiler: ^1.9.0
-  peerDependenciesMeta:
-    "@svgr/core":
-      optional: true
-    "@vue/compiler-sfc":
-      optional: true
-    vue-template-compiler:
-      optional: true
-    vue-template-es2015-compiler:
-      optional: true
-  checksum: c2e8eafa8a298ad0af82091aedc749979418ed11e7ac45a1edf9588b379509bb7baedb44d2b6209bd299f5994e3c45d099b4b043628abe646c12d9c4885a9673
   languageName: node
   linkType: hard
 

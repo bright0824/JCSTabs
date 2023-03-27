@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MdiMessageAlertOutline from "~icons/mdi/message-alert-outline";
+import { mdiMessageAlertOutline } from "@mdi/js";
 
 // scaffolding
 const route = useRoute();
@@ -83,7 +83,7 @@ const close = () => {
         @click="dialog = true"
         block
         class="justify-start"
-        :prepend-icon="MdiMessageAlertOutline"
+        :prepend-icon="mdiMessageAlertOutline"
       >
         Send feedback
       </VBtn>

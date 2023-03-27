@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiAccountCog, mdiArchiveCog } from "@mdi/js";
 // definePage({
 //   // path: "/admin",
 //   name: "admin",
@@ -18,12 +19,10 @@
   <KeepAlive>
     <VBottomNavigation>
       <VTabs>
-        <VTab value="staff" to="/admin/staff">
-          <MdiAccountCog class="mr-1" />
+        <VTab value="staff" to="/admin/staff" :prependIcon="mdiAccountCog">
           Staff
         </VTab>
-        <VTab value="items" to="/admin/items">
-          <MdiArchiveCog class="mr-1" />
+        <VTab value="items" to="/admin/items" :prependIcon="mdiArchiveCog">
           Items
         </VTab>
       </VTabs>

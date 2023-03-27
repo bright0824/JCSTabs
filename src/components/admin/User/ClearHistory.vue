@@ -5,7 +5,6 @@ import { httpsCallable } from "firebase/functions";
 
 // inject the user
 const props = defineProps<{ user: User | null }>();
-const { user } = toRefs(props);
 
 // reactive variables
 const dialog = ref(false);
@@ -19,7 +18,7 @@ const clearHistory = async () => {
   loading.value = true;
   try {
     const clearHistory = httpsCallable(functions, "clearHistory");
-    await clearHistory({ email: user.value?.info.email });
+    await clearHistory({ email: props.user?.info.email });
     dialog.value = false;
 
     error.value = { code: null, message: null };

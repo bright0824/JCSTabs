@@ -1,16 +1,8 @@
-import { ReCaptchaV3Provider } from "firebase/app-check";
-import { createPinia } from "pinia";
 import { registerSW } from "virtual:pwa-register";
 import { createApp } from "vue";
-import { VueFire, VueFireAppCheck, VueFireAuth } from "vuefire";
-import { firebaseApp } from "./firebase";
-import vuetify from "./plugins/vuetify";
-import { loadFonts } from "./plugins/webfontloader";
 
 import App from "./App.vue";
-import router from "./router";
-
-loadFonts();
+import { registerPlugins } from "./plugins";
 
 const intervalMS = 60 * 60 * 1000;
 
@@ -28,24 +20,6 @@ registerSW({
 
 const app = createApp(App);
 
-app.use(VueFire, {
-  firebaseApp,
-  modules: [
-    VueFireAuth(),
-    VueFireAppCheck({
-      provider: new ReCaptchaV3Provider(
-        "6LfgHEEgAAAAAEaYmNJkZHGvxQ4-c6syHPdOb5r5"
-      ),
-      isTokenAutoRefreshEnabled: true,
-      debug: import.meta.env.DEV
-        ? import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN || true
-        : false,
-    }),
-  ],
-});
-app.use(router);
-app.use(vuetify);
-
-app.use(createPinia());
+registerPlugins(app);
 
 app.mount("#app");

@@ -3,7 +3,7 @@ import { functions } from "@/firebase";
 import { useFCMStore } from "@/store/fcm";
 import type { User } from "@/types";
 import { httpsCallable } from "firebase/functions";
-import MdiBell from "~icons/mdi/bell";
+import { mdiBell } from "@mdi/js";
 
 const currentUser = useCurrentUser();
 const userRef = doc(useFirestore(), "users", currentUser.value?.uid || "");
@@ -53,12 +53,14 @@ const cancel = () => {
 </script>
 
 <template>
-  <VContainer fluid>
+  <VContainer fluid v-if="currentUser">
     <VRow>
       <VCol>
+        <VIcon :icon="mdiBell" />
+      </VCol>
+      <VCol>
         <h3>
-          <MdiBell class="mr-6" />
-          <span>topics</span>
+          <span class="ml-6">Topics</span>
         </h3>
       </VCol>
     </VRow>

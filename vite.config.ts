@@ -1,7 +1,5 @@
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from "node:url";
-import IconsResolver from "unplugin-icons/resolver";
-import Icons from "unplugin-icons/vite";
 import Components from "unplugin-vue-components/vite";
 import VueRouter from "unplugin-vue-router/vite";
 import { defineConfig } from "vite";
@@ -67,15 +65,6 @@ export default defineConfig({
     }),
     Components({
       dts: true,
-      resolvers: [
-        IconsResolver({
-          prefix: "",
-        }),
-      ],
-    }),
-    Icons({
-      compiler: "vue3",
-      autoInstall: true,
     }),
     VitePWA({
       injectRegister: "inline",
@@ -177,7 +166,7 @@ export default defineConfig({
     }),
   ],
   define: {
-    __VUE_OPTIONS_API__: false,
+    __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: false,
   },
   esbuild: {

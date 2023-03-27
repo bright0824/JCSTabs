@@ -8,8 +8,6 @@ const props = defineProps<{
   item: Item;
 }>();
 
-const { item } = toRefs(props);
-
 // data
 const loading = ref({
   pending: false,
@@ -23,7 +21,7 @@ const deleteItem = async () => {
   try {
     loading.value.confirm = true;
     const deleteItem = httpsCallable(functions, "deleteItem");
-    await deleteItem({ item: item });
+    await deleteItem({ item: props.item });
     dialog.value = false;
   } catch (err) {
     console.log(err);
