@@ -41,7 +41,7 @@ getToken(messaging, {
 
 onMessage(messaging, (payload) => {
   // display the notification
-  const notificationTitle = payload.notification?.title || "";
+  const notificationTitle = payload.notification?.title || "JCS Tab Tracker";
   const notificationOptions = {
     body: payload.notification?.body,
     icon: "/pwa-192x192.png",
