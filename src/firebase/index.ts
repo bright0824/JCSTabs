@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { enableIndexedDbPersistence, getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 import { getMessaging } from "firebase/messaging";
+import { getAnalytics } from "firebase/analytics";
+import { getPerformance } from "firebase/performance";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlFp1mxhtzaCy16eXFKX9glqWDAiyS_hg",
@@ -17,29 +18,8 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const functions = getFunctions(firebaseApp);
 const messaging = getMessaging(firebaseApp);
-const firestore = getFirestore(firebaseApp);
 
-enableIndexedDbPersistence(firestore).catch((err) => {
-  if (err.code === "failed-precondition") {
-    // Multiple tabs open, persistence can only be enabled
-    // in one tab at a a time.
-    // ...
-
-    console.error(
-      "Multiple tabs open, persistence can only be enabled in one tab at a a time."
-    );
-  } else if (err.code === "unimplemented") {
-    // The current browser does not support all of the
-    // features required to enable persistence
-    // ...
-
-    console.error(
-      "The current browser does not support all of the features required to enable persistence"
-    );
-  }
-});
-
-// getAnalytics(firebaseApp);
-// getPerformance(firebaseApp);
+getAnalytics(firebaseApp);
+getPerformance(firebaseApp);
 
 export { firebaseApp, functions, messaging };
