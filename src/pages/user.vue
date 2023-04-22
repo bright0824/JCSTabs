@@ -7,7 +7,7 @@ import {
   dedupeArray,
   getTabTotal,
 } from "@/utils";
-import type { Timestamp } from "@firebase/firestore";
+import type { Timestamp } from "firebase/firestore";
 import { useI18n } from "vue-i18n";
 
 // composables
