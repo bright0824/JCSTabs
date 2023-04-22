@@ -13,38 +13,22 @@
     "firebase-messaging-sw.ts"
   ],
   "compilerOptions": {
-    "ignoreDeprecations": "5.0", // this is temporary and should be removed once everything gets typescript 5.0 support
     "baseUrl": ".",
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "allowSyntheticDefaultImports": true,
-    "composite": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "lib": [
-      "esnext",
-      "dom",
-      "WebWorker"
-    ],
-    "types": [
-      "vuetify",
-      "vite-plugin-pwa/client",
-      "firebase/firestore",
-      "@types/webfontloader",
-      "unplugin-icons/types/vue"
-    ],
+    "ignoreDeprecations": "5.0",
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "vite-plugin-pwa/client",
+      "firebase/firestore",
+      "@types/webfontloader"
+    ]
   },
   "references": [
     {
-      "path": "./tsconfig.config.json"
+      "path": "./tsconfig.node.json"
     }
   ]
 }
