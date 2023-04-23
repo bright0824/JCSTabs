@@ -13,12 +13,19 @@
     "firebase-messaging-sw.ts"
   ],
   "compilerOptions": {
+    "composite": true,
     "baseUrl": ".",
+    "strict": true,
     "paths": {
       "@/*": [
         "./src/*"
       ]
     },
+    "lib": [
+      "esnext",
+      "dom",
+      "WebWorker"
+    ],
     "types": [
       "vite-plugin-pwa/client",
       "firebase/firestore",
