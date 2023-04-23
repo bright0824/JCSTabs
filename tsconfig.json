@@ -1,5 +1,5 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "vite.config.ts",
     "typed-router.d.ts",
@@ -14,7 +14,6 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
-    "ignoreDeprecations": "5.0",
     "paths": {
       "@/*": [
         "./src/*"
@@ -25,10 +24,5 @@
       "firebase/firestore",
       "@types/webfontloader"
     ]
-  },
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  }
 }
