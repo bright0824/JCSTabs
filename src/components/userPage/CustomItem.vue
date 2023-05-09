@@ -45,7 +45,7 @@ const addItem = async () => {
     await updateDoc(doc(db, "users", auth.currentUser?.uid), {
       tab: arrayUnion({
         name: input.value.name,
-        price: parseInt(input.value.price as string),
+        price: Number(input.value.price),
         date: Timestamp.now(),
         paid: false,
       }),

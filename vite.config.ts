@@ -5,7 +5,7 @@ import VueRouter from "unplugin-vue-router/vite";
 import { defineConfig } from "vite";
 import mkcert from "vite-plugin-mkcert";
 import { VitePWA } from "vite-plugin-pwa";
-import vuetify from "vite-plugin-vuetify";
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import AutoImport from "unplugin-auto-import/vite";
 import { VueRouterAutoImports } from "unplugin-vue-router";
 import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
@@ -26,7 +26,9 @@ export default defineConfig({
       routeBlockLang: "json5",
       importMode: "async",
     }),
-    vue(),
+    vue({
+      template: { transformAssetUrls },
+    }),
     mkcert(),
     vuetify({
       autoImport: true,
@@ -200,5 +202,6 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "~utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
     },
+    extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },
 });
