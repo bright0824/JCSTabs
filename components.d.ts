@@ -5,24 +5,24 @@
 // Read more: https://github.com/vuejs/core/pull/3399
 import '@vue/runtime-core'
 
-export {};
+export {}
 
-declare module "@vue/runtime-core" {
+declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AddItemToTab: typeof import("./src/components/userPage/AddItemToTab.vue")["default"];
-    ClearHistory: typeof import("./src/components/admin/User/ClearHistory.vue")["default"];
-    ClearTab: typeof import("./src/components/ClearTab.vue")["default"];
-    CustomItem: typeof import("./src/components/userPage/CustomItem.vue")["default"];
-    DeleteItem: typeof import("./src/components/admin/Item/DeleteItem.vue")["default"];
-    DeleteItemFromTab: typeof import("./src/components/userPage/DeleteItemFromTab.vue")["default"];
-    FeedBack: typeof import("./src/components/FeedBack.vue")["default"];
-    ItemCard: typeof import("./src/components/admin/Item/ItemCard.vue")["default"];
-    NewItem: typeof import("./src/components/admin/Item/NewItem.vue")["default"];
-    RouterLink: typeof import("vue-router")["RouterLink"];
-    RouterView: typeof import("vue-router")["RouterView"];
-    Settings: typeof import("./src/components/Settings.vue")["default"];
-    ToggleRole: typeof import("./src/components/admin/User/ToggleRole.vue")["default"];
-    UserCard: typeof import("./src/components/admin/User/UserCard.vue")["default"];
-    UserProfile: typeof import("./src/components/UserProfile.vue")["default"];
+    AddItemToTab: typeof import('./src/components/userPage/AddItemToTab.vue')['default']
+    ClearHistory: typeof import('./src/components/admin/User/ClearHistory.vue')['default']
+    ClearTab: typeof import('./src/components/ClearTab.vue')['default']
+    CustomItem: typeof import('./src/components/userPage/CustomItem.vue')['default']
+    DeleteItem: typeof import('./src/components/admin/Item/DeleteItem.vue')['default']
+    DeleteItemFromTab: typeof import('./src/components/userPage/DeleteItemFromTab.vue')['default']
+    FeedBack: typeof import('./src/components/FeedBack.vue')['default']
+    ItemCard: typeof import('./src/components/admin/Item/ItemCard.vue')['default']
+    NewItem: typeof import('./src/components/admin/Item/NewItem.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
+    Settings: typeof import('./src/components/Settings.vue')['default']
+    ToggleRole: typeof import('./src/components/admin/User/ToggleRole.vue')['default']
+    UserCard: typeof import('./src/components/admin/User/UserCard.vue')['default']
+    UserProfile: typeof import('./src/components/UserProfile.vue')['default']
   }
 }
