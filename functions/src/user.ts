@@ -1,18 +1,24 @@
 import { auth, firestore } from "firebase-admin";
 import { Timestamp } from "firebase-admin/firestore";
 import {
-  HttpsError,
   onCall,
+  HttpsError,
   FunctionsErrorCode,
-} from "firebase-functions/v1/https";
+} from "firebase-functions/v2/https";
+import {
+  TabItem,
+  ClearHistoryProps,
+  ClearTabProps,
+  ToggleRoleProps,
+} from "./types";
 
-export const clearTab = onCall(async (data, context) => {
-  if (context.app == undefined) {
+export const clearTab = onCall(async (event: ClearTabProps) => {
+  if (event.app == undefined) {
     throw new HttpsError("permission-denied", "Unknown origin");
   }
   if (
-    !context?.auth?.token.admin &&
-    context?.auth?.token.email !== data.email
+    !event?.auth?.token.admin ||
+    event?.auth?.token.email !== event.data.email
   ) {
     throw new HttpsError(
       "permission-denied",
@@ -20,24 +26,16 @@ export const clearTab = onCall(async (data, context) => {
     );
   }
 
-  type TabItem = {
-    name: string;
-    price: number;
-    date: Timestamp;
-    paid: boolean;
-    clearedBy?: string;
-  };
-
   try {
-    const user = await auth().getUserByEmail(data.email);
+    const user = await auth().getUserByEmail(event.data.email);
     const userRef = firestore().collection("users").doc(user.uid);
 
-    await firestore().runTransaction(async (t) => {
-      // Get the user's tab
-      const doc = await t.get(userRef);
-      const tab = doc.data()?.tab;
+    return await firestore().runTransaction(async (t) => {
+      const tab = await t.get(userRef).then((doc) => {
+        return doc.data()?.tab;
+      });
 
-      const currentTab: TabItem[] = tab || [];
+      const currentTab: TabItem[] = tab;
 
       currentTab
         .filter((item: TabItem) => !item.paid)
@@ -68,7 +66,6 @@ export const clearTab = onCall(async (data, context) => {
       });
     });
   } catch (error) {
-    console.log(error);
     const { code, message } = error as {
       code: FunctionsErrorCode;
       message: string;
@@ -77,11 +74,11 @@ export const clearTab = onCall(async (data, context) => {
   }
 });
 
-export const clearHistory = onCall(async (data, context) => {
-  if (context.app == undefined) {
+export const clearHistory = onCall(async (event: ClearHistoryProps) => {
+  if (event.app == undefined) {
     throw new HttpsError("permission-denied", "Unknown origin");
   }
-  if (!context?.auth?.token.admin) {
+  if (!event?.auth?.token.admin) {
     throw new HttpsError(
       "permission-denied",
       "You must be an admin to clear the history"
@@ -89,7 +86,7 @@ export const clearHistory = onCall(async (data, context) => {
   }
 
   try {
-    const user = await auth().getUserByEmail(data.email);
+    const user = await auth().getUserByEmail(event.data.email);
     return firestore().doc(`users/${user.uid}`).update({
       tab: [],
     });
@@ -102,35 +99,44 @@ export const clearHistory = onCall(async (data, context) => {
   }
 });
 
-export const toggleRole = onCall(async (data, context) => {
-  if (context.app == undefined) {
+export const toggleRole = onCall(async (event: ToggleRoleProps) => {
+  if (event.app == undefined) {
     throw new HttpsError("failed-precondition", "Unknown origin");
+  } else if (!event?.auth?.token.admin) {
+    throw new HttpsError(
+      "permission-denied",
+      "You must be an admin to toggle roles"
+    );
   }
-  const { email, role } = data;
 
-  const user = await auth().getUserByEmail(email);
-  await auth()
-    .setCustomUserClaims(user.uid, {
-      [role]: !user.customClaims?.[role],
-    })
-    .catch((error) => {
-      throw new HttpsError("unknown", error.message);
-    });
+  const { email, role } = event.data;
 
-  await firestore()
-    .doc(`users/${user.uid}`)
-    .set(
-      {
+  try {
+    const user = await auth().getUserByEmail(email);
+    await auth()
+      .setCustomUserClaims(user.uid, {
+        [role]: !user.customClaims?.[role],
+      })
+      .catch((error) => {
+        throw new HttpsError("unknown", error.message);
+      });
+
+    await firestore()
+      .collection("users")
+      .doc(user.uid)
+      .update({
         roles: {
           [role]: !user.customClaims?.[role],
         },
-      },
-      { merge: true }
-    )
-    .then(() => {
-      return { message: `Success! ${email} is now ${role}` };
-    })
-    .catch((error) => {
-      throw new HttpsError("unknown", error.message);
-    });
+      })
+      .then(() => {
+        return { message: `Success! ${email} is now ${role}` };
+      });
+  } catch (error) {
+    const { code, message } = error as {
+      code: FunctionsErrorCode;
+      message: string;
+    };
+    throw new HttpsError(code, message);
+  }
 });

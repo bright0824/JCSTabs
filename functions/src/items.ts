@@ -1,12 +1,13 @@
-import { onCall, HttpsError } from "firebase-functions/v1/https";
+import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { firestore } from "firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
+import { AddItemProps, DeleteItemProps, UpdateItemProps } from "./types";
 
-export const addItem = onCall(async (data, context) => {
-  if (context.app === undefined) {
+export const addItem = onCall(async (event: AddItemProps) => {
+  if (event.app === undefined) {
     throw new HttpsError("failed-precondition", "Unknown origin");
   }
-  if (!context.auth?.token.admin) {
+  if (!event.auth?.token.admin) {
     throw new HttpsError(
       "permission-denied",
       "You must be an admin to add an item"
@@ -16,18 +17,18 @@ export const addItem = onCall(async (data, context) => {
   return firestore()
     .doc("admin/items")
     .update({
-      food: FieldValue.arrayUnion(data.item),
+      food: FieldValue.arrayUnion(event.data.item),
     })
     .catch((error) => {
       throw new HttpsError("unknown", error.message);
     });
 });
 
-export const deleteItem = onCall(async (data, context) => {
-  if (context.app === undefined) {
+export const deleteItem = onCall(async (event: DeleteItemProps) => {
+  if (event.app === undefined) {
     throw new HttpsError("failed-precondition", "Unknown origin");
   }
-  if (!context.auth?.token.admin) {
+  if (!event.auth?.token.admin) {
     throw new HttpsError(
       "permission-denied",
       "You must be an admin to delete an item"
@@ -37,15 +38,15 @@ export const deleteItem = onCall(async (data, context) => {
   return firestore()
     .doc("admin/items")
     .update({
-      food: FieldValue.arrayRemove(data.item),
+      food: FieldValue.arrayRemove(event.data.item),
     });
 });
 
-export const updateItem = onCall(async (data, context) => {
-  if (context.auth == undefined) {
+export const updateItem = onCall(async (event: UpdateItemProps) => {
+  if (event.auth == undefined) {
     throw new HttpsError("permission-denied", "Unknown origin");
   }
-  if (!context.auth.token.admin) {
+  if (!event.auth.token.admin) {
     throw new HttpsError(
       "permission-denied",
       "You must be an admin to update an item"
@@ -53,6 +54,6 @@ export const updateItem = onCall(async (data, context) => {
   }
 
   return firestore().doc("admin/items").update({
-    food: data.items,
+    food: event.data.items,
   });
 });
