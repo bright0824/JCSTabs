@@ -10,7 +10,8 @@
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pre-commit": "run-p lint format type-check"
   },
   "dependencies": {
     "@mdi/js": "^7.2.96",
@@ -18,27 +19,28 @@
     "firebase": "^9.21.0",
     "pinia": "^2.0.36",
     "roboto-fontface": "^0.10.0",
-    "vue": "^3.2.47",
+    "vue": "^3.3.1",
     "vue-i18n": "^9.2.2",
-    "vue-router": "^4.1.6",
+    "vue-router": "^4.2.0",
     "vue-toastification": "next",
     "vuefire": "^3.1.0",
-    "vuetify": "^3.2.2",
+    "vuetify": "^3.2.3",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.62",
+    "@iconify/json": "^2.2.63",
     "@intlify/unplugin-vue-i18n": "^0.10.0",
     "@rushstack/eslint-patch": "^1.2.0",
-    "@types/node": "^20.1.1",
+    "@types/node": "^20.1.2",
     "@types/webfontloader": "^1.6.35",
-    "@vitejs/plugin-vue": "^4.2.1",
+    "@vitejs/plugin-vue": "^4.2.2",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/tsconfig": "^0.3.2",
     "eslint": "^8.40.0",
-    "eslint-plugin-vue": "^9.11.1",
-    "husky": "^8.0.0",
+    "eslint-plugin-vue": "^9.12.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4",
@@ -53,6 +55,9 @@
     "workbox-core": "^6.5.4",
     "workbox-precaching": "^6.5.4",
     "workbox-window": "^6.5.4"
+  },
+  "lint-staged": {
+    "*.{.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts}": "npm run pre-commit"
   },
   "workspaces": [
     "functions"
