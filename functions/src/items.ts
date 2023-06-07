@@ -3,26 +3,26 @@ import { firestore } from "firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { AddItemProps, DeleteItemProps, UpdateItemProps } from "./types";
 
-export const addItem = onCall(async (event: AddItemProps) => {
-  if (event.app === undefined) {
-    throw new HttpsError("failed-precondition", "Unknown origin");
-  }
-  if (!event.auth?.token.admin) {
-    throw new HttpsError(
-      "permission-denied",
-      "You must be an admin to add an item"
-    );
-  }
+export const addItem = onCall(
+  { enforceAppCheck: true },
+  async (event: AddItemProps) => {
+    if (!event.auth?.token.admin) {
+      throw new HttpsError(
+        "permission-denied",
+        "You must be an admin to add an item"
+      );
+    }
 
-  return firestore()
-    .doc("admin/items")
-    .update({
-      food: FieldValue.arrayUnion(event.data.item),
-    })
-    .catch((error) => {
-      throw new HttpsError("unknown", error.message);
-    });
-});
+    return firestore()
+      .doc("admin/items")
+      .update({
+        food: FieldValue.arrayUnion(event.data.item),
+      })
+      .catch((error) => {
+        throw new HttpsError("unknown", error.message);
+      });
+  }
+);
 
 export const deleteItem = onCall(async (event: DeleteItemProps) => {
   if (event.app === undefined) {
