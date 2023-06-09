@@ -5,6 +5,7 @@ import { httpsCallable } from "firebase/functions";
 
 // components
 import DeleteItem from "./DeleteItem.vue";
+import type { VCard } from "vuetify/lib/components/index.mjs";
 
 // props
 const props = defineProps<{
@@ -34,9 +35,14 @@ const rules = {
 const updateItem = async () => {
   loading.value.update = true;
   try {
-    const newItems = props.items.with(props.items.indexOf(props.input), {
-      ...props.input,
-      price: Number(price.value),
+    const newItems = props.items.map((item) => {
+      if (item.name === props.input.name) {
+        return {
+          ...item,
+          price: price.value,
+        };
+      }
+      return item;
     });
 
     await httpsCallable(
