@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
 import { functions } from "@/firebase";
 import type { Item } from "@/types";
@@ -6,6 +5,7 @@ import { httpsCallable } from "firebase/functions";
 
 // components
 import DeleteItem from "./DeleteItem.vue";
+import type { VCard } from "vuetify/lib/components/index.mjs";
 
 // props
 const props = defineProps<{
@@ -13,14 +13,14 @@ const props = defineProps<{
   items: Item[];
 }>();
 
-const { input, items } = toRefs(props);
-
 // data
 const loading = ref({
   update: false,
   delete: false,
   dialog: false,
 });
+
+const price = ref(props.input.price);
 
 const error = ref(null as string | null);
 const rules = {
@@ -35,11 +35,21 @@ const rules = {
 const updateItem = async () => {
   loading.value.update = true;
   try {
+    const newItems = props.items.map((item) => {
+      if (item.name === props.input.name) {
+        return {
+          ...item,
+          price: price.value,
+        };
+      }
+      return item;
+    });
+
     await httpsCallable(
       functions,
       "updateItem"
     )({
-      items: items,
+      items: newItems,
     });
   } catch (err) {
     console.error(err);
@@ -68,7 +78,7 @@ const updateItem = async () => {
           label="Price"
           variant="outlined"
           type="number"
-          v-model="input.price"
+          v-model="price"
           prefix="$"
           :rules="rules.price"
           @keyup.enter="updateItem()"

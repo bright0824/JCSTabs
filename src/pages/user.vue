@@ -31,7 +31,7 @@ const perPage = 5;
 const db = useFirestore();
 const auth = useFirebaseAuth();
 
-const items = useDocument<Items>(doc(db, "admin", "items"));
+const items = useDocument(doc(db, "admin", "items"));
 const userDoc = useDocument<User>(doc(db, `users/${auth?.currentUser?.uid}`));
 
 // computed
